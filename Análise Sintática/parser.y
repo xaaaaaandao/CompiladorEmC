@@ -38,32 +38,35 @@ lista_declaracoes:
 	lista_declaracoes declaracao | declaracao;
 
 declaracao:
-	declaracao_variavel declaracao_funcao | variavel;
+	declaracao_variavel | declaracao_funcao;
 
 declaracao_variavel:
-	declaracao_variavel "variavel" | "variavel";
+	tipo ':' lista_variaveis;
 
-variavel:
-	tipo DOISPONTOS var;
+lista_variaveis:
+	lista_variaveis ',' "var" | "var";
 
 var:
 	var ',' IDENTIFICADOR
 	| IDENTIFICADOR '[' NUMEROINTEIRO ']'
 	| IDENTIFICADOR '[' NUMEROINTEIRO ']' '[' NUMEROINTEIRO ']'
+	| IDENTIFICADOR indice
 	| IDENTIFICADOR;
+
+indice:
+	indice '[' "expressao" ']' | '[' "expressao" ']';
 
 tipo:
 	INTEIRO | FLUTUANTE;
 
 declaracao_funcao:
-	"declaracao_funcao" funcao
-	| funcao;
+	funcao_tipada | funcao_sem_tipo;
 
-funcao: tipo IDENTIFICADOR "(" declaracao_parametros ")" declaracao_composta FIM
-	| tipo IDENTIFICADOR "(" declaracao_parametros ")" FIM;
+funcao_tipada:
+	tipo IDENTIFICADOR "(" lista_parametros ")" declaracao_composta FIM;
 
-declaracao_parametros:
-	lista_parametros;
+funcao_sem_tipo:
+	IDENTIFICADOR "(" lista_parametros ")" declaracao_composta FIM;
 
 lista_parametros:
 	lista_parametros ',' parametro | parametro;
@@ -147,9 +150,10 @@ lista_argumentos:
 	lista_argumentos ',' expressao | expressao;
 
 %%
-//fazer comentario!!
-//como fazer com o vazio?
-//como fazer com os main?
+/*
+	Como fazer o vazio? 
+	No parâmetro está correto?
+*/
 
 #define SIZEOF_NODETYPE ((char *)&p->con - (char *)p)
 
