@@ -1,6 +1,0 @@
-1 - Abra essa diretório pelo terminal.
-2 - Para executar é só dar o seguinte comando make all.
-3 - Visualize o resultado no seu terminal.
-
-*** Para trocar o arquivo de teste, vá no arquivo Makefile e troque onde está escrito teste1.tpp por teste2.tpp ou teste3.tpp ***
-*** Para abrir o autômato, é necessário ter o JFLAP ***
