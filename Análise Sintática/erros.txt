@@ -1,0 +1,2 @@
+1 - no exemplo que você deu não tinha os return de se, então etc, e dai que valor que eu ponho no return?
+2 - o que são os erros que tão dando?

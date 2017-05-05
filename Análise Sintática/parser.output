@@ -1,0 +1,364 @@
+Não-terminais inúteis na gramática
+
+   declaracao_funcao
+
+
+Terminais sem uso na gramática
+
+   END_OF_FILE
+   NUMEROFLUTUANTE
+   RESERVADA
+   IGUAL
+   ATRIBUICAO
+   MENOR
+   MENORIGUAL
+   MAIOR
+   MAIORIGUAL
+   DIFERENTE
+   ABREPARENTESES
+   FECHAPARENTESES
+   ABRECHAVE
+   FECHACHAVE
+   VIRGULA
+   MAIS
+   MENOS
+   MULTIPLICACAO
+   DIVISAO
+   COMENTARIO_NAO_FINALIZADO
+   SE
+   ENTAO
+   SENAO
+   FIM
+   REPITA
+   RETORNA
+   ATE
+   LEIA
+   ESCREVA
+   EXPONENCIAL
+   COMENTARIO
+   ABRECOLCHETE
+   FECHACOLCHETE
+   '+'
+   '-'
+   '*'
+   '/'
+   "funcao"
+
+
+Regras inúteis na gramática
+
+   15 declaracao_funcao: declaracao_funcao IDENTIFICADOR
+   16                  | "funcao"
+
+
+Gramática
+
+    0 $accept: programa $end
+
+    1 programa: lista_declaracoes
+
+    2 lista_declaracoes: lista_declaracoes declaracao
+    3                  | declaracao
+
+    4 declaracao: declaracao_variavel variavel
+    5           | variavel
+
+    6 declaracao_variavel: declaracao_variavel "variavel"
+    7                    | "variavel"
+
+    8 variavel: tipo DOISPONTOS var
+
+    9 var: var ',' IDENTIFICADOR
+   10    | IDENTIFICADOR '[' NUMEROINTEIRO ']'
+   11    | IDENTIFICADOR '[' NUMEROINTEIRO ']' '[' NUMEROINTEIRO ']'
+   12    | IDENTIFICADOR
+
+   13 tipo: INTEIRO
+   14     | FLUTUANTE
+
+
+Terminais, com as regras onde eles aparecem
+
+$end (0) 0
+'*' (42)
+'+' (43)
+',' (44) 9
+'-' (45)
+'/' (47)
+'[' (91) 10 11
+']' (93) 10 11
+error (256)
+END_OF_FILE (258)
+NUMEROINTEIRO (259) 10 11
+NUMEROFLUTUANTE (260)
+IDENTIFICADOR (261) 9 10 11 12
+RESERVADA (262)
+IGUAL (263)
+DOISPONTOS (264) 8
+ATRIBUICAO (265)
+MENOR (266)
+MENORIGUAL (267)
+MAIOR (268)
+MAIORIGUAL (269)
+DIFERENTE (270)
+ABREPARENTESES (271)
+FECHAPARENTESES (272)
+ABRECHAVE (273)
+FECHACHAVE (274)
+VIRGULA (275)
+MAIS (276)
+MENOS (277)
+MULTIPLICACAO (278)
+DIVISAO (279)
+COMENTARIO_NAO_FINALIZADO (280)
+SE (281)
+ENTAO (282)
+SENAO (283)
+FIM (284)
+REPITA (285)
+INTEIRO (286) 13
+RETORNA (287)
+ATE (288)
+LEIA (289)
+ESCREVA (290)
+FLUTUANTE (291) 14
+EXPONENCIAL (292)
+COMENTARIO (293)
+ABRECOLCHETE (294)
+FECHACOLCHETE (295)
+"variavel" (296) 6 7
+"funcao" (297)
+
+
+Não terminais com as regras onde eles aparecem
+
+$accept (50)
+    à esquerda: 0
+programa (51)
+    à esquerda: 1, à direita: 0
+lista_declaracoes (52)
+    à esquerda: 2 3, à direita: 1 2
+declaracao (53)
+    à esquerda: 4 5, à direita: 2 3
+declaracao_variavel (54)
+    à esquerda: 6 7, à direita: 4 6
+variavel (55)
+    à esquerda: 8, à direita: 4 5
+var (56)
+    à esquerda: 9 10 11 12, à direita: 8 9
+tipo (57)
+    à esquerda: 13 14, à direita: 8
+
+
+Estado 0
+
+    0 $accept: . programa $end
+
+    INTEIRO     deslocar, e ir ao estado 1
+    FLUTUANTE   deslocar, e ir ao estado 2
+    "variavel"  deslocar, e ir ao estado 3
+
+    programa             ir ao estado 4
+    lista_declaracoes    ir ao estado 5
+    declaracao           ir ao estado 6
+    declaracao_variavel  ir ao estado 7
+    variavel             ir ao estado 8
+    tipo                 ir ao estado 9
+
+
+Estado 1
+
+   13 tipo: INTEIRO .
+
+    $padrão  reduzir usando a regra 13 (tipo)
+
+
+Estado 2
+
+   14 tipo: FLUTUANTE .
+
+    $padrão  reduzir usando a regra 14 (tipo)
+
+
+Estado 3
+
+    7 declaracao_variavel: "variavel" .
+
+    $padrão  reduzir usando a regra 7 (declaracao_variavel)
+
+
+Estado 4
+
+    0 $accept: programa . $end
+
+    $end  deslocar, e ir ao estado 10
+
+
+Estado 5
+
+    1 programa: lista_declaracoes .
+    2 lista_declaracoes: lista_declaracoes . declaracao
+
+    INTEIRO     deslocar, e ir ao estado 1
+    FLUTUANTE   deslocar, e ir ao estado 2
+    "variavel"  deslocar, e ir ao estado 3
+
+    $padrão  reduzir usando a regra 1 (programa)
+
+    declaracao           ir ao estado 11
+    declaracao_variavel  ir ao estado 7
+    variavel             ir ao estado 8
+    tipo                 ir ao estado 9
+
+
+Estado 6
+
+    3 lista_declaracoes: declaracao .
+
+    $padrão  reduzir usando a regra 3 (lista_declaracoes)
+
+
+Estado 7
+
+    4 declaracao: declaracao_variavel . variavel
+    6 declaracao_variavel: declaracao_variavel . "variavel"
+
+    INTEIRO     deslocar, e ir ao estado 1
+    FLUTUANTE   deslocar, e ir ao estado 2
+    "variavel"  deslocar, e ir ao estado 12
+
+    variavel  ir ao estado 13
+    tipo      ir ao estado 9
+
+
+Estado 8
+
+    5 declaracao: variavel .
+
+    $padrão  reduzir usando a regra 5 (declaracao)
+
+
+Estado 9
+
+    8 variavel: tipo . DOISPONTOS var
+
+    DOISPONTOS  deslocar, e ir ao estado 14
+
+
+Estado 10
+
+    0 $accept: programa $end .
+
+    $padrão  aceitar
+
+
+Estado 11
+
+    2 lista_declaracoes: lista_declaracoes declaracao .
+
+    $padrão  reduzir usando a regra 2 (lista_declaracoes)
+
+
+Estado 12
+
+    6 declaracao_variavel: declaracao_variavel "variavel" .
+
+    $padrão  reduzir usando a regra 6 (declaracao_variavel)
+
+
+Estado 13
+
+    4 declaracao: declaracao_variavel variavel .
+
+    $padrão  reduzir usando a regra 4 (declaracao)
+
+
+Estado 14
+
+    8 variavel: tipo DOISPONTOS . var
+
+    IDENTIFICADOR  deslocar, e ir ao estado 15
+
+    var  ir ao estado 16
+
+
+Estado 15
+
+   10 var: IDENTIFICADOR . '[' NUMEROINTEIRO ']'
+   11    | IDENTIFICADOR . '[' NUMEROINTEIRO ']' '[' NUMEROINTEIRO ']'
+   12    | IDENTIFICADOR .
+
+    '['  deslocar, e ir ao estado 17
+
+    $padrão  reduzir usando a regra 12 (var)
+
+
+Estado 16
+
+    8 variavel: tipo DOISPONTOS var .
+    9 var: var . ',' IDENTIFICADOR
+
+    ','  deslocar, e ir ao estado 18
+
+    $padrão  reduzir usando a regra 8 (variavel)
+
+
+Estado 17
+
+   10 var: IDENTIFICADOR '[' . NUMEROINTEIRO ']'
+   11    | IDENTIFICADOR '[' . NUMEROINTEIRO ']' '[' NUMEROINTEIRO ']'
+
+    NUMEROINTEIRO  deslocar, e ir ao estado 19
+
+
+Estado 18
+
+    9 var: var ',' . IDENTIFICADOR
+
+    IDENTIFICADOR  deslocar, e ir ao estado 20
+
+
+Estado 19
+
+   10 var: IDENTIFICADOR '[' NUMEROINTEIRO . ']'
+   11    | IDENTIFICADOR '[' NUMEROINTEIRO . ']' '[' NUMEROINTEIRO ']'
+
+    ']'  deslocar, e ir ao estado 21
+
+
+Estado 20
+
+    9 var: var ',' IDENTIFICADOR .
+
+    $padrão  reduzir usando a regra 9 (var)
+
+
+Estado 21
+
+   10 var: IDENTIFICADOR '[' NUMEROINTEIRO ']' .
+   11    | IDENTIFICADOR '[' NUMEROINTEIRO ']' . '[' NUMEROINTEIRO ']'
+
+    '['  deslocar, e ir ao estado 22
+
+    $padrão  reduzir usando a regra 10 (var)
+
+
+Estado 22
+
+   11 var: IDENTIFICADOR '[' NUMEROINTEIRO ']' '[' . NUMEROINTEIRO ']'
+
+    NUMEROINTEIRO  deslocar, e ir ao estado 23
+
+
+Estado 23
+
+   11 var: IDENTIFICADOR '[' NUMEROINTEIRO ']' '[' NUMEROINTEIRO . ']'
+
+    ']'  deslocar, e ir ao estado 24
+
+
+Estado 24
+
+   11 var: IDENTIFICADOR '[' NUMEROINTEIRO ']' '[' NUMEROINTEIRO ']' .
+
+    $padrão  reduzir usando a regra 11 (var)
