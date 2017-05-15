@@ -58,7 +58,7 @@ COMENTARIO "{"[^\}]*"}"
 	return LEIA;
 }
 
-"escreve" {
+"escreva" {
 	strcpy(yylval.reservada, yytext);
 	return ESCREVA;
 }

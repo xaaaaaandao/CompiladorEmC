@@ -24,7 +24,7 @@
 
 %token <pgm> SE ENTAO SENAO FIM REPITA RETORNA ATE LEIA ESCREVA TIPOINTEIRO TIPOFLUTUANTE TIPOVOID IDENTIFICADOR NUMEROINTEIRO NUMEROFLUTUANTE EXPONENCIAL COMENTARIO IGUAL DOISPONTOS ATRIBUICAO MENOR MENORIGUAL MAIOR MAIORIGUAL DIFERENTE ABREPARENTESES FECHAPARENTESES ABRECHAVE FECHACHAVE VIRGULA ADICAO SUBTRACAO MULTIPLICACAO DIVISAO ABRECOLCHETE FECHACOLCHETE END_OF_FILE
 
-%type <pgm> programa lista_declaracoes declaracao comentario declaracao_funcao funcao_tipada funcao_sem_tipo declaracao_variavel tipo lista_statements
+%type <pgm> programa lista_declaracoes declaracao comentario declaracao_funcao funcao_tipada funcao_sem_tipo declaracao_variavel tipo lista_statements declaracao_selecao declaracao_iteracao declaracao_atribuicao declaracao_leitura declaracao_escrita declaracao_retorno
 
 %% 
 programa:
@@ -80,8 +80,38 @@ parametro:
 
 lista_statements:
 	declaracao_variavel
-	| lista_statements declaracao_variavel;
+	| lista_statements declaracao_variavel
+	| declaracao_selecao
+	| lista_statements declaracao_selecao
+	| declaracao_iteracao 
+	| lista_statements declaracao_iteracao
+	| declaracao_atribuicao 
+	| lista_statements declaracao_atribuicao
+	| declaracao_leitura 
+	| lista_statements declaracao_leitura
+	| declaracao_escrita 
+	| lista_statements declaracao_escrita
+	| declaracao_retorno 
+	| lista_statements declaracao_retorno;
 
+declaracao_selecao:
+	SE ENTAO lista_statements FIM { printf("condição\n"); }
+	| SE ENTAO lista_statements SENAO lista_statements FIM { printf("condição com senão\n"); }; 
+
+declaracao_iteracao:
+	REPITA lista_statements ATE { printf("iteração\n"); };
+
+declaracao_atribuicao:
+	variavel ATRIBUICAO { printf("atribuição\n"); }; 
+
+declaracao_leitura:
+	LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES { printf("leia\n"); };
+
+declaracao_escrita:
+	ESCREVA ABREPARENTESES FECHAPARENTESES { printf("escrita\n"); };
+
+declaracao_retorno:
+	RETORNA ABREPARENTESES FECHAPARENTESES { printf("retorna\n"); };
 
 %%
 void yyerror(char *s) {
