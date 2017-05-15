@@ -30,11 +30,11 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_PARSER_TAB_H_INCLUDED
-# define YY_YY_PARSER_TAB_H_INCLUDED
+#ifndef YY_YY_Y_TAB_H_INCLUDED
+# define YY_YY_Y_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 1
+# define YYDEBUG 0
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -54,34 +54,14 @@ extern int yydebug;
     ATE = 264,
     LEIA = 265,
     ESCREVA = 266,
-    TIPOINTEIRO = 267,
-    TIPOFLUTUANTE = 268,
-    TIPOVOID = 269,
-    IDENTIFICADOR = 270,
-    NUMEROINTEIRO = 271,
-    NUMEROFLUTUANTE = 272,
-    EXPONENCIAL = 273,
-    COMENTARIO = 274,
-    IGUAL = 275,
-    DOISPONTOS = 276,
-    ATRIBUICAO = 277,
-    MENOR = 278,
-    MENORIGUAL = 279,
-    MAIOR = 280,
-    MAIORIGUAL = 281,
-    DIFERENTE = 282,
-    ABREPARENTESES = 283,
-    FECHAPARENTESES = 284,
-    ABRECHAVE = 285,
-    FECHACHAVE = 286,
-    VIRGULA = 287,
-    ADICAO = 288,
-    SUBTRACAO = 289,
-    MULTIPLICACAO = 290,
-    DIVISAO = 291,
-    ABRECOLCHETE = 292,
-    FECHACOLCHETE = 293,
-    END_OF_FILE = 294
+    IDENTIFICADOR = 267,
+    COMENTARIO = 268,
+    END_OF_FILE = 269,
+    TIPOINTEIRO = 270,
+    TIPOFLUTUANTE = 271,
+    NUMEROINTEIRO = 272,
+    NUMEROFLUTUANTE = 273,
+    EXPONENCIAL = 274
   };
 #endif
 /* Tokens.  */
@@ -94,34 +74,14 @@ extern int yydebug;
 #define ATE 264
 #define LEIA 265
 #define ESCREVA 266
-#define TIPOINTEIRO 267
-#define TIPOFLUTUANTE 268
-#define TIPOVOID 269
-#define IDENTIFICADOR 270
-#define NUMEROINTEIRO 271
-#define NUMEROFLUTUANTE 272
-#define EXPONENCIAL 273
-#define COMENTARIO 274
-#define IGUAL 275
-#define DOISPONTOS 276
-#define ATRIBUICAO 277
-#define MENOR 278
-#define MENORIGUAL 279
-#define MAIOR 280
-#define MAIORIGUAL 281
-#define DIFERENTE 282
-#define ABREPARENTESES 283
-#define FECHAPARENTESES 284
-#define ABRECHAVE 285
-#define FECHACHAVE 286
-#define VIRGULA 287
-#define ADICAO 288
-#define SUBTRACAO 289
-#define MULTIPLICACAO 290
-#define DIVISAO 291
-#define ABRECOLCHETE 292
-#define FECHACOLCHETE 293
-#define END_OF_FILE 294
+#define IDENTIFICADOR 267
+#define COMENTARIO 268
+#define END_OF_FILE 269
+#define TIPOINTEIRO 270
+#define TIPOFLUTUANTE 271
+#define NUMEROINTEIRO 272
+#define NUMEROFLUTUANTE 273
+#define EXPONENCIAL 274
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -130,14 +90,9 @@ union YYSTYPE
 {
 #line 15 "parser.y" /* yacc.c:1909  */
 
-	char pgm[100];
-	char simbolo[3];
-	char tipo[10];
-	char identificador[3276];	
-	char reservada[3276];
-	char comentario[3276];
+	char programa[3276]; /* Valor inteiro. */
 
-#line 141 "parser.tab.h" /* yacc.c:1909  */
+#line 96 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -150,4 +105,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_PARSER_TAB_H_INCLUDED  */
+#endif /* !YY_YY_Y_TAB_H_INCLUDED  */

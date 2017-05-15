@@ -1,53 +1,10 @@
 %{
-void yyerror(char *);
-
-
-#ifndef  YYTOKENTYPE
-#define YYTOKENTYPE
-enum yytokentype{
-	END_OF_FILE = 258,
-	NUMEROINTEIRO = 259,
-	NUMEROFLUTUANTE = 260,
-	IDENTIFICADOR = 270,
-	RESERVADA = 280,
-	IGUAL = 290,
-	DOISPONTOS = 291,
-	ATRIBUICAO = 292,
-	MENOR = 293,
-	MENORIGUAL = 294,
-	MAIOR = 295,
-	MAIORIGUAL = 296,
-	DIFERENTE = 297,
-	ABREPARENTESES = 298,
-	FECHAPARENTESES = 299,
-	ABRECHAVE = 300,
-	FECHACHAVE = 301,
-	VIRGULA = 302,
-	MAIS = 303,
-	MENOS = 304,
-	MULTIPLICACAO = 305,
-	DIVISAO = 306,
-	COMENTARIO_NAO_FINALIZADO = 307,
-	SE = 1,
-	ENTAO = 2,
-	SENAO = 3,
-	FIM = 4,
-	REPITA = 5,
-	INTEIRO = 6,
-	RETORNA = 7,
-	ATE = 8,
-	LEIA = 9,
-	ESCREVA = 10,
-	FLUTUANTE = 11,
-	EXPONENCIAL = 12,
-	COMENTARIO = 13,
-	ABRECOLCHETE = 14,
-	FECHACOLCHETE = 15
-};
-#endif
-
-int yylval;
-int line_num = 1;
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <math.h>
+	#include "syntax-tree.h"
+	#include "parser.tab.h"
+	void yyerror(char *);
 %}
 
 DIGITO [0-9]
@@ -62,43 +19,228 @@ ESPACO [ \n\r\t]+
 COMENTARIO "{"[^\}]*"}"
 
 %% /* Regras */
-"se" return SE;
-"então" return ENTAO;
-"senão" return SENAO;
-"fim" return FIM;
-"repita" return REPITA;
-"flutuante" return FLUTUANTE;
-"retorna" return RETORNA;
-"até" return ATE;
-"leia" return LEIA;
-"escreve" return ESCREVA;
-"inteiro" return INTEIRO;
+"se" {
+	strcpy(yylval.reservada, yytext);
+	return SE;
+}
 
-{IDENTIFICADOR} { return IDENTIFICADOR;} 
-{INTEIRO} { return NUMEROINTEIRO; }
-{FLUTUANTE} { return NUMEROFLUTUANTE; } 
-{EXPONENCIAL} {	return EXPONENCIAL; }
-{COMENTARIO} {	return COMENTARIO; }
+"então"  {
+	strcpy(yylval.reservada, yytext);
+	return ENTAO;
+}
 
-"=" return IGUAL;
-":" return DOISPONTOS;
-":=" return ATRIBUICAO;
-"<" return MENOR;
-"<=" return MENORIGUAL;
-">" return MAIOR;
-">=" return MAIORIGUAL;
-"<>" return DIFERENTE;
-"(" return ABREPARENTESES;
-")" return FECHAPARENTESES;
-"{" return ABRECHAVE;	
-"}" return FECHACHAVE;
-"," return VIRGULA;
-"+" return MAIS;
-"-" return MENOS;
-"*" return MULTIPLICACAO;
-"/" return DIVISAO;
-"[" return ABRECOLCHETE;
-"]" return FECHACOLCHETE;	
+"senão" {
+	strcpy(yylval.reservada, yytext);
+	return SENAO;
+}
+
+"fim" {
+	strcpy(yylval.reservada, yytext);
+	return FIM;
+}
+
+"repita" {
+	strcpy(yylval.reservada, yytext);
+	return REPITA;
+}
+"retorna" {
+	strcpy(yylval.reservada, yytext);
+	return RETORNA;
+}
+
+"até" {
+	strcpy(yylval.reservada, yytext);
+	return ATE;
+}
+
+"leia" {
+	strcpy(yylval.reservada, yytext);
+	return LEIA;
+}
+
+"escreve" {
+	strcpy(yylval.reservada, yytext);
+	return ESCREVA;
+}
+
+"inteiro" {
+	strcpy(yylval.tipo, yytext);
+	return TIPOINTEIRO;
+};
+
+"flutuante" {
+	strcpy(yylval.tipo, yytext);
+	return TIPOFLUTUANTE;
+};
+
+"void" {
+	strcpy(yylval.tipo, yytext);
+	return TIPOVOID;
+}
+
+{IDENTIFICADOR} { 
+	strcpy(yylval.identificador, yytext);
+	return IDENTIFICADOR;
+}
+ 
+{INTEIRO} {
+	/*yylval.nValor = atoi(yytext);*/
+	return NUMEROINTEIRO;
+}
+
+{FLUTUANTE} {
+	/*yylval.nValor = atof(yytext);*/
+	return NUMEROFLUTUANTE;
+} 
+
+{EXPONENCIAL} {	
+	printf("%s\n", yytext);
+	char sinal = '!';	
+	char eValor[3276];			
+	double valor;
+	double potencia;
+	int i = 0, j = 0;	
+	while(yytext[i] != '\0'){
+		if(yytext[i] == 'e' || yytext[i] ==  'E'){
+			eValor[j] = '\0';
+			valor = atof(eValor);
+			memset(eValor, 0, sizeof(eValor));
+			i++;
+			j = 0;
+		} else if(yytext[i] == '+' || yytext[i] == '-'){
+			sinal = yytext[i];
+			i++;
+		} else {
+			eValor[j] = yytext[i];
+			i++;
+			j++;
+		}
+	}
+	eValor[j] = '\0';
+	potencia = atof(eValor);				
+	if(sinal == '-'){
+		potencia = atof(eValor);				
+		potencia = potencia * -1;
+	}
+	//yylval.nValor = pow(valor, potencia);
+	return EXPONENCIAL;
+}
+
+{COMENTARIO} {
+	strcpy(yylval.comentario, yytext);
+	return COMENTARIO;
+}
+
+"=" {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return IGUAL;
+}
+
+":" {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return DOISPONTOS;
+};
+
+":=" {
+	strcpy(yylval.simbolo, yytext);
+	return ATRIBUICAO;
+}
+
+"<" {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return MENOR;
+}
+
+"<=" {
+	strcpy(yylval.simbolo, yytext);
+	return MENORIGUAL;
+
+}
+
+">" {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return MAIOR;
+}
+
+">=" {
+	strcpy(yylval.simbolo, yytext);
+	return MAIORIGUAL;
+}
+
+"<>" {
+	strcpy(yylval.simbolo, yytext);
+	return DIFERENTE;
+}
+
+"(" {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return ABREPARENTESES;
+}
+
+")" {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return FECHAPARENTESES;
+}
+
+"{" {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return ABRECHAVE;
+}	
+
+"}" {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return FECHACHAVE;
+}	
+
+"," {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return VIRGULA;
+}	
+
+"+"  {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return ADICAO;
+}	
+
+"-" {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return SUBTRACAO;
+}	
+
+"*" {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return MULTIPLICACAO;
+}	
+
+"/" {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return DIVISAO;
+}	
+
+"[" {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return ABRECOLCHETE;
+}	
+
+"]" {
+	yylval.simbolo[0] = yytext[0];
+	yylval.simbolo[1] = '\0';
+	return FECHACOLCHETE;
+}		
 
 {ESPACO} {
 	//descarta espaço em branco
@@ -108,7 +250,13 @@ COMENTARIO "{"[^\}]*"}"
 
 }
 
-<<EOF>> return END_OF_FILE;
+<<EOF>> {
+	static int once = 0; 
+	if(once == 0)
+		return once++;
+	else 
+		return '\n';
+}
 
 %%
 int yywrap(void){
@@ -116,11 +264,4 @@ int yywrap(void){
 }
 
 extern int yy_flex_debug;
-int main(int argc, char *argv[]){
-/*	yyin = fopen(argv[1], "r");
-	int token = 0;
-	while((token = yylex()) != END_OF_FILE){
-	}
-	fclose(yyin);
-	return 0;*/
-}
+

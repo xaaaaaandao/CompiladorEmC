@@ -1,11 +1,16 @@
 all:
-	lex scanner.l
-	gcc lex.yy.c -o scanner
 	bison -y -d -t parser.y -o parser.tab.c 
-#	gcc -c parser.tab.c lex.yy.c
-#	gcc parser.tab.o lex.yy.o -o tppc.exe
-#	./scanner teste-completo.tpp
+	flex -d -T scanner.l
+	gcc -c parser.tab.c lex.yy.c -lfl
+	gcc parser.tab.o lex.yy.o -lm -o token.exe
+	bison -y -d -t parser.y -o parser.tab.c 
 
-clear:
+bison:
+	bison -y -d -t parser.y -o parser.tab.c 	
+
+lex:
+	flex -d -T scanner.l
+
+clean:
 	rm yytokentype.o
 	rm scanner

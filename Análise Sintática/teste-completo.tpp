@@ -1,13 +1,15 @@
-{Teste compiladores
-Aluno Fulano de Tal
-}
-
+{não existe amize 
+de ex}
+54
+132
+123
 inteiro: n, g
 flutuante: d,a
 inteiro fatorial(inteiro: n)
 	d := 5.6 
+	c := 7
 	inteiro: fat
-	fat := 2e+89 + 67*12
+	fat := 2e+3 + 67*12
 	se a > 10 então
 		se n > 0 então {não calcula se n > 0}
 			fat := 1
