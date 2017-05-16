@@ -22,9 +22,9 @@
 };
 %start programa
 
-%token <pgm> SE ENTAO SENAO FIM REPITA RETORNA ATE LEIA ESCREVA TIPOINTEIRO TIPOFLUTUANTE TIPOVOID IDENTIFICADOR NUMEROINTEIRO NUMEROFLUTUANTE EXPONENCIAL COMENTARIO IGUAL DOISPONTOS ATRIBUICAO MENOR MENORIGUAL MAIOR MAIORIGUAL DIFERENTE ABREPARENTESES FECHAPARENTESES ABRECHAVE FECHACHAVE VIRGULA ADICAO SUBTRACAO MULTIPLICACAO DIVISAO ABRECOLCHETE FECHACOLCHETE END_OF_FILE
+%token <pgm> SE ENTAO SENAO FIM REPITA RETORNA ATE LEIA ESCREVA TIPOINTEIRO TIPOFLUTUANTE TIPOVOID IDENTIFICADOR NUMEROINTEIRO NUMEROFLUTUANTE EXPONENCIAL COMENTARIO IGUAL DOISPONTOS ATRIBUICAO MENOR MENORIGUAL MAIOR MAIORIGUAL DIFERENTE ABREPARENTESES FECHAPARENTESES ABRECHAVE FECHACHAVE VIRGULA ADICAO SUBTRACAO MULTIPLICACAO DIVISAO ABRECOLCHETE FECHACOLCHETE END_OF_FILE "IDENTIFICADOR"
 
-%type <pgm> programa lista_declaracoes declaracao declaracao_variaveis inicializacao_variaveis lista_variaveis var indice tipo declaracao_funcao cabecalho lista_parametros parametro corpo acao se repita atribuicao leia escreva retorna expressao expressao_simples expressao_aditiva expressao_multiplicativa expressao_unaria operador_relacional operador_soma operador_multiplicacao fator numero chamada_funcao lista_argumentos
+%type <pgm> programa lista_declaracoes declaracao declaracao_variaveis inicializacao_variaveis lista_variaveis var indice tipo declaracao_funcao cabecalho lista_parametros parametro corpo acao se repita atribuicao leia escreva retorna expressao "atribuicao" expressao_simples "expressao_simples" expressao_aditiva "expressao_aditiva" expressao_multiplicativa "expressao_multiplicativa" expressao_unaria operador_soma operador_relacional operador_multiplicacao fator numero chamada_funcao lista_argumentos
 
 %% 
 programa:
@@ -77,8 +77,8 @@ parametro:
 	| parametro ABRECOLCHETE FECHACOLCHETE;
 
 corpo:
-	corpo acao
-	| acao;
+	acao
+	| corpo acao;
 
 acao:
 	expressao | declaracao_variaveis
@@ -104,21 +104,20 @@ retorna:
 	RETORNA ABREPARENTESES expressao FECHAPARENTESES;
 
 expressao:
-	/* empty */
-	atribuicao
-	| expressao_simples;
+	"atribuicao" | expressao_simples;
+
 
 expressao_simples:
 	expressao_aditiva
-	| expressao_simples operador_relacional expressao_aditiva;
+	| "expressao_simples" operador_relacional expressao_aditiva;
 
 expressao_aditiva:
 	expressao_multiplicativa
-	| expressao_aditiva operador_soma expressao_multiplicativa;
+	| "expressao_aditiva" operador_soma expressao_multiplicativa;
 
 expressao_multiplicativa:
 	expressao_unaria
-	| expressao_multiplicativa operador_multiplicacao expressao_unaria;
+	| "expressao_multiplicativa" operador_multiplicacao expressao_unaria;
 
 expressao_unaria:
 	fator
@@ -145,7 +144,7 @@ numero:
 	| EXPONENCIAL;
 
 chamada_funcao:
-	IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES;
+	"IDENTIFICADOR" ABREPARENTESES lista_argumentos FECHAPARENTESES;
 
 lista_argumentos:
 	lista_argumentos VIRGULA expressao
