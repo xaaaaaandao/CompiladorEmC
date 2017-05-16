@@ -67,7 +67,9 @@ declaracao_funcao:
 
 cabecalho:
 	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM
-	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM;
+	| IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES FIM
+	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM
+	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES FIM;
 
 lista_parametros:
 	lista_parametros VIRGULA parametro
@@ -90,7 +92,7 @@ se:
 	| SE expressao ENTAO corpo SENAO corpo FIM;
 
 repita:
-	REPITA corpo ATE ;
+	REPITA corpo ATE expressao;
 
 atribuicao:
 	var ATRIBUICAO expressao;
