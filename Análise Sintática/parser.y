@@ -43,7 +43,7 @@ declaracao_variaveis:
 	tipo DOISPONTOS lista_variaveis;
 
 inicializacao_variaveis:
-	ATRIBUICAO;
+	atribuicao;
 
 lista_variaveis:
 	lista_variaveis VIRGULA var
@@ -66,7 +66,8 @@ declaracao_funcao:
 	| cabecalho;
 
 cabecalho:
-	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM;
+	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM
+	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM;
 
 lista_parametros:
 	lista_parametros VIRGULA parametro
@@ -106,7 +107,6 @@ retorna:
 expressao:
 	"atribuicao" | expressao_simples;
 
-
 expressao_simples:
 	expressao_aditiva
 	| "expressao_simples" operador_relacional expressao_aditiva;
@@ -121,6 +121,8 @@ expressao_multiplicativa:
 
 expressao_unaria:
 	fator
+	| IDENTIFICADOR operador_relacional fator
+	| operador_multiplicacao fator
 	| operador_soma fator;
 
 operador_relacional:
