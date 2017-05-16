@@ -24,95 +24,130 @@
 
 %token <pgm> SE ENTAO SENAO FIM REPITA RETORNA ATE LEIA ESCREVA TIPOINTEIRO TIPOFLUTUANTE TIPOVOID IDENTIFICADOR NUMEROINTEIRO NUMEROFLUTUANTE EXPONENCIAL COMENTARIO IGUAL DOISPONTOS ATRIBUICAO MENOR MENORIGUAL MAIOR MAIORIGUAL DIFERENTE ABREPARENTESES FECHAPARENTESES ABRECHAVE FECHACHAVE VIRGULA ADICAO SUBTRACAO MULTIPLICACAO DIVISAO ABRECOLCHETE FECHACOLCHETE END_OF_FILE
 
-%type <pgm> programa lista_declaracoes declaracao comentario declaracao_funcao funcao_tipada funcao_sem_tipo declaracao_variavel tipo lista_statements declaracao_selecao declaracao_iteracao declaracao_atribuicao declaracao_leitura declaracao_escrita declaracao_retorno
+%type <pgm> programa lista_declaracoes declaracao declaracao_variaveis inicializacao_variaveis lista_variaveis var indice tipo declaracao_funcao cabecalho lista_parametros parametro corpo acao se repita escreva retorna expressao expressao_simples expressao_aditiva expressao_multiplicativa expressao_unaria operador_relacional operador_soma operador_multiplicacao fator numero chamada_funcao lista_argumentos leia atribuicao
 
 %% 
 programa:
 	lista_declaracoes;
 
 lista_declaracoes:
-	/* empty */
-	declaracao
-	| lista_declaracoes declaracao;
+	lista_declaracoes declaracao
+	| declaracao;
 
 declaracao:
-	/* empty */
-	comentario
-	| declaracao_funcao
-	| declaracao_variavel;
+	declaracao_variaveis
+	| inicializacao_variaveis
+	| declaracao_funcao;
 
-comentario: COMENTARIO { printf("comentario\n"); strcpy($$, $1); };
-
-declaracao_funcao:
-	funcao_tipada
-	| funcao_sem_tipo;
-
-funcao_tipada:
-	tipo IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES lista_statements FIM { printf("funcao com tipo\n"); };
-
-funcao_sem_tipo:
-	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES FIM { printf("funcao sem tipo\n"); };
-
-declaracao_variavel:
+declaracao_variaveis:
 	tipo DOISPONTOS lista_variaveis;
 
-lista_variaveis :
-	variavel
-	| lista_variaveis VIRGULA variavel;
+inicializacao_variaveis:
+	atribuicao;
 
-variavel:
-	IDENTIFICADOR { printf("variavel\n"); 	}
-	| IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE { printf ("variavel vetor\n"); }
-	| IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE ABRECOLCHETE FECHACOLCHETE { printf ("variavel matriz\n"); };
+lista_variaveis:
+	lista_variaveis VIRGULA var
+	| var;
+
+var:
+	IDENTIFICADOR
+	| IDENTIFICADOR indice;
+
+indice:
+	indice ABRECOLCHETE expressao FECHACOLCHETE
+	| ABRECOLCHETE expressao FECHACOLCHETE;
 
 tipo:
-	TIPOINTEIRO { strcpy($$,$1); }
-	| TIPOFLUTUANTE { strcpy($$,$1); };
+	TIPOINTEIRO
+	| TIPOFLUTUANTE;
+
+declaracao_funcao:
+	tipo cabecalho
+	| cabecalho;
+
+cabecalho:
+	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM;
 
 lista_parametros:
-	parametro
-	| lista_parametros VIRGULA parametro;
+	lista_parametros VIRGULA parametro
+	| parametro;
 
 parametro:
-	tipo DOISPONTOS IDENTIFICADOR { printf("parâmetro variavel\n"); }
-	| tipo DOISPONTOS IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE { printf("parametro vetor\n"); }
-	| tipo DOISPONTOS IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE ABRECOLCHETE FECHACOLCHETE { printf("parametro da matriz\n");};
+	tipo DOISPONTOS IDENTIFICADOR
+	| parametro ABRECOLCHETE FECHACOLCHETE;
 
-lista_statements:
-	declaracao_variavel
-	| lista_statements declaracao_variavel
-	| declaracao_selecao
-	| lista_statements declaracao_selecao
-	| declaracao_iteracao 
-	| lista_statements declaracao_iteracao
-	| declaracao_atribuicao 
-	| lista_statements declaracao_atribuicao
-	| declaracao_leitura 
-	| lista_statements declaracao_leitura
-	| declaracao_escrita 
-	| lista_statements declaracao_escrita
-	| declaracao_retorno 
-	| lista_statements declaracao_retorno;
+corpo:
+	corpo acao;
 
-declaracao_selecao:
-	SE ENTAO lista_statements FIM { printf("condição\n"); }
-	| SE ENTAO lista_statements SENAO lista_statements FIM { printf("condição com senão\n"); }; 
+acao:
+	expressao | declaracao_variaveis
+	| se | repita | leia | escreva | retorna;
 
-declaracao_iteracao:
-	REPITA lista_statements ATE { printf("iteração\n"); };
+se:
+	SE expressao ENTAO corpo FIM
+	| SE expressao ENTAO corpo SENAO corpo FIM;
 
-declaracao_atribuicao:
-	variavel ATRIBUICAO { printf("atribuição\n"); }; 
+repita:
+	REPITA corpo ATE expressao;
 
-declaracao_leitura:
-	LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES { printf("leia\n"); };
+atribuicao:
+	var ATRIBUICAO expressao;
 
-declaracao_escrita:
-	ESCREVA ABREPARENTESES FECHAPARENTESES { printf("escrita\n"); };
+leia:
+	LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES;
 
-declaracao_retorno:
-	RETORNA ABREPARENTESES FECHAPARENTESES { printf("retorna\n"); };
+escreva:
+	ESCREVA ABREPARENTESES expressao FECHAPARENTESES;
 
+retorna:
+	RETORNA ABREPARENTESES "expressao" FECHAPARENTESES;
+
+expressao:
+	expressao_simples
+	| "atribuicao";
+
+expressao_simples:
+	expressao_aditiva
+	| expressao_simples operador_relacional expressao_aditiva;
+
+expressao_aditiva:
+	expressao_multiplicativa
+	| expressao_aditiva operador_soma expressao_multiplicativa;
+
+expressao_multiplicativa:
+	expressao_unaria
+	| expressao_multiplicativa operador_multiplicacao expressao_unaria;
+
+expressao_unaria:
+	fator
+	| operador_soma fator;
+
+operador_relacional:
+	MENOR | MAIOR | IGUAL | DIFERENTE | MENORIGUAL | MAIORIGUAL;
+
+operador_soma:
+	ADICAO | SUBTRACAO;
+
+operador_multiplicacao:
+	MULTIPLICACAO | DIVISAO;
+
+fator:
+	ABREPARENTESES expressao FECHAPARENTESES
+	| var
+	| chamada_funcao
+	| numero;
+
+numero:
+	NUMEROINTEIRO
+	| NUMEROFLUTUANTE
+	| EXPONENCIAL;
+
+chamada_funcao:
+	IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES;
+
+lista_argumentos:
+	lista_argumentos VIRGULA expressao
+	| expressao;
 %%
 void yyerror(char *s) {
 	fprintf(stdout, "%s\n", s);
