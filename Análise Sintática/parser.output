@@ -1,0 +1,479 @@
+Terminais sem uso na gramática
+
+   SE
+   ENTAO
+   SENAO
+   REPITA
+   RETORNA
+   ATE
+   LEIA
+   ESCREVA
+   TIPOVOID
+   NUMEROINTEIRO
+   NUMEROFLUTUANTE
+   EXPONENCIAL
+   COMENTARIO
+   IGUAL
+   MENOR
+   MENORIGUAL
+   MAIOR
+   MAIORIGUAL
+   DIFERENTE
+   ABRECHAVE
+   FECHACHAVE
+   ADICAO
+   SUBTRACAO
+   MULTIPLICACAO
+   DIVISAO
+   END_OF_FILE
+
+
+Gramática
+
+    0 $accept: programa $end
+
+    1 programa: lista_declaracoes
+
+    2 lista_declaracoes: lista_declaracoes declaracao
+    3                  | declaracao
+
+    4 declaracao: declaracao_variaveis
+    5           | inicializacao_variaveis
+    6           | declaracao_funcao
+
+    7 declaracao_variaveis: tipo DOISPONTOS lista_variaveis
+
+    8 inicializacao_variaveis: ATRIBUICAO
+
+    9 lista_variaveis: lista_variaveis VIRGULA var
+   10                | var
+
+   11 var: IDENTIFICADOR
+   12    | IDENTIFICADOR indice
+
+   13 indice: indice ABRECOLCHETE FECHACOLCHETE
+   14       | ABRECOLCHETE FECHACOLCHETE
+
+   15 tipo: TIPOINTEIRO
+   16     | TIPOFLUTUANTE
+
+   17 declaracao_funcao: tipo cabecalho
+   18                  | cabecalho
+
+   19 cabecalho: IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES FIM
+
+   20 lista_parametros: lista_parametros VIRGULA parametro
+   21                 | parametro
+
+   22 parametro: tipo DOISPONTOS IDENTIFICADOR
+   23          | parametro ABRECOLCHETE FECHACOLCHETE
+
+
+Terminais, com as regras onde eles aparecem
+
+$end (0) 0
+error (256)
+SE (258)
+ENTAO (259)
+SENAO (260)
+FIM (261) 19
+REPITA (262)
+RETORNA (263)
+ATE (264)
+LEIA (265)
+ESCREVA (266)
+TIPOINTEIRO (267) 15
+TIPOFLUTUANTE (268) 16
+TIPOVOID (269)
+IDENTIFICADOR (270) 11 12 19 22
+NUMEROINTEIRO (271)
+NUMEROFLUTUANTE (272)
+EXPONENCIAL (273)
+COMENTARIO (274)
+IGUAL (275)
+DOISPONTOS (276) 7 22
+ATRIBUICAO (277) 8
+MENOR (278)
+MENORIGUAL (279)
+MAIOR (280)
+MAIORIGUAL (281)
+DIFERENTE (282)
+ABREPARENTESES (283) 19
+FECHAPARENTESES (284) 19
+ABRECHAVE (285)
+FECHACHAVE (286)
+VIRGULA (287) 9 20
+ADICAO (288)
+SUBTRACAO (289)
+MULTIPLICACAO (290)
+DIVISAO (291)
+ABRECOLCHETE (292) 13 14 23
+FECHACOLCHETE (293) 13 14 23
+END_OF_FILE (294)
+
+
+Não terminais com as regras onde eles aparecem
+
+$accept (40)
+    à esquerda: 0
+programa (41)
+    à esquerda: 1, à direita: 0
+lista_declaracoes (42)
+    à esquerda: 2 3, à direita: 1 2
+declaracao (43)
+    à esquerda: 4 5 6, à direita: 2 3
+declaracao_variaveis (44)
+    à esquerda: 7, à direita: 4
+inicializacao_variaveis (45)
+    à esquerda: 8, à direita: 5
+lista_variaveis (46)
+    à esquerda: 9 10, à direita: 7 9
+var (47)
+    à esquerda: 11 12, à direita: 9 10
+indice (48)
+    à esquerda: 13 14, à direita: 12 13
+tipo (49)
+    à esquerda: 15 16, à direita: 7 17 22
+declaracao_funcao (50)
+    à esquerda: 17 18, à direita: 6
+cabecalho (51)
+    à esquerda: 19, à direita: 17 18
+lista_parametros (52)
+    à esquerda: 20 21, à direita: 19 20
+parametro (53)
+    à esquerda: 22 23, à direita: 20 21 23
+
+
+Estado 0
+
+    0 $accept: . programa $end
+
+    TIPOINTEIRO    deslocar, e ir ao estado 1
+    TIPOFLUTUANTE  deslocar, e ir ao estado 2
+    IDENTIFICADOR  deslocar, e ir ao estado 3
+    ATRIBUICAO     deslocar, e ir ao estado 4
+
+    programa                 ir ao estado 5
+    lista_declaracoes        ir ao estado 6
+    declaracao               ir ao estado 7
+    declaracao_variaveis     ir ao estado 8
+    inicializacao_variaveis  ir ao estado 9
+    tipo                     ir ao estado 10
+    declaracao_funcao        ir ao estado 11
+    cabecalho                ir ao estado 12
+
+
+Estado 1
+
+   15 tipo: TIPOINTEIRO .
+
+    $padrão  reduzir usando a regra 15 (tipo)
+
+
+Estado 2
+
+   16 tipo: TIPOFLUTUANTE .
+
+    $padrão  reduzir usando a regra 16 (tipo)
+
+
+Estado 3
+
+   19 cabecalho: IDENTIFICADOR . ABREPARENTESES lista_parametros FECHAPARENTESES FIM
+
+    ABREPARENTESES  deslocar, e ir ao estado 13
+
+
+Estado 4
+
+    8 inicializacao_variaveis: ATRIBUICAO .
+
+    $padrão  reduzir usando a regra 8 (inicializacao_variaveis)
+
+
+Estado 5
+
+    0 $accept: programa . $end
+
+    $end  deslocar, e ir ao estado 14
+
+
+Estado 6
+
+    1 programa: lista_declaracoes .
+    2 lista_declaracoes: lista_declaracoes . declaracao
+
+    TIPOINTEIRO    deslocar, e ir ao estado 1
+    TIPOFLUTUANTE  deslocar, e ir ao estado 2
+    IDENTIFICADOR  deslocar, e ir ao estado 3
+    ATRIBUICAO     deslocar, e ir ao estado 4
+
+    $padrão  reduzir usando a regra 1 (programa)
+
+    declaracao               ir ao estado 15
+    declaracao_variaveis     ir ao estado 8
+    inicializacao_variaveis  ir ao estado 9
+    tipo                     ir ao estado 10
+    declaracao_funcao        ir ao estado 11
+    cabecalho                ir ao estado 12
+
+
+Estado 7
+
+    3 lista_declaracoes: declaracao .
+
+    $padrão  reduzir usando a regra 3 (lista_declaracoes)
+
+
+Estado 8
+
+    4 declaracao: declaracao_variaveis .
+
+    $padrão  reduzir usando a regra 4 (declaracao)
+
+
+Estado 9
+
+    5 declaracao: inicializacao_variaveis .
+
+    $padrão  reduzir usando a regra 5 (declaracao)
+
+
+Estado 10
+
+    7 declaracao_variaveis: tipo . DOISPONTOS lista_variaveis
+   17 declaracao_funcao: tipo . cabecalho
+
+    IDENTIFICADOR  deslocar, e ir ao estado 3
+    DOISPONTOS     deslocar, e ir ao estado 16
+
+    cabecalho  ir ao estado 17
+
+
+Estado 11
+
+    6 declaracao: declaracao_funcao .
+
+    $padrão  reduzir usando a regra 6 (declaracao)
+
+
+Estado 12
+
+   18 declaracao_funcao: cabecalho .
+
+    $padrão  reduzir usando a regra 18 (declaracao_funcao)
+
+
+Estado 13
+
+   19 cabecalho: IDENTIFICADOR ABREPARENTESES . lista_parametros FECHAPARENTESES FIM
+
+    TIPOINTEIRO    deslocar, e ir ao estado 1
+    TIPOFLUTUANTE  deslocar, e ir ao estado 2
+
+    tipo              ir ao estado 18
+    lista_parametros  ir ao estado 19
+    parametro         ir ao estado 20
+
+
+Estado 14
+
+    0 $accept: programa $end .
+
+    $padrão  aceitar
+
+
+Estado 15
+
+    2 lista_declaracoes: lista_declaracoes declaracao .
+
+    $padrão  reduzir usando a regra 2 (lista_declaracoes)
+
+
+Estado 16
+
+    7 declaracao_variaveis: tipo DOISPONTOS . lista_variaveis
+
+    IDENTIFICADOR  deslocar, e ir ao estado 21
+
+    lista_variaveis  ir ao estado 22
+    var              ir ao estado 23
+
+
+Estado 17
+
+   17 declaracao_funcao: tipo cabecalho .
+
+    $padrão  reduzir usando a regra 17 (declaracao_funcao)
+
+
+Estado 18
+
+   22 parametro: tipo . DOISPONTOS IDENTIFICADOR
+
+    DOISPONTOS  deslocar, e ir ao estado 24
+
+
+Estado 19
+
+   19 cabecalho: IDENTIFICADOR ABREPARENTESES lista_parametros . FECHAPARENTESES FIM
+   20 lista_parametros: lista_parametros . VIRGULA parametro
+
+    FECHAPARENTESES  deslocar, e ir ao estado 25
+    VIRGULA          deslocar, e ir ao estado 26
+
+
+Estado 20
+
+   21 lista_parametros: parametro .
+   23 parametro: parametro . ABRECOLCHETE FECHACOLCHETE
+
+    ABRECOLCHETE  deslocar, e ir ao estado 27
+
+    $padrão  reduzir usando a regra 21 (lista_parametros)
+
+
+Estado 21
+
+   11 var: IDENTIFICADOR .
+   12    | IDENTIFICADOR . indice
+
+    ABRECOLCHETE  deslocar, e ir ao estado 28
+
+    $padrão  reduzir usando a regra 11 (var)
+
+    indice  ir ao estado 29
+
+
+Estado 22
+
+    7 declaracao_variaveis: tipo DOISPONTOS lista_variaveis .
+    9 lista_variaveis: lista_variaveis . VIRGULA var
+
+    VIRGULA  deslocar, e ir ao estado 30
+
+    $padrão  reduzir usando a regra 7 (declaracao_variaveis)
+
+
+Estado 23
+
+   10 lista_variaveis: var .
+
+    $padrão  reduzir usando a regra 10 (lista_variaveis)
+
+
+Estado 24
+
+   22 parametro: tipo DOISPONTOS . IDENTIFICADOR
+
+    IDENTIFICADOR  deslocar, e ir ao estado 31
+
+
+Estado 25
+
+   19 cabecalho: IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES . FIM
+
+    FIM  deslocar, e ir ao estado 32
+
+
+Estado 26
+
+   20 lista_parametros: lista_parametros VIRGULA . parametro
+
+    TIPOINTEIRO    deslocar, e ir ao estado 1
+    TIPOFLUTUANTE  deslocar, e ir ao estado 2
+
+    tipo       ir ao estado 18
+    parametro  ir ao estado 33
+
+
+Estado 27
+
+   23 parametro: parametro ABRECOLCHETE . FECHACOLCHETE
+
+    FECHACOLCHETE  deslocar, e ir ao estado 34
+
+
+Estado 28
+
+   14 indice: ABRECOLCHETE . FECHACOLCHETE
+
+    FECHACOLCHETE  deslocar, e ir ao estado 35
+
+
+Estado 29
+
+   12 var: IDENTIFICADOR indice .
+   13 indice: indice . ABRECOLCHETE FECHACOLCHETE
+
+    ABRECOLCHETE  deslocar, e ir ao estado 36
+
+    $padrão  reduzir usando a regra 12 (var)
+
+
+Estado 30
+
+    9 lista_variaveis: lista_variaveis VIRGULA . var
+
+    IDENTIFICADOR  deslocar, e ir ao estado 21
+
+    var  ir ao estado 37
+
+
+Estado 31
+
+   22 parametro: tipo DOISPONTOS IDENTIFICADOR .
+
+    $padrão  reduzir usando a regra 22 (parametro)
+
+
+Estado 32
+
+   19 cabecalho: IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES FIM .
+
+    $padrão  reduzir usando a regra 19 (cabecalho)
+
+
+Estado 33
+
+   20 lista_parametros: lista_parametros VIRGULA parametro .
+   23 parametro: parametro . ABRECOLCHETE FECHACOLCHETE
+
+    ABRECOLCHETE  deslocar, e ir ao estado 27
+
+    $padrão  reduzir usando a regra 20 (lista_parametros)
+
+
+Estado 34
+
+   23 parametro: parametro ABRECOLCHETE FECHACOLCHETE .
+
+    $padrão  reduzir usando a regra 23 (parametro)
+
+
+Estado 35
+
+   14 indice: ABRECOLCHETE FECHACOLCHETE .
+
+    $padrão  reduzir usando a regra 14 (indice)
+
+
+Estado 36
+
+   13 indice: indice ABRECOLCHETE . FECHACOLCHETE
+
+    FECHACOLCHETE  deslocar, e ir ao estado 38
+
+
+Estado 37
+
+    9 lista_variaveis: lista_variaveis VIRGULA var .
+
+    $padrão  reduzir usando a regra 9 (lista_variaveis)
+
+
+Estado 38
+
+   13 indice: indice ABRECOLCHETE FECHACOLCHETE .
+
+    $padrão  reduzir usando a regra 13 (indice)

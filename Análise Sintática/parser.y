@@ -24,7 +24,7 @@
 
 %token <pgm> SE ENTAO SENAO FIM REPITA RETORNA ATE LEIA ESCREVA TIPOINTEIRO TIPOFLUTUANTE TIPOVOID IDENTIFICADOR NUMEROINTEIRO NUMEROFLUTUANTE EXPONENCIAL COMENTARIO IGUAL DOISPONTOS ATRIBUICAO MENOR MENORIGUAL MAIOR MAIORIGUAL DIFERENTE ABREPARENTESES FECHAPARENTESES ABRECHAVE FECHACHAVE VIRGULA ADICAO SUBTRACAO MULTIPLICACAO DIVISAO ABRECOLCHETE FECHACOLCHETE END_OF_FILE
 
-%type <pgm> programa lista_declaracoes declaracao declaracao_variaveis inicializacao_variaveis lista_variaveis var indice tipo declaracao_funcao cabecalho lista_parametros parametro corpo acao se repita escreva retorna expressao expressao_simples expressao_aditiva expressao_multiplicativa expressao_unaria operador_relacional operador_soma operador_multiplicacao fator numero chamada_funcao lista_argumentos leia atribuicao
+%type <pgm> programa lista_declaracoes declaracao declaracao_variaveis inicializacao_variaveis lista_variaveis var indice tipo declaracao_funcao cabecalho lista_parametros parametro corpo acao se repita atribuicao leia escreva retorna expressao expressao_simples expressao_aditiva expressao_multiplicativa expressao_unaria operador_relacional operador_soma operador_multiplicacao fator numero chamada_funcao lista_argumentos
 
 %% 
 programa:
@@ -43,7 +43,7 @@ declaracao_variaveis:
 	tipo DOISPONTOS lista_variaveis;
 
 inicializacao_variaveis:
-	atribuicao;
+	ATRIBUICAO;
 
 lista_variaveis:
 	lista_variaveis VIRGULA var
@@ -77,18 +77,19 @@ parametro:
 	| parametro ABRECOLCHETE FECHACOLCHETE;
 
 corpo:
-	corpo acao;
+	corpo acao
+	| acao;
 
 acao:
 	expressao | declaracao_variaveis
-	| se | repita | leia | escreva | retorna;
+	| se | repita | atribuicao | leia | escreva | retorna;
 
 se:
 	SE expressao ENTAO corpo FIM
 	| SE expressao ENTAO corpo SENAO corpo FIM;
 
 repita:
-	REPITA corpo ATE expressao;
+	REPITA corpo ATE ;
 
 atribuicao:
 	var ATRIBUICAO expressao;
@@ -100,11 +101,12 @@ escreva:
 	ESCREVA ABREPARENTESES expressao FECHAPARENTESES;
 
 retorna:
-	RETORNA ABREPARENTESES "expressao" FECHAPARENTESES;
+	RETORNA ABREPARENTESES expressao FECHAPARENTESES;
 
 expressao:
-	expressao_simples
-	| "atribuicao";
+	/* empty */
+	atribuicao
+	| expressao_simples;
 
 expressao_simples:
 	expressao_aditiva
@@ -148,6 +150,7 @@ chamada_funcao:
 lista_argumentos:
 	lista_argumentos VIRGULA expressao
 	| expressao;
+
 %%
 void yyerror(char *s) {
 	fprintf(stdout, "%s\n", s);
@@ -156,7 +159,7 @@ void yyerror(char *s) {
 int main(int argc, char *argv[]){
 	/*
 		-> precisar ter uma expressão para o comentário?
-		-> como fazer com a expressão vazio?
+		-> como fazer com a expressão vazio & erro?
 	*/
 	yyin = fopen(argv[1], "r");
 	yyparse();	
