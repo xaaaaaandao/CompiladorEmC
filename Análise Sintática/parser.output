@@ -7,9 +7,9 @@ Terminais sem uso na gramática
    END_OF_FILE
 
 
-Estado 26 conflitos: 1 de deslocamento/redução
-Estado 37 conflitos: 2 de deslocamento/redução
-Estado 92 conflitos: 2 de deslocamento/redução
+Estado 27 conflitos: 1 de deslocamento/redução
+Estado 38 conflitos: 2 de deslocamento/redução
+Estado 101 conflitos: 2 de deslocamento/redução
 
 
 Gramática
@@ -45,120 +45,121 @@ Gramática
    18                  | cabecalho
 
    19 cabecalho: IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM
+   20          | IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM
 
-   20 lista_parametros: lista_parametros VIRGULA parametro
-   21                 | parametro
+   21 lista_parametros: lista_parametros VIRGULA parametro
+   22                 | parametro
 
-   22 parametro: tipo DOISPONTOS IDENTIFICADOR
-   23          | parametro ABRECOLCHETE FECHACOLCHETE
+   23 parametro: tipo DOISPONTOS IDENTIFICADOR
+   24          | parametro ABRECOLCHETE FECHACOLCHETE
 
-   24 corpo: acao
-   25      | corpo acao
+   25 corpo: acao
+   26      | corpo acao
 
-   26 acao: expressao
-   27     | declaracao_variaveis
-   28     | se
-   29     | repita
-   30     | leia
-   31     | escreva
-   32     | retorna
+   27 acao: expressao
+   28     | declaracao_variaveis
+   29     | se
+   30     | repita
+   31     | leia
+   32     | escreva
+   33     | retorna
 
-   33 se: SE expressao ENTAO corpo FIM
-   34   | SE expressao ENTAO corpo SENAO corpo FIM
+   34 se: SE expressao ENTAO corpo FIM
+   35   | SE expressao ENTAO corpo SENAO corpo FIM
 
-   35 repita: REPITA corpo ATE expressao
+   36 repita: REPITA corpo ATE expressao
 
-   36 atribuicao: var ATRIBUICAO expressao
+   37 atribuicao: var ATRIBUICAO expressao
 
-   37 leia: LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES
+   38 leia: LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES
 
-   38 escreva: ESCREVA ABREPARENTESES expressao FECHAPARENTESES
+   39 escreva: ESCREVA ABREPARENTESES expressao FECHAPARENTESES
 
-   39 retorna: RETORNA ABREPARENTESES expressao FECHAPARENTESES
+   40 retorna: RETORNA ABREPARENTESES expressao FECHAPARENTESES
 
-   40 expressao: atribuicao
-   41          | expressao_simples
+   41 expressao: atribuicao
+   42          | expressao_simples
 
-   42 expressao_simples: expressao_aditiva
-   43                  | expressao_simples operador_relacional expressao_aditiva
+   43 expressao_simples: expressao_aditiva
+   44                  | expressao_simples operador_relacional expressao_aditiva
 
-   44 expressao_aditiva: expressao_multiplicativa
-   45                  | expressao_aditiva operador_soma expressao_multiplicativa
+   45 expressao_aditiva: expressao_multiplicativa
+   46                  | expressao_aditiva operador_soma expressao_multiplicativa
 
-   46 expressao_multiplicativa: expressao_unaria
-   47                         | expressao_multiplicativa operador_multiplicacao expressao_unaria
+   47 expressao_multiplicativa: expressao_unaria
+   48                         | expressao_multiplicativa operador_multiplicacao expressao_unaria
 
-   48 expressao_unaria: fator
-   49                 | operador_soma fator
+   49 expressao_unaria: fator
+   50                 | operador_soma fator
 
-   50 operador_relacional: MENOR
-   51                    | MAIOR
-   52                    | IGUAL
-   53                    | DIFERENTE
-   54                    | MENORIGUAL
-   55                    | MAIORIGUAL
+   51 operador_relacional: MENOR
+   52                    | MAIOR
+   53                    | IGUAL
+   54                    | DIFERENTE
+   55                    | MENORIGUAL
+   56                    | MAIORIGUAL
 
-   56 operador_soma: ADICAO
-   57              | SUBTRACAO
+   57 operador_soma: ADICAO
+   58              | SUBTRACAO
 
-   58 operador_multiplicacao: MULTIPLICACAO
-   59                       | DIVISAO
+   59 operador_multiplicacao: MULTIPLICACAO
+   60                       | DIVISAO
 
-   60 fator: ABREPARENTESES expressao FECHAPARENTESES
-   61      | var
-   62      | chamada_funcao
-   63      | numero
+   61 fator: ABREPARENTESES expressao FECHAPARENTESES
+   62      | var
+   63      | chamada_funcao
+   64      | numero
 
-   64 numero: NUMEROINTEIRO
-   65       | NUMEROFLUTUANTE
-   66       | EXPONENCIAL
+   65 numero: NUMEROINTEIRO
+   66       | NUMEROFLUTUANTE
+   67       | EXPONENCIAL
 
-   67 chamada_funcao: IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES
+   68 chamada_funcao: IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES
 
-   68 lista_argumentos: lista_argumentos VIRGULA expressao
-   69                 | expressao
+   69 lista_argumentos: lista_argumentos VIRGULA expressao
+   70                 | expressao
 
 
 Terminais, com as regras onde eles aparecem
 
 $end (0) 0
 error (256)
-SE (258) 33 34
-ENTAO (259) 33 34
-SENAO (260) 34
-FIM (261) 19 33 34
-REPITA (262) 35
-RETORNA (263) 39
-ATE (264) 35
-LEIA (265) 37
-ESCREVA (266) 38
+SE (258) 34 35
+ENTAO (259) 34 35
+SENAO (260) 35
+FIM (261) 19 20 34 35
+REPITA (262) 36
+RETORNA (263) 40
+ATE (264) 36
+LEIA (265) 38
+ESCREVA (266) 39
 TIPOINTEIRO (267) 15
 TIPOFLUTUANTE (268) 16
 TIPOVOID (269)
-IDENTIFICADOR (270) 11 12 19 22 37 67
-NUMEROINTEIRO (271) 64
-NUMEROFLUTUANTE (272) 65
-EXPONENCIAL (273) 66
+IDENTIFICADOR (270) 11 12 19 20 23 38 68
+NUMEROINTEIRO (271) 65
+NUMEROFLUTUANTE (272) 66
+EXPONENCIAL (273) 67
 COMENTARIO (274)
-IGUAL (275) 52
-DOISPONTOS (276) 7 22
-ATRIBUICAO (277) 36
-MENOR (278) 50
-MENORIGUAL (279) 54
-MAIOR (280) 51
-MAIORIGUAL (281) 55
-DIFERENTE (282) 53
-ABREPARENTESES (283) 19 37 38 39 60 67
-FECHAPARENTESES (284) 19 37 38 39 60 67
+IGUAL (275) 53
+DOISPONTOS (276) 7 23
+ATRIBUICAO (277) 37
+MENOR (278) 51
+MENORIGUAL (279) 55
+MAIOR (280) 52
+MAIORIGUAL (281) 56
+DIFERENTE (282) 54
+ABREPARENTESES (283) 19 20 38 39 40 61 68
+FECHAPARENTESES (284) 19 20 38 39 40 61 68
 ABRECHAVE (285)
 FECHACHAVE (286)
-VIRGULA (287) 9 20 68
-ADICAO (288) 56
-SUBTRACAO (289) 57
-MULTIPLICACAO (290) 58
-DIVISAO (291) 59
-ABRECOLCHETE (292) 13 14 23
-FECHACOLCHETE (293) 13 14 23
+VIRGULA (287) 9 21 69
+ADICAO (288) 57
+SUBTRACAO (289) 58
+MULTIPLICACAO (290) 59
+DIVISAO (291) 60
+ABRECOLCHETE (292) 13 14 24
+FECHACOLCHETE (293) 13 14 24
 END_OF_FILE (294)
 
 
@@ -173,66 +174,66 @@ lista_declaracoes (42)
 declaracao (43)
     à esquerda: 4 5 6, à direita: 2 3
 declaracao_variaveis (44)
-    à esquerda: 7, à direita: 4 27
+    à esquerda: 7, à direita: 4 28
 inicializacao_variaveis (45)
     à esquerda: 8, à direita: 5
 lista_variaveis (46)
     à esquerda: 9 10, à direita: 7 9
 var (47)
-    à esquerda: 11 12, à direita: 9 10 36 61
+    à esquerda: 11 12, à direita: 9 10 37 62
 indice (48)
     à esquerda: 13 14, à direita: 12 13
 tipo (49)
-    à esquerda: 15 16, à direita: 7 17 22
+    à esquerda: 15 16, à direita: 7 17 23
 declaracao_funcao (50)
     à esquerda: 17 18, à direita: 6
 cabecalho (51)
-    à esquerda: 19, à direita: 17 18
+    à esquerda: 19 20, à direita: 17 18
 lista_parametros (52)
-    à esquerda: 20 21, à direita: 19 20
+    à esquerda: 21 22, à direita: 19 21
 parametro (53)
-    à esquerda: 22 23, à direita: 20 21 23
+    à esquerda: 23 24, à direita: 21 22 24
 corpo (54)
-    à esquerda: 24 25, à direita: 19 25 33 34 35
+    à esquerda: 25 26, à direita: 19 20 26 34 35 36
 acao (55)
-    à esquerda: 26 27 28 29 30 31 32, à direita: 24 25
+    à esquerda: 27 28 29 30 31 32 33, à direita: 25 26
 se (56)
-    à esquerda: 33 34, à direita: 28
+    à esquerda: 34 35, à direita: 29
 repita (57)
-    à esquerda: 35, à direita: 29
+    à esquerda: 36, à direita: 30
 atribuicao (58)
-    à esquerda: 36, à direita: 8 40
+    à esquerda: 37, à direita: 8 41
 leia (59)
-    à esquerda: 37, à direita: 30
-escreva (60)
     à esquerda: 38, à direita: 31
-retorna (61)
+escreva (60)
     à esquerda: 39, à direita: 32
+retorna (61)
+    à esquerda: 40, à direita: 33
 expressao (62)
-    à esquerda: 40 41, à direita: 13 14 26 33 34 35 36 38 39 60 68
-    69
+    à esquerda: 41 42, à direita: 13 14 27 34 35 36 37 39 40 61 69
+    70
 expressao_simples (63)
-    à esquerda: 42 43, à direita: 41 43
+    à esquerda: 43 44, à direita: 42 44
 expressao_aditiva (64)
-    à esquerda: 44 45, à direita: 42 43 45
+    à esquerda: 45 46, à direita: 43 44 46
 expressao_multiplicativa (65)
-    à esquerda: 46 47, à direita: 44 45 47
+    à esquerda: 47 48, à direita: 45 46 48
 expressao_unaria (66)
-    à esquerda: 48 49, à direita: 46 47
+    à esquerda: 49 50, à direita: 47 48
 operador_relacional (67)
-    à esquerda: 50 51 52 53 54 55, à direita: 43
+    à esquerda: 51 52 53 54 55 56, à direita: 44
 operador_soma (68)
-    à esquerda: 56 57, à direita: 45 49
+    à esquerda: 57 58, à direita: 46 50
 operador_multiplicacao (69)
-    à esquerda: 58 59, à direita: 47
+    à esquerda: 59 60, à direita: 48
 fator (70)
-    à esquerda: 60 61 62 63, à direita: 48 49
+    à esquerda: 61 62 63 64, à direita: 49 50
 numero (71)
-    à esquerda: 64 65 66, à direita: 63
+    à esquerda: 65 66 67, à direita: 64
 chamada_funcao (72)
-    à esquerda: 67, à direita: 62
+    à esquerda: 68, à direita: 63
 lista_argumentos (73)
-    à esquerda: 68 69, à direita: 67 68
+    à esquerda: 69 70, à direita: 68 69
 
 
 Estado 0
@@ -274,6 +275,7 @@ Estado 3
    11 var: IDENTIFICADOR .
    12    | IDENTIFICADOR . indice
    19 cabecalho: IDENTIFICADOR . ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM
+   20          | IDENTIFICADOR . ABREPARENTESES FECHAPARENTESES corpo FIM
 
     ABREPARENTESES  deslocar, e ir ao estado 14
     ABRECOLCHETE    deslocar, e ir ao estado 15
@@ -334,7 +336,7 @@ Estado 8
 
 Estado 9
 
-   36 atribuicao: var . ATRIBUICAO expressao
+   37 atribuicao: var . ATRIBUICAO expressao
 
     ATRIBUICAO  deslocar, e ir ao estado 19
 
@@ -374,38 +376,40 @@ Estado 13
 Estado 14
 
    19 cabecalho: IDENTIFICADOR ABREPARENTESES . lista_parametros FECHAPARENTESES corpo FIM
+   20          | IDENTIFICADOR ABREPARENTESES . FECHAPARENTESES corpo FIM
 
-    TIPOINTEIRO    deslocar, e ir ao estado 1
-    TIPOFLUTUANTE  deslocar, e ir ao estado 2
+    TIPOINTEIRO      deslocar, e ir ao estado 1
+    TIPOFLUTUANTE    deslocar, e ir ao estado 2
+    FECHAPARENTESES  deslocar, e ir ao estado 23
 
-    tipo              ir ao estado 23
-    lista_parametros  ir ao estado 24
-    parametro         ir ao estado 25
+    tipo              ir ao estado 24
+    lista_parametros  ir ao estado 25
+    parametro         ir ao estado 26
 
 
 Estado 15
 
    14 indice: ABRECOLCHETE . expressao FECHACOLCHETE
 
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
 
-    var                       ir ao estado 33
-    atribuicao                ir ao estado 34
-    expressao                 ir ao estado 35
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
+    var                       ir ao estado 34
+    atribuicao                ir ao estado 35
+    expressao                 ir ao estado 36
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
 Estado 16
@@ -413,7 +417,7 @@ Estado 16
    12 var: IDENTIFICADOR indice .
    13 indice: indice . ABRECOLCHETE expressao FECHACOLCHETE
 
-    ABRECOLCHETE  deslocar, e ir ao estado 44
+    ABRECOLCHETE  deslocar, e ir ao estado 45
 
     $padrão  reduzir usando a regra 12 (var)
 
@@ -434,32 +438,33 @@ Estado 18
 
 Estado 19
 
-   36 atribuicao: var ATRIBUICAO . expressao
+   37 atribuicao: var ATRIBUICAO . expressao
 
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
 
-    var                       ir ao estado 33
-    atribuicao                ir ao estado 34
-    expressao                 ir ao estado 45
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
+    var                       ir ao estado 34
+    atribuicao                ir ao estado 35
+    expressao                 ir ao estado 46
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
 Estado 20
 
    19 cabecalho: IDENTIFICADOR . ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM
+   20          | IDENTIFICADOR . ABREPARENTESES FECHAPARENTESES corpo FIM
 
     ABREPARENTESES  deslocar, e ir ao estado 14
 
@@ -468,10 +473,10 @@ Estado 21
 
     7 declaracao_variaveis: tipo DOISPONTOS . lista_variaveis
 
-    IDENTIFICADOR  deslocar, e ir ao estado 46
+    IDENTIFICADOR  deslocar, e ir ao estado 47
 
-    lista_variaveis  ir ao estado 47
-    var              ir ao estado 48
+    lista_variaveis  ir ao estado 48
+    var              ir ao estado 49
 
 
 Estado 22
@@ -483,37 +488,78 @@ Estado 22
 
 Estado 23
 
-   22 parametro: tipo . DOISPONTOS IDENTIFICADOR
+   20 cabecalho: IDENTIFICADOR ABREPARENTESES FECHAPARENTESES . corpo FIM
 
-    DOISPONTOS  deslocar, e ir ao estado 49
+    SE               deslocar, e ir ao estado 50
+    REPITA           deslocar, e ir ao estado 51
+    RETORNA          deslocar, e ir ao estado 52
+    LEIA             deslocar, e ir ao estado 53
+    ESCREVA          deslocar, e ir ao estado 54
+    TIPOINTEIRO      deslocar, e ir ao estado 1
+    TIPOFLUTUANTE    deslocar, e ir ao estado 2
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    declaracao_variaveis      ir ao estado 55
+    var                       ir ao estado 34
+    tipo                      ir ao estado 56
+    corpo                     ir ao estado 57
+    acao                      ir ao estado 58
+    se                        ir ao estado 59
+    repita                    ir ao estado 60
+    atribuicao                ir ao estado 35
+    leia                      ir ao estado 61
+    escreva                   ir ao estado 62
+    retorna                   ir ao estado 63
+    expressao                 ir ao estado 64
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
 Estado 24
 
-   19 cabecalho: IDENTIFICADOR ABREPARENTESES lista_parametros . FECHAPARENTESES corpo FIM
-   20 lista_parametros: lista_parametros . VIRGULA parametro
+   23 parametro: tipo . DOISPONTOS IDENTIFICADOR
 
-    FECHAPARENTESES  deslocar, e ir ao estado 50
-    VIRGULA          deslocar, e ir ao estado 51
+    DOISPONTOS  deslocar, e ir ao estado 65
 
 
 Estado 25
 
-   21 lista_parametros: parametro .
-   23 parametro: parametro . ABRECOLCHETE FECHACOLCHETE
+   19 cabecalho: IDENTIFICADOR ABREPARENTESES lista_parametros . FECHAPARENTESES corpo FIM
+   21 lista_parametros: lista_parametros . VIRGULA parametro
 
-    ABRECOLCHETE  deslocar, e ir ao estado 52
-
-    $padrão  reduzir usando a regra 21 (lista_parametros)
+    FECHAPARENTESES  deslocar, e ir ao estado 66
+    VIRGULA          deslocar, e ir ao estado 67
 
 
 Estado 26
 
+   22 lista_parametros: parametro .
+   24 parametro: parametro . ABRECOLCHETE FECHACOLCHETE
+
+    ABRECOLCHETE  deslocar, e ir ao estado 68
+
+    $padrão  reduzir usando a regra 22 (lista_parametros)
+
+
+Estado 27
+
    11 var: IDENTIFICADOR .
    12    | IDENTIFICADOR . indice
-   67 chamada_funcao: IDENTIFICADOR . ABREPARENTESES lista_argumentos FECHAPARENTESES
+   68 chamada_funcao: IDENTIFICADOR . ABREPARENTESES lista_argumentos FECHAPARENTESES
 
-    ABREPARENTESES  deslocar, e ir ao estado 53
+    ABREPARENTESES  deslocar, e ir ao estado 69
     ABRECOLCHETE    deslocar, e ir ao estado 15
 
     ABREPARENTESES  [reduzir usando a regra 11 (var)]
@@ -522,212 +568,212 @@ Estado 26
     indice  ir ao estado 16
 
 
-Estado 27
-
-   64 numero: NUMEROINTEIRO .
-
-    $padrão  reduzir usando a regra 64 (numero)
-
-
 Estado 28
 
-   65 numero: NUMEROFLUTUANTE .
+   65 numero: NUMEROINTEIRO .
 
     $padrão  reduzir usando a regra 65 (numero)
 
 
 Estado 29
 
-   66 numero: EXPONENCIAL .
+   66 numero: NUMEROFLUTUANTE .
 
     $padrão  reduzir usando a regra 66 (numero)
 
 
 Estado 30
 
-   60 fator: ABREPARENTESES . expressao FECHAPARENTESES
+   67 numero: EXPONENCIAL .
 
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    var                       ir ao estado 33
-    atribuicao                ir ao estado 34
-    expressao                 ir ao estado 54
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
+    $padrão  reduzir usando a regra 67 (numero)
 
 
 Estado 31
 
-   56 operador_soma: ADICAO .
+   61 fator: ABREPARENTESES . expressao FECHAPARENTESES
 
-    $padrão  reduzir usando a regra 56 (operador_soma)
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    var                       ir ao estado 34
+    atribuicao                ir ao estado 35
+    expressao                 ir ao estado 70
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
 Estado 32
 
-   57 operador_soma: SUBTRACAO .
+   57 operador_soma: ADICAO .
 
     $padrão  reduzir usando a regra 57 (operador_soma)
 
 
 Estado 33
 
-   36 atribuicao: var . ATRIBUICAO expressao
-   61 fator: var .
+   58 operador_soma: SUBTRACAO .
 
-    ATRIBUICAO  deslocar, e ir ao estado 19
-
-    $padrão  reduzir usando a regra 61 (fator)
+    $padrão  reduzir usando a regra 58 (operador_soma)
 
 
 Estado 34
 
-   40 expressao: atribuicao .
+   37 atribuicao: var . ATRIBUICAO expressao
+   62 fator: var .
 
-    $padrão  reduzir usando a regra 40 (expressao)
-
-
-Estado 35
-
-   14 indice: ABRECOLCHETE expressao . FECHACOLCHETE
-
-    FECHACOLCHETE  deslocar, e ir ao estado 55
-
-
-Estado 36
-
-   41 expressao: expressao_simples .
-   43 expressao_simples: expressao_simples . operador_relacional expressao_aditiva
-
-    IGUAL       deslocar, e ir ao estado 56
-    MENOR       deslocar, e ir ao estado 57
-    MENORIGUAL  deslocar, e ir ao estado 58
-    MAIOR       deslocar, e ir ao estado 59
-    MAIORIGUAL  deslocar, e ir ao estado 60
-    DIFERENTE   deslocar, e ir ao estado 61
-
-    $padrão  reduzir usando a regra 41 (expressao)
-
-    operador_relacional  ir ao estado 62
-
-
-Estado 37
-
-   42 expressao_simples: expressao_aditiva .
-   45 expressao_aditiva: expressao_aditiva . operador_soma expressao_multiplicativa
-
-    ADICAO     deslocar, e ir ao estado 31
-    SUBTRACAO  deslocar, e ir ao estado 32
-
-    ADICAO     [reduzir usando a regra 42 (expressao_simples)]
-    SUBTRACAO  [reduzir usando a regra 42 (expressao_simples)]
-    $padrão   reduzir usando a regra 42 (expressao_simples)
-
-    operador_soma  ir ao estado 63
-
-
-Estado 38
-
-   44 expressao_aditiva: expressao_multiplicativa .
-   47 expressao_multiplicativa: expressao_multiplicativa . operador_multiplicacao expressao_unaria
-
-    MULTIPLICACAO  deslocar, e ir ao estado 64
-    DIVISAO        deslocar, e ir ao estado 65
-
-    $padrão  reduzir usando a regra 44 (expressao_aditiva)
-
-    operador_multiplicacao  ir ao estado 66
-
-
-Estado 39
-
-   46 expressao_multiplicativa: expressao_unaria .
-
-    $padrão  reduzir usando a regra 46 (expressao_multiplicativa)
-
-
-Estado 40
-
-   49 expressao_unaria: operador_soma . fator
-
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-
-    var             ir ao estado 67
-    fator           ir ao estado 68
-    numero          ir ao estado 42
-    chamada_funcao  ir ao estado 43
-
-
-Estado 41
-
-   48 expressao_unaria: fator .
-
-    $padrão  reduzir usando a regra 48 (expressao_unaria)
-
-
-Estado 42
-
-   63 fator: numero .
-
-    $padrão  reduzir usando a regra 63 (fator)
-
-
-Estado 43
-
-   62 fator: chamada_funcao .
+    ATRIBUICAO  deslocar, e ir ao estado 19
 
     $padrão  reduzir usando a regra 62 (fator)
 
 
+Estado 35
+
+   41 expressao: atribuicao .
+
+    $padrão  reduzir usando a regra 41 (expressao)
+
+
+Estado 36
+
+   14 indice: ABRECOLCHETE expressao . FECHACOLCHETE
+
+    FECHACOLCHETE  deslocar, e ir ao estado 71
+
+
+Estado 37
+
+   42 expressao: expressao_simples .
+   44 expressao_simples: expressao_simples . operador_relacional expressao_aditiva
+
+    IGUAL       deslocar, e ir ao estado 72
+    MENOR       deslocar, e ir ao estado 73
+    MENORIGUAL  deslocar, e ir ao estado 74
+    MAIOR       deslocar, e ir ao estado 75
+    MAIORIGUAL  deslocar, e ir ao estado 76
+    DIFERENTE   deslocar, e ir ao estado 77
+
+    $padrão  reduzir usando a regra 42 (expressao)
+
+    operador_relacional  ir ao estado 78
+
+
+Estado 38
+
+   43 expressao_simples: expressao_aditiva .
+   46 expressao_aditiva: expressao_aditiva . operador_soma expressao_multiplicativa
+
+    ADICAO     deslocar, e ir ao estado 32
+    SUBTRACAO  deslocar, e ir ao estado 33
+
+    ADICAO     [reduzir usando a regra 43 (expressao_simples)]
+    SUBTRACAO  [reduzir usando a regra 43 (expressao_simples)]
+    $padrão   reduzir usando a regra 43 (expressao_simples)
+
+    operador_soma  ir ao estado 79
+
+
+Estado 39
+
+   45 expressao_aditiva: expressao_multiplicativa .
+   48 expressao_multiplicativa: expressao_multiplicativa . operador_multiplicacao expressao_unaria
+
+    MULTIPLICACAO  deslocar, e ir ao estado 80
+    DIVISAO        deslocar, e ir ao estado 81
+
+    $padrão  reduzir usando a regra 45 (expressao_aditiva)
+
+    operador_multiplicacao  ir ao estado 82
+
+
+Estado 40
+
+   47 expressao_multiplicativa: expressao_unaria .
+
+    $padrão  reduzir usando a regra 47 (expressao_multiplicativa)
+
+
+Estado 41
+
+   50 expressao_unaria: operador_soma . fator
+
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+
+    var             ir ao estado 83
+    fator           ir ao estado 84
+    numero          ir ao estado 43
+    chamada_funcao  ir ao estado 44
+
+
+Estado 42
+
+   49 expressao_unaria: fator .
+
+    $padrão  reduzir usando a regra 49 (expressao_unaria)
+
+
+Estado 43
+
+   64 fator: numero .
+
+    $padrão  reduzir usando a regra 64 (fator)
+
+
 Estado 44
 
-   13 indice: indice ABRECOLCHETE . expressao FECHACOLCHETE
+   63 fator: chamada_funcao .
 
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    var                       ir ao estado 33
-    atribuicao                ir ao estado 34
-    expressao                 ir ao estado 69
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
+    $padrão  reduzir usando a regra 63 (fator)
 
 
 Estado 45
 
-   36 atribuicao: var ATRIBUICAO expressao .
+   13 indice: indice ABRECOLCHETE . expressao FECHACOLCHETE
 
-    $padrão  reduzir usando a regra 36 (atribuicao)
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    var                       ir ao estado 34
+    atribuicao                ir ao estado 35
+    expressao                 ir ao estado 85
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
 Estado 46
+
+   37 atribuicao: var ATRIBUICAO expressao .
+
+    $padrão  reduzir usando a regra 37 (atribuicao)
+
+
+Estado 47
 
    11 var: IDENTIFICADOR .
    12    | IDENTIFICADOR . indice
@@ -739,979 +785,1028 @@ Estado 46
     indice  ir ao estado 16
 
 
-Estado 47
+Estado 48
 
     7 declaracao_variaveis: tipo DOISPONTOS lista_variaveis .
     9 lista_variaveis: lista_variaveis . VIRGULA var
 
-    VIRGULA  deslocar, e ir ao estado 70
+    VIRGULA  deslocar, e ir ao estado 86
 
     $padrão  reduzir usando a regra 7 (declaracao_variaveis)
 
 
-Estado 48
+Estado 49
 
    10 lista_variaveis: var .
 
     $padrão  reduzir usando a regra 10 (lista_variaveis)
 
 
-Estado 49
-
-   22 parametro: tipo DOISPONTOS . IDENTIFICADOR
-
-    IDENTIFICADOR  deslocar, e ir ao estado 71
-
-
 Estado 50
 
-   19 cabecalho: IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES . corpo FIM
+   34 se: SE . expressao ENTAO corpo FIM
+   35   | SE . expressao ENTAO corpo SENAO corpo FIM
 
-    SE               deslocar, e ir ao estado 72
-    REPITA           deslocar, e ir ao estado 73
-    RETORNA          deslocar, e ir ao estado 74
-    LEIA             deslocar, e ir ao estado 75
-    ESCREVA          deslocar, e ir ao estado 76
-    TIPOINTEIRO      deslocar, e ir ao estado 1
-    TIPOFLUTUANTE    deslocar, e ir ao estado 2
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
 
-    declaracao_variaveis      ir ao estado 77
-    var                       ir ao estado 33
-    tipo                      ir ao estado 78
-    corpo                     ir ao estado 79
-    acao                      ir ao estado 80
-    se                        ir ao estado 81
-    repita                    ir ao estado 82
-    atribuicao                ir ao estado 34
-    leia                      ir ao estado 83
-    escreva                   ir ao estado 84
-    retorna                   ir ao estado 85
-    expressao                 ir ao estado 86
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
+    var                       ir ao estado 34
+    atribuicao                ir ao estado 35
+    expressao                 ir ao estado 87
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
 Estado 51
 
-   20 lista_parametros: lista_parametros VIRGULA . parametro
+   36 repita: REPITA . corpo ATE expressao
 
-    TIPOINTEIRO    deslocar, e ir ao estado 1
-    TIPOFLUTUANTE  deslocar, e ir ao estado 2
+    SE               deslocar, e ir ao estado 50
+    REPITA           deslocar, e ir ao estado 51
+    RETORNA          deslocar, e ir ao estado 52
+    LEIA             deslocar, e ir ao estado 53
+    ESCREVA          deslocar, e ir ao estado 54
+    TIPOINTEIRO      deslocar, e ir ao estado 1
+    TIPOFLUTUANTE    deslocar, e ir ao estado 2
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
 
-    tipo       ir ao estado 23
-    parametro  ir ao estado 87
+    declaracao_variaveis      ir ao estado 55
+    var                       ir ao estado 34
+    tipo                      ir ao estado 56
+    corpo                     ir ao estado 88
+    acao                      ir ao estado 58
+    se                        ir ao estado 59
+    repita                    ir ao estado 60
+    atribuicao                ir ao estado 35
+    leia                      ir ao estado 61
+    escreva                   ir ao estado 62
+    retorna                   ir ao estado 63
+    expressao                 ir ao estado 64
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
 Estado 52
 
-   23 parametro: parametro ABRECOLCHETE . FECHACOLCHETE
+   40 retorna: RETORNA . ABREPARENTESES expressao FECHAPARENTESES
 
-    FECHACOLCHETE  deslocar, e ir ao estado 88
+    ABREPARENTESES  deslocar, e ir ao estado 89
 
 
 Estado 53
 
-   67 chamada_funcao: IDENTIFICADOR ABREPARENTESES . lista_argumentos FECHAPARENTESES
+   38 leia: LEIA . ABREPARENTESES IDENTIFICADOR FECHAPARENTESES
 
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    var                       ir ao estado 33
-    atribuicao                ir ao estado 34
-    expressao                 ir ao estado 89
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
-    lista_argumentos          ir ao estado 90
+    ABREPARENTESES  deslocar, e ir ao estado 90
 
 
 Estado 54
 
-   60 fator: ABREPARENTESES expressao . FECHAPARENTESES
+   39 escreva: ESCREVA . ABREPARENTESES expressao FECHAPARENTESES
 
-    FECHAPARENTESES  deslocar, e ir ao estado 91
+    ABREPARENTESES  deslocar, e ir ao estado 91
 
 
 Estado 55
 
-   14 indice: ABRECOLCHETE expressao FECHACOLCHETE .
+   28 acao: declaracao_variaveis .
 
-    $padrão  reduzir usando a regra 14 (indice)
+    $padrão  reduzir usando a regra 28 (acao)
 
 
 Estado 56
-
-   52 operador_relacional: IGUAL .
-
-    $padrão  reduzir usando a regra 52 (operador_relacional)
-
-
-Estado 57
-
-   50 operador_relacional: MENOR .
-
-    $padrão  reduzir usando a regra 50 (operador_relacional)
-
-
-Estado 58
-
-   54 operador_relacional: MENORIGUAL .
-
-    $padrão  reduzir usando a regra 54 (operador_relacional)
-
-
-Estado 59
-
-   51 operador_relacional: MAIOR .
-
-    $padrão  reduzir usando a regra 51 (operador_relacional)
-
-
-Estado 60
-
-   55 operador_relacional: MAIORIGUAL .
-
-    $padrão  reduzir usando a regra 55 (operador_relacional)
-
-
-Estado 61
-
-   53 operador_relacional: DIFERENTE .
-
-    $padrão  reduzir usando a regra 53 (operador_relacional)
-
-
-Estado 62
-
-   43 expressao_simples: expressao_simples operador_relacional . expressao_aditiva
-
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    var                       ir ao estado 67
-    expressao_aditiva         ir ao estado 92
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
-
-
-Estado 63
-
-   45 expressao_aditiva: expressao_aditiva operador_soma . expressao_multiplicativa
-
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    var                       ir ao estado 67
-    expressao_multiplicativa  ir ao estado 93
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
-
-
-Estado 64
-
-   58 operador_multiplicacao: MULTIPLICACAO .
-
-    $padrão  reduzir usando a regra 58 (operador_multiplicacao)
-
-
-Estado 65
-
-   59 operador_multiplicacao: DIVISAO .
-
-    $padrão  reduzir usando a regra 59 (operador_multiplicacao)
-
-
-Estado 66
-
-   47 expressao_multiplicativa: expressao_multiplicativa operador_multiplicacao . expressao_unaria
-
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    var               ir ao estado 67
-    expressao_unaria  ir ao estado 94
-    operador_soma     ir ao estado 40
-    fator             ir ao estado 41
-    numero            ir ao estado 42
-    chamada_funcao    ir ao estado 43
-
-
-Estado 67
-
-   61 fator: var .
-
-    $padrão  reduzir usando a regra 61 (fator)
-
-
-Estado 68
-
-   49 expressao_unaria: operador_soma fator .
-
-    $padrão  reduzir usando a regra 49 (expressao_unaria)
-
-
-Estado 69
-
-   13 indice: indice ABRECOLCHETE expressao . FECHACOLCHETE
-
-    FECHACOLCHETE  deslocar, e ir ao estado 95
-
-
-Estado 70
-
-    9 lista_variaveis: lista_variaveis VIRGULA . var
-
-    IDENTIFICADOR  deslocar, e ir ao estado 46
-
-    var  ir ao estado 96
-
-
-Estado 71
-
-   22 parametro: tipo DOISPONTOS IDENTIFICADOR .
-
-    $padrão  reduzir usando a regra 22 (parametro)
-
-
-Estado 72
-
-   33 se: SE . expressao ENTAO corpo FIM
-   34   | SE . expressao ENTAO corpo SENAO corpo FIM
-
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    var                       ir ao estado 33
-    atribuicao                ir ao estado 34
-    expressao                 ir ao estado 97
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
-
-
-Estado 73
-
-   35 repita: REPITA . corpo ATE expressao
-
-    SE               deslocar, e ir ao estado 72
-    REPITA           deslocar, e ir ao estado 73
-    RETORNA          deslocar, e ir ao estado 74
-    LEIA             deslocar, e ir ao estado 75
-    ESCREVA          deslocar, e ir ao estado 76
-    TIPOINTEIRO      deslocar, e ir ao estado 1
-    TIPOFLUTUANTE    deslocar, e ir ao estado 2
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    declaracao_variaveis      ir ao estado 77
-    var                       ir ao estado 33
-    tipo                      ir ao estado 78
-    corpo                     ir ao estado 98
-    acao                      ir ao estado 80
-    se                        ir ao estado 81
-    repita                    ir ao estado 82
-    atribuicao                ir ao estado 34
-    leia                      ir ao estado 83
-    escreva                   ir ao estado 84
-    retorna                   ir ao estado 85
-    expressao                 ir ao estado 86
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
-
-
-Estado 74
-
-   39 retorna: RETORNA . ABREPARENTESES expressao FECHAPARENTESES
-
-    ABREPARENTESES  deslocar, e ir ao estado 99
-
-
-Estado 75
-
-   37 leia: LEIA . ABREPARENTESES IDENTIFICADOR FECHAPARENTESES
-
-    ABREPARENTESES  deslocar, e ir ao estado 100
-
-
-Estado 76
-
-   38 escreva: ESCREVA . ABREPARENTESES expressao FECHAPARENTESES
-
-    ABREPARENTESES  deslocar, e ir ao estado 101
-
-
-Estado 77
-
-   27 acao: declaracao_variaveis .
-
-    $padrão  reduzir usando a regra 27 (acao)
-
-
-Estado 78
 
     7 declaracao_variaveis: tipo . DOISPONTOS lista_variaveis
 
     DOISPONTOS  deslocar, e ir ao estado 21
 
 
-Estado 79
+Estado 57
 
-   19 cabecalho: IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo . FIM
-   25 corpo: corpo . acao
+   20 cabecalho: IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo . FIM
+   26 corpo: corpo . acao
 
-    SE               deslocar, e ir ao estado 72
-    FIM              deslocar, e ir ao estado 102
-    REPITA           deslocar, e ir ao estado 73
-    RETORNA          deslocar, e ir ao estado 74
-    LEIA             deslocar, e ir ao estado 75
-    ESCREVA          deslocar, e ir ao estado 76
+    SE               deslocar, e ir ao estado 50
+    FIM              deslocar, e ir ao estado 92
+    REPITA           deslocar, e ir ao estado 51
+    RETORNA          deslocar, e ir ao estado 52
+    LEIA             deslocar, e ir ao estado 53
+    ESCREVA          deslocar, e ir ao estado 54
     TIPOINTEIRO      deslocar, e ir ao estado 1
     TIPOFLUTUANTE    deslocar, e ir ao estado 2
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
 
-    declaracao_variaveis      ir ao estado 77
-    var                       ir ao estado 33
-    tipo                      ir ao estado 78
-    acao                      ir ao estado 103
-    se                        ir ao estado 81
-    repita                    ir ao estado 82
-    atribuicao                ir ao estado 34
-    leia                      ir ao estado 83
-    escreva                   ir ao estado 84
-    retorna                   ir ao estado 85
-    expressao                 ir ao estado 86
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
-
-
-Estado 80
-
-   24 corpo: acao .
-
-    $padrão  reduzir usando a regra 24 (corpo)
+    declaracao_variaveis      ir ao estado 55
+    var                       ir ao estado 34
+    tipo                      ir ao estado 56
+    acao                      ir ao estado 93
+    se                        ir ao estado 59
+    repita                    ir ao estado 60
+    atribuicao                ir ao estado 35
+    leia                      ir ao estado 61
+    escreva                   ir ao estado 62
+    retorna                   ir ao estado 63
+    expressao                 ir ao estado 64
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
-Estado 81
+Estado 58
 
-   28 acao: se .
+   25 corpo: acao .
 
-    $padrão  reduzir usando a regra 28 (acao)
+    $padrão  reduzir usando a regra 25 (corpo)
 
 
-Estado 82
+Estado 59
 
-   29 acao: repita .
+   29 acao: se .
 
     $padrão  reduzir usando a regra 29 (acao)
 
 
-Estado 83
+Estado 60
 
-   30 acao: leia .
+   30 acao: repita .
 
     $padrão  reduzir usando a regra 30 (acao)
 
 
-Estado 84
+Estado 61
 
-   31 acao: escreva .
+   31 acao: leia .
 
     $padrão  reduzir usando a regra 31 (acao)
 
 
-Estado 85
+Estado 62
 
-   32 acao: retorna .
+   32 acao: escreva .
 
     $padrão  reduzir usando a regra 32 (acao)
 
 
+Estado 63
+
+   33 acao: retorna .
+
+    $padrão  reduzir usando a regra 33 (acao)
+
+
+Estado 64
+
+   27 acao: expressao .
+
+    $padrão  reduzir usando a regra 27 (acao)
+
+
+Estado 65
+
+   23 parametro: tipo DOISPONTOS . IDENTIFICADOR
+
+    IDENTIFICADOR  deslocar, e ir ao estado 94
+
+
+Estado 66
+
+   19 cabecalho: IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES . corpo FIM
+
+    SE               deslocar, e ir ao estado 50
+    REPITA           deslocar, e ir ao estado 51
+    RETORNA          deslocar, e ir ao estado 52
+    LEIA             deslocar, e ir ao estado 53
+    ESCREVA          deslocar, e ir ao estado 54
+    TIPOINTEIRO      deslocar, e ir ao estado 1
+    TIPOFLUTUANTE    deslocar, e ir ao estado 2
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    declaracao_variaveis      ir ao estado 55
+    var                       ir ao estado 34
+    tipo                      ir ao estado 56
+    corpo                     ir ao estado 95
+    acao                      ir ao estado 58
+    se                        ir ao estado 59
+    repita                    ir ao estado 60
+    atribuicao                ir ao estado 35
+    leia                      ir ao estado 61
+    escreva                   ir ao estado 62
+    retorna                   ir ao estado 63
+    expressao                 ir ao estado 64
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
+
+
+Estado 67
+
+   21 lista_parametros: lista_parametros VIRGULA . parametro
+
+    TIPOINTEIRO    deslocar, e ir ao estado 1
+    TIPOFLUTUANTE  deslocar, e ir ao estado 2
+
+    tipo       ir ao estado 24
+    parametro  ir ao estado 96
+
+
+Estado 68
+
+   24 parametro: parametro ABRECOLCHETE . FECHACOLCHETE
+
+    FECHACOLCHETE  deslocar, e ir ao estado 97
+
+
+Estado 69
+
+   68 chamada_funcao: IDENTIFICADOR ABREPARENTESES . lista_argumentos FECHAPARENTESES
+
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    var                       ir ao estado 34
+    atribuicao                ir ao estado 35
+    expressao                 ir ao estado 98
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
+    lista_argumentos          ir ao estado 99
+
+
+Estado 70
+
+   61 fator: ABREPARENTESES expressao . FECHAPARENTESES
+
+    FECHAPARENTESES  deslocar, e ir ao estado 100
+
+
+Estado 71
+
+   14 indice: ABRECOLCHETE expressao FECHACOLCHETE .
+
+    $padrão  reduzir usando a regra 14 (indice)
+
+
+Estado 72
+
+   53 operador_relacional: IGUAL .
+
+    $padrão  reduzir usando a regra 53 (operador_relacional)
+
+
+Estado 73
+
+   51 operador_relacional: MENOR .
+
+    $padrão  reduzir usando a regra 51 (operador_relacional)
+
+
+Estado 74
+
+   55 operador_relacional: MENORIGUAL .
+
+    $padrão  reduzir usando a regra 55 (operador_relacional)
+
+
+Estado 75
+
+   52 operador_relacional: MAIOR .
+
+    $padrão  reduzir usando a regra 52 (operador_relacional)
+
+
+Estado 76
+
+   56 operador_relacional: MAIORIGUAL .
+
+    $padrão  reduzir usando a regra 56 (operador_relacional)
+
+
+Estado 77
+
+   54 operador_relacional: DIFERENTE .
+
+    $padrão  reduzir usando a regra 54 (operador_relacional)
+
+
+Estado 78
+
+   44 expressao_simples: expressao_simples operador_relacional . expressao_aditiva
+
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    var                       ir ao estado 83
+    expressao_aditiva         ir ao estado 101
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
+
+
+Estado 79
+
+   46 expressao_aditiva: expressao_aditiva operador_soma . expressao_multiplicativa
+
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    var                       ir ao estado 83
+    expressao_multiplicativa  ir ao estado 102
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
+
+
+Estado 80
+
+   59 operador_multiplicacao: MULTIPLICACAO .
+
+    $padrão  reduzir usando a regra 59 (operador_multiplicacao)
+
+
+Estado 81
+
+   60 operador_multiplicacao: DIVISAO .
+
+    $padrão  reduzir usando a regra 60 (operador_multiplicacao)
+
+
+Estado 82
+
+   48 expressao_multiplicativa: expressao_multiplicativa operador_multiplicacao . expressao_unaria
+
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    var               ir ao estado 83
+    expressao_unaria  ir ao estado 103
+    operador_soma     ir ao estado 41
+    fator             ir ao estado 42
+    numero            ir ao estado 43
+    chamada_funcao    ir ao estado 44
+
+
+Estado 83
+
+   62 fator: var .
+
+    $padrão  reduzir usando a regra 62 (fator)
+
+
+Estado 84
+
+   50 expressao_unaria: operador_soma fator .
+
+    $padrão  reduzir usando a regra 50 (expressao_unaria)
+
+
+Estado 85
+
+   13 indice: indice ABRECOLCHETE expressao . FECHACOLCHETE
+
+    FECHACOLCHETE  deslocar, e ir ao estado 104
+
+
 Estado 86
 
-   26 acao: expressao .
+    9 lista_variaveis: lista_variaveis VIRGULA . var
 
-    $padrão  reduzir usando a regra 26 (acao)
+    IDENTIFICADOR  deslocar, e ir ao estado 47
+
+    var  ir ao estado 105
 
 
 Estado 87
 
-   20 lista_parametros: lista_parametros VIRGULA parametro .
-   23 parametro: parametro . ABRECOLCHETE FECHACOLCHETE
+   34 se: SE expressao . ENTAO corpo FIM
+   35   | SE expressao . ENTAO corpo SENAO corpo FIM
 
-    ABRECOLCHETE  deslocar, e ir ao estado 52
-
-    $padrão  reduzir usando a regra 20 (lista_parametros)
+    ENTAO  deslocar, e ir ao estado 106
 
 
 Estado 88
 
-   23 parametro: parametro ABRECOLCHETE FECHACOLCHETE .
+   26 corpo: corpo . acao
+   36 repita: REPITA corpo . ATE expressao
 
-    $padrão  reduzir usando a regra 23 (parametro)
+    SE               deslocar, e ir ao estado 50
+    REPITA           deslocar, e ir ao estado 51
+    RETORNA          deslocar, e ir ao estado 52
+    ATE              deslocar, e ir ao estado 107
+    LEIA             deslocar, e ir ao estado 53
+    ESCREVA          deslocar, e ir ao estado 54
+    TIPOINTEIRO      deslocar, e ir ao estado 1
+    TIPOFLUTUANTE    deslocar, e ir ao estado 2
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    declaracao_variaveis      ir ao estado 55
+    var                       ir ao estado 34
+    tipo                      ir ao estado 56
+    acao                      ir ao estado 93
+    se                        ir ao estado 59
+    repita                    ir ao estado 60
+    atribuicao                ir ao estado 35
+    leia                      ir ao estado 61
+    escreva                   ir ao estado 62
+    retorna                   ir ao estado 63
+    expressao                 ir ao estado 64
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
 Estado 89
 
-   69 lista_argumentos: expressao .
+   40 retorna: RETORNA ABREPARENTESES . expressao FECHAPARENTESES
 
-    $padrão  reduzir usando a regra 69 (lista_argumentos)
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    var                       ir ao estado 34
+    atribuicao                ir ao estado 35
+    expressao                 ir ao estado 108
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
 Estado 90
 
-   67 chamada_funcao: IDENTIFICADOR ABREPARENTESES lista_argumentos . FECHAPARENTESES
-   68 lista_argumentos: lista_argumentos . VIRGULA expressao
+   38 leia: LEIA ABREPARENTESES . IDENTIFICADOR FECHAPARENTESES
 
-    FECHAPARENTESES  deslocar, e ir ao estado 104
-    VIRGULA          deslocar, e ir ao estado 105
+    IDENTIFICADOR  deslocar, e ir ao estado 109
 
 
 Estado 91
 
-   60 fator: ABREPARENTESES expressao FECHAPARENTESES .
+   39 escreva: ESCREVA ABREPARENTESES . expressao FECHAPARENTESES
 
-    $padrão  reduzir usando a regra 60 (fator)
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    var                       ir ao estado 34
+    atribuicao                ir ao estado 35
+    expressao                 ir ao estado 110
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
 Estado 92
 
-   43 expressao_simples: expressao_simples operador_relacional expressao_aditiva .
-   45 expressao_aditiva: expressao_aditiva . operador_soma expressao_multiplicativa
+   20 cabecalho: IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM .
 
-    ADICAO     deslocar, e ir ao estado 31
-    SUBTRACAO  deslocar, e ir ao estado 32
-
-    ADICAO     [reduzir usando a regra 43 (expressao_simples)]
-    SUBTRACAO  [reduzir usando a regra 43 (expressao_simples)]
-    $padrão   reduzir usando a regra 43 (expressao_simples)
-
-    operador_soma  ir ao estado 63
+    $padrão  reduzir usando a regra 20 (cabecalho)
 
 
 Estado 93
 
-   45 expressao_aditiva: expressao_aditiva operador_soma expressao_multiplicativa .
-   47 expressao_multiplicativa: expressao_multiplicativa . operador_multiplicacao expressao_unaria
+   26 corpo: corpo acao .
 
-    MULTIPLICACAO  deslocar, e ir ao estado 64
-    DIVISAO        deslocar, e ir ao estado 65
-
-    $padrão  reduzir usando a regra 45 (expressao_aditiva)
-
-    operador_multiplicacao  ir ao estado 66
+    $padrão  reduzir usando a regra 26 (corpo)
 
 
 Estado 94
 
-   47 expressao_multiplicativa: expressao_multiplicativa operador_multiplicacao expressao_unaria .
+   23 parametro: tipo DOISPONTOS IDENTIFICADOR .
 
-    $padrão  reduzir usando a regra 47 (expressao_multiplicativa)
+    $padrão  reduzir usando a regra 23 (parametro)
 
 
 Estado 95
+
+   19 cabecalho: IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo . FIM
+   26 corpo: corpo . acao
+
+    SE               deslocar, e ir ao estado 50
+    FIM              deslocar, e ir ao estado 111
+    REPITA           deslocar, e ir ao estado 51
+    RETORNA          deslocar, e ir ao estado 52
+    LEIA             deslocar, e ir ao estado 53
+    ESCREVA          deslocar, e ir ao estado 54
+    TIPOINTEIRO      deslocar, e ir ao estado 1
+    TIPOFLUTUANTE    deslocar, e ir ao estado 2
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    declaracao_variaveis      ir ao estado 55
+    var                       ir ao estado 34
+    tipo                      ir ao estado 56
+    acao                      ir ao estado 93
+    se                        ir ao estado 59
+    repita                    ir ao estado 60
+    atribuicao                ir ao estado 35
+    leia                      ir ao estado 61
+    escreva                   ir ao estado 62
+    retorna                   ir ao estado 63
+    expressao                 ir ao estado 64
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
+
+
+Estado 96
+
+   21 lista_parametros: lista_parametros VIRGULA parametro .
+   24 parametro: parametro . ABRECOLCHETE FECHACOLCHETE
+
+    ABRECOLCHETE  deslocar, e ir ao estado 68
+
+    $padrão  reduzir usando a regra 21 (lista_parametros)
+
+
+Estado 97
+
+   24 parametro: parametro ABRECOLCHETE FECHACOLCHETE .
+
+    $padrão  reduzir usando a regra 24 (parametro)
+
+
+Estado 98
+
+   70 lista_argumentos: expressao .
+
+    $padrão  reduzir usando a regra 70 (lista_argumentos)
+
+
+Estado 99
+
+   68 chamada_funcao: IDENTIFICADOR ABREPARENTESES lista_argumentos . FECHAPARENTESES
+   69 lista_argumentos: lista_argumentos . VIRGULA expressao
+
+    FECHAPARENTESES  deslocar, e ir ao estado 112
+    VIRGULA          deslocar, e ir ao estado 113
+
+
+Estado 100
+
+   61 fator: ABREPARENTESES expressao FECHAPARENTESES .
+
+    $padrão  reduzir usando a regra 61 (fator)
+
+
+Estado 101
+
+   44 expressao_simples: expressao_simples operador_relacional expressao_aditiva .
+   46 expressao_aditiva: expressao_aditiva . operador_soma expressao_multiplicativa
+
+    ADICAO     deslocar, e ir ao estado 32
+    SUBTRACAO  deslocar, e ir ao estado 33
+
+    ADICAO     [reduzir usando a regra 44 (expressao_simples)]
+    SUBTRACAO  [reduzir usando a regra 44 (expressao_simples)]
+    $padrão   reduzir usando a regra 44 (expressao_simples)
+
+    operador_soma  ir ao estado 79
+
+
+Estado 102
+
+   46 expressao_aditiva: expressao_aditiva operador_soma expressao_multiplicativa .
+   48 expressao_multiplicativa: expressao_multiplicativa . operador_multiplicacao expressao_unaria
+
+    MULTIPLICACAO  deslocar, e ir ao estado 80
+    DIVISAO        deslocar, e ir ao estado 81
+
+    $padrão  reduzir usando a regra 46 (expressao_aditiva)
+
+    operador_multiplicacao  ir ao estado 82
+
+
+Estado 103
+
+   48 expressao_multiplicativa: expressao_multiplicativa operador_multiplicacao expressao_unaria .
+
+    $padrão  reduzir usando a regra 48 (expressao_multiplicativa)
+
+
+Estado 104
 
    13 indice: indice ABRECOLCHETE expressao FECHACOLCHETE .
 
     $padrão  reduzir usando a regra 13 (indice)
 
 
-Estado 96
+Estado 105
 
     9 lista_variaveis: lista_variaveis VIRGULA var .
 
     $padrão  reduzir usando a regra 9 (lista_variaveis)
 
 
-Estado 97
+Estado 106
 
-   33 se: SE expressao . ENTAO corpo FIM
-   34   | SE expressao . ENTAO corpo SENAO corpo FIM
+   34 se: SE expressao ENTAO . corpo FIM
+   35   | SE expressao ENTAO . corpo SENAO corpo FIM
 
-    ENTAO  deslocar, e ir ao estado 106
-
-
-Estado 98
-
-   25 corpo: corpo . acao
-   35 repita: REPITA corpo . ATE expressao
-
-    SE               deslocar, e ir ao estado 72
-    REPITA           deslocar, e ir ao estado 73
-    RETORNA          deslocar, e ir ao estado 74
-    ATE              deslocar, e ir ao estado 107
-    LEIA             deslocar, e ir ao estado 75
-    ESCREVA          deslocar, e ir ao estado 76
+    SE               deslocar, e ir ao estado 50
+    REPITA           deslocar, e ir ao estado 51
+    RETORNA          deslocar, e ir ao estado 52
+    LEIA             deslocar, e ir ao estado 53
+    ESCREVA          deslocar, e ir ao estado 54
     TIPOINTEIRO      deslocar, e ir ao estado 1
     TIPOFLUTUANTE    deslocar, e ir ao estado 2
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
 
-    declaracao_variaveis      ir ao estado 77
-    var                       ir ao estado 33
-    tipo                      ir ao estado 78
-    acao                      ir ao estado 103
-    se                        ir ao estado 81
-    repita                    ir ao estado 82
-    atribuicao                ir ao estado 34
-    leia                      ir ao estado 83
-    escreva                   ir ao estado 84
-    retorna                   ir ao estado 85
-    expressao                 ir ao estado 86
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
-
-
-Estado 99
-
-   39 retorna: RETORNA ABREPARENTESES . expressao FECHAPARENTESES
-
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    var                       ir ao estado 33
-    atribuicao                ir ao estado 34
-    expressao                 ir ao estado 108
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
+    declaracao_variaveis      ir ao estado 55
+    var                       ir ao estado 34
+    tipo                      ir ao estado 56
+    corpo                     ir ao estado 114
+    acao                      ir ao estado 58
+    se                        ir ao estado 59
+    repita                    ir ao estado 60
+    atribuicao                ir ao estado 35
+    leia                      ir ao estado 61
+    escreva                   ir ao estado 62
+    retorna                   ir ao estado 63
+    expressao                 ir ao estado 64
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
-Estado 100
+Estado 107
 
-   37 leia: LEIA ABREPARENTESES . IDENTIFICADOR FECHAPARENTESES
+   36 repita: REPITA corpo ATE . expressao
 
-    IDENTIFICADOR  deslocar, e ir ao estado 109
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
 
-
-Estado 101
-
-   38 escreva: ESCREVA ABREPARENTESES . expressao FECHAPARENTESES
-
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    var                       ir ao estado 33
-    atribuicao                ir ao estado 34
-    expressao                 ir ao estado 110
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
+    var                       ir ao estado 34
+    atribuicao                ir ao estado 35
+    expressao                 ir ao estado 115
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
-Estado 102
+Estado 108
+
+   40 retorna: RETORNA ABREPARENTESES expressao . FECHAPARENTESES
+
+    FECHAPARENTESES  deslocar, e ir ao estado 116
+
+
+Estado 109
+
+   38 leia: LEIA ABREPARENTESES IDENTIFICADOR . FECHAPARENTESES
+
+    FECHAPARENTESES  deslocar, e ir ao estado 117
+
+
+Estado 110
+
+   39 escreva: ESCREVA ABREPARENTESES expressao . FECHAPARENTESES
+
+    FECHAPARENTESES  deslocar, e ir ao estado 118
+
+
+Estado 111
 
    19 cabecalho: IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM .
 
     $padrão  reduzir usando a regra 19 (cabecalho)
 
 
-Estado 103
-
-   25 corpo: corpo acao .
-
-    $padrão  reduzir usando a regra 25 (corpo)
-
-
-Estado 104
-
-   67 chamada_funcao: IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES .
-
-    $padrão  reduzir usando a regra 67 (chamada_funcao)
-
-
-Estado 105
-
-   68 lista_argumentos: lista_argumentos VIRGULA . expressao
-
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    var                       ir ao estado 33
-    atribuicao                ir ao estado 34
-    expressao                 ir ao estado 111
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
-
-
-Estado 106
-
-   33 se: SE expressao ENTAO . corpo FIM
-   34   | SE expressao ENTAO . corpo SENAO corpo FIM
-
-    SE               deslocar, e ir ao estado 72
-    REPITA           deslocar, e ir ao estado 73
-    RETORNA          deslocar, e ir ao estado 74
-    LEIA             deslocar, e ir ao estado 75
-    ESCREVA          deslocar, e ir ao estado 76
-    TIPOINTEIRO      deslocar, e ir ao estado 1
-    TIPOFLUTUANTE    deslocar, e ir ao estado 2
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    declaracao_variaveis      ir ao estado 77
-    var                       ir ao estado 33
-    tipo                      ir ao estado 78
-    corpo                     ir ao estado 112
-    acao                      ir ao estado 80
-    se                        ir ao estado 81
-    repita                    ir ao estado 82
-    atribuicao                ir ao estado 34
-    leia                      ir ao estado 83
-    escreva                   ir ao estado 84
-    retorna                   ir ao estado 85
-    expressao                 ir ao estado 86
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
-
-
-Estado 107
-
-   35 repita: REPITA corpo ATE . expressao
-
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    var                       ir ao estado 33
-    atribuicao                ir ao estado 34
-    expressao                 ir ao estado 113
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
-
-
-Estado 108
-
-   39 retorna: RETORNA ABREPARENTESES expressao . FECHAPARENTESES
-
-    FECHAPARENTESES  deslocar, e ir ao estado 114
-
-
-Estado 109
-
-   37 leia: LEIA ABREPARENTESES IDENTIFICADOR . FECHAPARENTESES
-
-    FECHAPARENTESES  deslocar, e ir ao estado 115
-
-
-Estado 110
-
-   38 escreva: ESCREVA ABREPARENTESES expressao . FECHAPARENTESES
-
-    FECHAPARENTESES  deslocar, e ir ao estado 116
-
-
-Estado 111
-
-   68 lista_argumentos: lista_argumentos VIRGULA expressao .
-
-    $padrão  reduzir usando a regra 68 (lista_argumentos)
-
-
 Estado 112
 
-   25 corpo: corpo . acao
-   33 se: SE expressao ENTAO corpo . FIM
-   34   | SE expressao ENTAO corpo . SENAO corpo FIM
+   68 chamada_funcao: IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES .
 
-    SE               deslocar, e ir ao estado 72
-    SENAO            deslocar, e ir ao estado 117
-    FIM              deslocar, e ir ao estado 118
-    REPITA           deslocar, e ir ao estado 73
-    RETORNA          deslocar, e ir ao estado 74
-    LEIA             deslocar, e ir ao estado 75
-    ESCREVA          deslocar, e ir ao estado 76
-    TIPOINTEIRO      deslocar, e ir ao estado 1
-    TIPOFLUTUANTE    deslocar, e ir ao estado 2
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    declaracao_variaveis      ir ao estado 77
-    var                       ir ao estado 33
-    tipo                      ir ao estado 78
-    acao                      ir ao estado 103
-    se                        ir ao estado 81
-    repita                    ir ao estado 82
-    atribuicao                ir ao estado 34
-    leia                      ir ao estado 83
-    escreva                   ir ao estado 84
-    retorna                   ir ao estado 85
-    expressao                 ir ao estado 86
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
+    $padrão  reduzir usando a regra 68 (chamada_funcao)
 
 
 Estado 113
 
-   35 repita: REPITA corpo ATE expressao .
+   69 lista_argumentos: lista_argumentos VIRGULA . expressao
 
-    $padrão  reduzir usando a regra 35 (repita)
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    var                       ir ao estado 34
+    atribuicao                ir ao estado 35
+    expressao                 ir ao estado 119
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
 Estado 114
 
-   39 retorna: RETORNA ABREPARENTESES expressao FECHAPARENTESES .
+   26 corpo: corpo . acao
+   34 se: SE expressao ENTAO corpo . FIM
+   35   | SE expressao ENTAO corpo . SENAO corpo FIM
 
-    $padrão  reduzir usando a regra 39 (retorna)
+    SE               deslocar, e ir ao estado 50
+    SENAO            deslocar, e ir ao estado 120
+    FIM              deslocar, e ir ao estado 121
+    REPITA           deslocar, e ir ao estado 51
+    RETORNA          deslocar, e ir ao estado 52
+    LEIA             deslocar, e ir ao estado 53
+    ESCREVA          deslocar, e ir ao estado 54
+    TIPOINTEIRO      deslocar, e ir ao estado 1
+    TIPOFLUTUANTE    deslocar, e ir ao estado 2
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    declaracao_variaveis      ir ao estado 55
+    var                       ir ao estado 34
+    tipo                      ir ao estado 56
+    acao                      ir ao estado 93
+    se                        ir ao estado 59
+    repita                    ir ao estado 60
+    atribuicao                ir ao estado 35
+    leia                      ir ao estado 61
+    escreva                   ir ao estado 62
+    retorna                   ir ao estado 63
+    expressao                 ir ao estado 64
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
 
 
 Estado 115
 
-   37 leia: LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES .
+   36 repita: REPITA corpo ATE expressao .
 
-    $padrão  reduzir usando a regra 37 (leia)
+    $padrão  reduzir usando a regra 36 (repita)
 
 
 Estado 116
 
-   38 escreva: ESCREVA ABREPARENTESES expressao FECHAPARENTESES .
+   40 retorna: RETORNA ABREPARENTESES expressao FECHAPARENTESES .
 
-    $padrão  reduzir usando a regra 38 (escreva)
+    $padrão  reduzir usando a regra 40 (retorna)
 
 
 Estado 117
 
-   34 se: SE expressao ENTAO corpo SENAO . corpo FIM
+   38 leia: LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES .
 
-    SE               deslocar, e ir ao estado 72
-    REPITA           deslocar, e ir ao estado 73
-    RETORNA          deslocar, e ir ao estado 74
-    LEIA             deslocar, e ir ao estado 75
-    ESCREVA          deslocar, e ir ao estado 76
-    TIPOINTEIRO      deslocar, e ir ao estado 1
-    TIPOFLUTUANTE    deslocar, e ir ao estado 2
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    declaracao_variaveis      ir ao estado 77
-    var                       ir ao estado 33
-    tipo                      ir ao estado 78
-    corpo                     ir ao estado 119
-    acao                      ir ao estado 80
-    se                        ir ao estado 81
-    repita                    ir ao estado 82
-    atribuicao                ir ao estado 34
-    leia                      ir ao estado 83
-    escreva                   ir ao estado 84
-    retorna                   ir ao estado 85
-    expressao                 ir ao estado 86
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
+    $padrão  reduzir usando a regra 38 (leia)
 
 
 Estado 118
 
-   33 se: SE expressao ENTAO corpo FIM .
+   39 escreva: ESCREVA ABREPARENTESES expressao FECHAPARENTESES .
 
-    $padrão  reduzir usando a regra 33 (se)
+    $padrão  reduzir usando a regra 39 (escreva)
 
 
 Estado 119
 
-   25 corpo: corpo . acao
-   34 se: SE expressao ENTAO corpo SENAO corpo . FIM
+   69 lista_argumentos: lista_argumentos VIRGULA expressao .
 
-    SE               deslocar, e ir ao estado 72
-    FIM              deslocar, e ir ao estado 120
-    REPITA           deslocar, e ir ao estado 73
-    RETORNA          deslocar, e ir ao estado 74
-    LEIA             deslocar, e ir ao estado 75
-    ESCREVA          deslocar, e ir ao estado 76
-    TIPOINTEIRO      deslocar, e ir ao estado 1
-    TIPOFLUTUANTE    deslocar, e ir ao estado 2
-    IDENTIFICADOR    deslocar, e ir ao estado 26
-    NUMEROINTEIRO    deslocar, e ir ao estado 27
-    NUMEROFLUTUANTE  deslocar, e ir ao estado 28
-    EXPONENCIAL      deslocar, e ir ao estado 29
-    ABREPARENTESES   deslocar, e ir ao estado 30
-    ADICAO           deslocar, e ir ao estado 31
-    SUBTRACAO        deslocar, e ir ao estado 32
-
-    declaracao_variaveis      ir ao estado 77
-    var                       ir ao estado 33
-    tipo                      ir ao estado 78
-    acao                      ir ao estado 103
-    se                        ir ao estado 81
-    repita                    ir ao estado 82
-    atribuicao                ir ao estado 34
-    leia                      ir ao estado 83
-    escreva                   ir ao estado 84
-    retorna                   ir ao estado 85
-    expressao                 ir ao estado 86
-    expressao_simples         ir ao estado 36
-    expressao_aditiva         ir ao estado 37
-    expressao_multiplicativa  ir ao estado 38
-    expressao_unaria          ir ao estado 39
-    operador_soma             ir ao estado 40
-    fator                     ir ao estado 41
-    numero                    ir ao estado 42
-    chamada_funcao            ir ao estado 43
+    $padrão  reduzir usando a regra 69 (lista_argumentos)
 
 
 Estado 120
 
-   34 se: SE expressao ENTAO corpo SENAO corpo FIM .
+   35 se: SE expressao ENTAO corpo SENAO . corpo FIM
+
+    SE               deslocar, e ir ao estado 50
+    REPITA           deslocar, e ir ao estado 51
+    RETORNA          deslocar, e ir ao estado 52
+    LEIA             deslocar, e ir ao estado 53
+    ESCREVA          deslocar, e ir ao estado 54
+    TIPOINTEIRO      deslocar, e ir ao estado 1
+    TIPOFLUTUANTE    deslocar, e ir ao estado 2
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    declaracao_variaveis      ir ao estado 55
+    var                       ir ao estado 34
+    tipo                      ir ao estado 56
+    corpo                     ir ao estado 122
+    acao                      ir ao estado 58
+    se                        ir ao estado 59
+    repita                    ir ao estado 60
+    atribuicao                ir ao estado 35
+    leia                      ir ao estado 61
+    escreva                   ir ao estado 62
+    retorna                   ir ao estado 63
+    expressao                 ir ao estado 64
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
+
+
+Estado 121
+
+   34 se: SE expressao ENTAO corpo FIM .
 
     $padrão  reduzir usando a regra 34 (se)
+
+
+Estado 122
+
+   26 corpo: corpo . acao
+   35 se: SE expressao ENTAO corpo SENAO corpo . FIM
+
+    SE               deslocar, e ir ao estado 50
+    FIM              deslocar, e ir ao estado 123
+    REPITA           deslocar, e ir ao estado 51
+    RETORNA          deslocar, e ir ao estado 52
+    LEIA             deslocar, e ir ao estado 53
+    ESCREVA          deslocar, e ir ao estado 54
+    TIPOINTEIRO      deslocar, e ir ao estado 1
+    TIPOFLUTUANTE    deslocar, e ir ao estado 2
+    IDENTIFICADOR    deslocar, e ir ao estado 27
+    NUMEROINTEIRO    deslocar, e ir ao estado 28
+    NUMEROFLUTUANTE  deslocar, e ir ao estado 29
+    EXPONENCIAL      deslocar, e ir ao estado 30
+    ABREPARENTESES   deslocar, e ir ao estado 31
+    ADICAO           deslocar, e ir ao estado 32
+    SUBTRACAO        deslocar, e ir ao estado 33
+
+    declaracao_variaveis      ir ao estado 55
+    var                       ir ao estado 34
+    tipo                      ir ao estado 56
+    acao                      ir ao estado 93
+    se                        ir ao estado 59
+    repita                    ir ao estado 60
+    atribuicao                ir ao estado 35
+    leia                      ir ao estado 61
+    escreva                   ir ao estado 62
+    retorna                   ir ao estado 63
+    expressao                 ir ao estado 64
+    expressao_simples         ir ao estado 37
+    expressao_aditiva         ir ao estado 38
+    expressao_multiplicativa  ir ao estado 39
+    expressao_unaria          ir ao estado 40
+    operador_soma             ir ao estado 41
+    fator                     ir ao estado 42
+    numero                    ir ao estado 43
+    chamada_funcao            ir ao estado 44
+
+
+Estado 123
+
+   35 se: SE expressao ENTAO corpo SENAO corpo FIM .
+
+    $padrão  reduzir usando a regra 35 (se)

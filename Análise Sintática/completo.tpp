@@ -1,6 +1,7 @@
 inteiro: n, g
 flutuante: d,a
 inteiro fatorial(inteiro: n)
+	90 + 90
 	d := 5.6 
 	c := 7
 	a := 0 + 1
@@ -31,6 +32,7 @@ inteiro fatorial(inteiro: n)
 fim
 
 inteiro faznada()
+	{comentario}
 fim
 
 inteiro principal()

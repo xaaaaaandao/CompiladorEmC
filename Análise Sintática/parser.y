@@ -61,7 +61,7 @@ indice:
 tipo:
 	TIPOINTEIRO {printf("TIPOINTEIRO\n");}
 	| TIPOFLUTUANTE {printf("flutuante\n");}
-;
+	;
 
 declaracao_funcao:
 	tipo cabecalho {printf("tipo cabecalho\n");}
@@ -69,15 +69,9 @@ declaracao_funcao:
 	;
 
 cabecalho:
-<<<<<<< HEAD
-	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM
-	| IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES FIM
-	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM
-	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES FIM;
-=======
 	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM {printf("IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM\n"); }
+	| 	IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM {printf("IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM\n"); }
 	;
->>>>>>> xandao
 
 lista_parametros:
 	lista_parametros VIRGULA parametro {printf("lista_parametros VIRGULA parametro\n");}
@@ -108,12 +102,8 @@ se:
 	;
 
 repita:
-<<<<<<< HEAD
-	REPITA corpo ATE expressao;
-=======
 	REPITA corpo ATE expressao {printf("REPITA corpo ATE expressao\n");}
 	;
->>>>>>> xandao
 
 atribuicao:
 	var ATRIBUICAO expressao{printf("var ATRIBUICAO expressao\n");}
