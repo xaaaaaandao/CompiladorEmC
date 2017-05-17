@@ -3,7 +3,7 @@ all:
 	flex -d -T scanner.l
 	gcc -c parser.tab.c lex.yy.c -lfl
 	gcc parser.tab.o lex.yy.o -lm -o arvoreSintatica.exe
-	bison -y -d -t parser.y -o parser.tab.c 
+	bison -y -d -t parser.y -o parser.tab.c --verbose
 
 bison:
 	bison -y -d -t parser.y -o parser.tab.c 	

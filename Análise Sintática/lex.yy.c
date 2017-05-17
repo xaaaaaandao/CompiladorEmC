@@ -989,7 +989,7 @@ case 1:
 YY_RULE_SETUP
 #line 22 "scanner.l"
 {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return SE;
 }
 	YY_BREAK
@@ -997,7 +997,7 @@ case 2:
 YY_RULE_SETUP
 #line 27 "scanner.l"
 {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return ENTAO;
 }
 	YY_BREAK
@@ -1005,7 +1005,7 @@ case 3:
 YY_RULE_SETUP
 #line 32 "scanner.l"
 {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return SENAO;
 }
 	YY_BREAK
@@ -1013,7 +1013,7 @@ case 4:
 YY_RULE_SETUP
 #line 37 "scanner.l"
 {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return FIM;
 }
 	YY_BREAK
@@ -1021,7 +1021,7 @@ case 5:
 YY_RULE_SETUP
 #line 42 "scanner.l"
 {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return REPITA;
 }
 	YY_BREAK
@@ -1029,7 +1029,7 @@ case 6:
 YY_RULE_SETUP
 #line 46 "scanner.l"
 {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return RETORNA;
 }
 	YY_BREAK
@@ -1037,7 +1037,7 @@ case 7:
 YY_RULE_SETUP
 #line 51 "scanner.l"
 {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return ATE;
 }
 	YY_BREAK
@@ -1045,7 +1045,7 @@ case 8:
 YY_RULE_SETUP
 #line 56 "scanner.l"
 {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return LEIA;
 }
 	YY_BREAK
@@ -1053,7 +1053,7 @@ case 9:
 YY_RULE_SETUP
 #line 61 "scanner.l"
 {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return ESCREVA;
 }
 	YY_BREAK
@@ -1061,7 +1061,7 @@ case 10:
 YY_RULE_SETUP
 #line 66 "scanner.l"
 {
-	strcpy(yylval.tipo, yytext);
+	strcpy(yylval.pgm, yytext);
 	return TIPOINTEIRO;
 };
 	YY_BREAK
@@ -1069,7 +1069,7 @@ case 11:
 YY_RULE_SETUP
 #line 71 "scanner.l"
 {
-	strcpy(yylval.tipo, yytext);
+	strcpy(yylval.pgm, yytext);
 	return TIPOFLUTUANTE;
 };
 	YY_BREAK
@@ -1077,7 +1077,7 @@ case 12:
 YY_RULE_SETUP
 #line 76 "scanner.l"
 {
-	strcpy(yylval.tipo, yytext);
+	strcpy(yylval.pgm, yytext);
 	return TIPOVOID;
 }
 	YY_BREAK
@@ -1085,7 +1085,7 @@ case 13:
 YY_RULE_SETUP
 #line 81 "scanner.l"
 { 
-	strcpy(yylval.identificador, yytext);
+	strcpy(yylval.pgm, yytext);
 	return IDENTIFICADOR;
 }
 	YY_BREAK
@@ -1093,7 +1093,7 @@ case 14:
 YY_RULE_SETUP
 #line 86 "scanner.l"
 {
-	/*yylval.nValor = atoi(yytext);*/
+	strcpy(yylval.pgm, yytext);
 	return NUMEROINTEIRO;
 }
 	YY_BREAK
@@ -1101,7 +1101,7 @@ case 15:
 YY_RULE_SETUP
 #line 91 "scanner.l"
 {
-	/*yylval.nValor = atof(yytext);*/
+	strcpy(yylval.pgm, yytext);
 	return NUMEROFLUTUANTE;
 } 
 	YY_BREAK
@@ -1137,7 +1137,7 @@ YY_RULE_SETUP
 		potencia = atof(eValor);				
 		potencia = potencia * -1;
 	}
-	//yylval.nValor = pow(valor, potencia);
+	strcpy(yylval.pgm, yytext);
 	return EXPONENCIAL;
 }
 	YY_BREAK
@@ -1146,7 +1146,7 @@ case 17:
 YY_RULE_SETUP
 #line 129 "scanner.l"
 {
-	strcpy(yylval.comentario, yytext);
+	strcpy(yylval.pgm, yytext);
 	return COMENTARIO;
 }
 	YY_BREAK
@@ -1154,8 +1154,8 @@ case 18:
 YY_RULE_SETUP
 #line 134 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return IGUAL;
 }
 	YY_BREAK
@@ -1163,8 +1163,8 @@ case 19:
 YY_RULE_SETUP
 #line 140 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return DOISPONTOS;
 };
 	YY_BREAK
@@ -1172,7 +1172,7 @@ case 20:
 YY_RULE_SETUP
 #line 146 "scanner.l"
 {
-	strcpy(yylval.simbolo, yytext);
+	strcpy(yylval.pgm, yytext);
 	return ATRIBUICAO;
 }
 	YY_BREAK
@@ -1180,8 +1180,8 @@ case 21:
 YY_RULE_SETUP
 #line 151 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return MENOR;
 }
 	YY_BREAK
@@ -1189,7 +1189,7 @@ case 22:
 YY_RULE_SETUP
 #line 157 "scanner.l"
 {
-	strcpy(yylval.simbolo, yytext);
+	strcpy(yylval.pgm, yytext);
 	return MENORIGUAL;
 
 }
@@ -1198,8 +1198,8 @@ case 23:
 YY_RULE_SETUP
 #line 163 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return MAIOR;
 }
 	YY_BREAK
@@ -1207,7 +1207,7 @@ case 24:
 YY_RULE_SETUP
 #line 169 "scanner.l"
 {
-	strcpy(yylval.simbolo, yytext);
+	strcpy(yylval.pgm, yytext);
 	return MAIORIGUAL;
 }
 	YY_BREAK
@@ -1215,7 +1215,7 @@ case 25:
 YY_RULE_SETUP
 #line 174 "scanner.l"
 {
-	strcpy(yylval.simbolo, yytext);
+	strcpy(yylval.pgm, yytext);
 	return DIFERENTE;
 }
 	YY_BREAK
@@ -1223,8 +1223,8 @@ case 26:
 YY_RULE_SETUP
 #line 179 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return ABREPARENTESES;
 }
 	YY_BREAK
@@ -1232,8 +1232,8 @@ case 27:
 YY_RULE_SETUP
 #line 185 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return FECHAPARENTESES;
 }
 	YY_BREAK
@@ -1241,8 +1241,8 @@ case 28:
 YY_RULE_SETUP
 #line 191 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return ABRECHAVE;
 }	
 	YY_BREAK
@@ -1250,8 +1250,8 @@ case 29:
 YY_RULE_SETUP
 #line 197 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return FECHACHAVE;
 }	
 	YY_BREAK
@@ -1259,8 +1259,8 @@ case 30:
 YY_RULE_SETUP
 #line 203 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return VIRGULA;
 }	
 	YY_BREAK
@@ -1268,8 +1268,8 @@ case 31:
 YY_RULE_SETUP
 #line 209 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return ADICAO;
 }	
 	YY_BREAK
@@ -1277,8 +1277,8 @@ case 32:
 YY_RULE_SETUP
 #line 215 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return SUBTRACAO;
 }	
 	YY_BREAK
@@ -1286,8 +1286,8 @@ case 33:
 YY_RULE_SETUP
 #line 221 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return MULTIPLICACAO;
 }	
 	YY_BREAK
@@ -1295,8 +1295,8 @@ case 34:
 YY_RULE_SETUP
 #line 227 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return DIVISAO;
 }	
 	YY_BREAK
@@ -1304,8 +1304,8 @@ case 35:
 YY_RULE_SETUP
 #line 233 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return ABRECOLCHETE;
 }	
 	YY_BREAK
@@ -1313,8 +1313,8 @@ case 36:
 YY_RULE_SETUP
 #line 239 "scanner.l"
 {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return FECHACOLCHETE;
 }		
 	YY_BREAK

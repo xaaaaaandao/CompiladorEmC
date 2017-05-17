@@ -130,14 +130,9 @@ union YYSTYPE
 {
 #line 15 "parser.y" /* yacc.c:1909  */
 
-	char pgm[100];
-	char simbolo[3];
-	char tipo[10];
-	char identificador[3276];	
-	char reservada[3276];
-	char comentario[3276];
+	char pgm[32768];
 
-#line 141 "parser.tab.h" /* yacc.c:1909  */
+#line 136 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

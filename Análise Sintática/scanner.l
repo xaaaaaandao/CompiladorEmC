@@ -20,76 +20,76 @@ COMENTARIO "{"[^\}]*"}"
 
 %% /* Regras */
 "se" {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return SE;
 }
 
 "então"  {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return ENTAO;
 }
 
 "senão" {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return SENAO;
 }
 
 "fim" {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return FIM;
 }
 
 "repita" {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return REPITA;
 }
 "retorna" {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return RETORNA;
 }
 
 "até" {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return ATE;
 }
 
 "leia" {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return LEIA;
 }
 
 "escreva" {
-	strcpy(yylval.reservada, yytext);
+	strcpy(yylval.pgm, yytext);
 	return ESCREVA;
 }
 
 "inteiro" {
-	strcpy(yylval.tipo, yytext);
+	strcpy(yylval.pgm, yytext);
 	return TIPOINTEIRO;
 };
 
 "flutuante" {
-	strcpy(yylval.tipo, yytext);
+	strcpy(yylval.pgm, yytext);
 	return TIPOFLUTUANTE;
 };
 
 "void" {
-	strcpy(yylval.tipo, yytext);
+	strcpy(yylval.pgm, yytext);
 	return TIPOVOID;
 }
 
 {IDENTIFICADOR} { 
-	strcpy(yylval.identificador, yytext);
+	strcpy(yylval.pgm, yytext);
 	return IDENTIFICADOR;
 }
  
 {INTEIRO} {
-	/*yylval.nValor = atoi(yytext);*/
+	strcpy(yylval.pgm, yytext);
 	return NUMEROINTEIRO;
 }
 
 {FLUTUANTE} {
-	/*yylval.nValor = atof(yytext);*/
+	strcpy(yylval.pgm, yytext);
 	return NUMEROFLUTUANTE;
 } 
 
@@ -122,123 +122,123 @@ COMENTARIO "{"[^\}]*"}"
 		potencia = atof(eValor);				
 		potencia = potencia * -1;
 	}
-	//yylval.nValor = pow(valor, potencia);
+	strcpy(yylval.pgm, yytext);
 	return EXPONENCIAL;
 }
 
 {COMENTARIO} {
-	strcpy(yylval.comentario, yytext);
+	strcpy(yylval.pgm, yytext);
 	return COMENTARIO;
 }
 
 "=" {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return IGUAL;
 }
 
 ":" {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return DOISPONTOS;
 };
 
 ":=" {
-	strcpy(yylval.simbolo, yytext);
+	strcpy(yylval.pgm, yytext);
 	return ATRIBUICAO;
 }
 
 "<" {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return MENOR;
 }
 
 "<=" {
-	strcpy(yylval.simbolo, yytext);
+	strcpy(yylval.pgm, yytext);
 	return MENORIGUAL;
 
 }
 
 ">" {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return MAIOR;
 }
 
 ">=" {
-	strcpy(yylval.simbolo, yytext);
+	strcpy(yylval.pgm, yytext);
 	return MAIORIGUAL;
 }
 
 "<>" {
-	strcpy(yylval.simbolo, yytext);
+	strcpy(yylval.pgm, yytext);
 	return DIFERENTE;
 }
 
 "(" {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return ABREPARENTESES;
 }
 
 ")" {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return FECHAPARENTESES;
 }
 
 "{" {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return ABRECHAVE;
 }	
 
 "}" {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return FECHACHAVE;
 }	
 
 "," {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return VIRGULA;
 }	
 
 "+"  {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return ADICAO;
 }	
 
 "-" {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return SUBTRACAO;
 }	
 
 "*" {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return MULTIPLICACAO;
 }	
 
 "/" {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return DIVISAO;
 }	
 
 "[" {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return ABRECOLCHETE;
 }	
 
 "]" {
-	yylval.simbolo[0] = yytext[0];
-	yylval.simbolo[1] = '\0';
+	yylval.pgm[0] = yytext[0];
+	yylval.pgm[1] = '\0';
 	return FECHACOLCHETE;
 }		
 

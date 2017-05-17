@@ -3,6 +3,7 @@ flutuante: d,a
 inteiro fatorial(inteiro: n)
 	d := 5.6 
 	c := 7
+	a := 0 + 1
 	inteiro: fat
 	90 + 90
 	fat := 2e+3 + 67*12
