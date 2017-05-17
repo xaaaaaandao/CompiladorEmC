@@ -1,12 +1,10 @@
 inteiro: n, g
 flutuante: d,a
 inteiro fatorial(inteiro: n)
-	90 + 90
 	d := 5.6 
 	c := 7
 	a := 0 + 1
 	inteiro: fat
-	90 + 90
 	fat := 2e+3 + 67*12
 	se a > 10 então
 		se n > 0 então
@@ -29,10 +27,6 @@ inteiro fatorial(inteiro: n)
 	teste := 5-(1+5)
 	teste := 5-1
 	teste := 10*8
-fim
-
-inteiro faznada()
-	{comentario}
 fim
 
 inteiro principal()

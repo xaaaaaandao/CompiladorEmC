@@ -60,7 +60,7 @@ indice:
 
 tipo:
 	TIPOINTEIRO {printf("TIPOINTEIRO\n");}
-	| TIPOFLUTUANTE {printf("flutuante\n");}
+	| TIPOFLUTUANTE {printf("TIPOFLUTUANTE\n");}
 	;
 
 declaracao_funcao:
@@ -70,7 +70,7 @@ declaracao_funcao:
 
 cabecalho:
 	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM {printf("IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM\n"); }
-	| 	IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM {printf("IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM\n"); }
+	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM {printf("IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM\n"); }
 	;
 
 lista_parametros:
@@ -85,11 +85,12 @@ parametro:
 
 corpo:
 	acao {printf("acao\n");}
-	| corpo acao {printf("corpo acao\n");};
+	| corpo acao {printf("corpo acao\n");}
+	| atribuicao
+	| corpo atribuicao;
 
 acao:
-	expressao {printf("expressao\n");}
-	| declaracao_variaveis {printf("declaracao_variaveis\n");}
+	declaracao_variaveis {printf("declaracao_variaveis\n");}
 	| se {printf("se\n");}
 	| repita {printf("repita\n");}
 	| leia {printf("leia\n");}
