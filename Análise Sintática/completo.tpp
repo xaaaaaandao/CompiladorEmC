@@ -1,3 +1,4 @@
+{Xandão}
 inteiro: n, g
 flutuante: d,a
 inteiro fatorial(inteiro: n)

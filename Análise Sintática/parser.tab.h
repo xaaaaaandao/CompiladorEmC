@@ -61,27 +61,26 @@ extern int yydebug;
     NUMEROINTEIRO = 271,
     NUMEROFLUTUANTE = 272,
     EXPONENCIAL = 273,
-    COMENTARIO = 274,
-    IGUAL = 275,
-    DOISPONTOS = 276,
-    ATRIBUICAO = 277,
-    MENOR = 278,
-    MENORIGUAL = 279,
-    MAIOR = 280,
-    MAIORIGUAL = 281,
-    DIFERENTE = 282,
-    ABREPARENTESES = 283,
-    FECHAPARENTESES = 284,
-    ABRECHAVE = 285,
-    FECHACHAVE = 286,
-    VIRGULA = 287,
-    ADICAO = 288,
-    SUBTRACAO = 289,
-    MULTIPLICACAO = 290,
-    DIVISAO = 291,
-    ABRECOLCHETE = 292,
-    FECHACOLCHETE = 293,
-    END_OF_FILE = 294
+    IGUAL = 274,
+    DOISPONTOS = 275,
+    ATRIBUICAO = 276,
+    MENOR = 277,
+    MENORIGUAL = 278,
+    MAIOR = 279,
+    MAIORIGUAL = 280,
+    DIFERENTE = 281,
+    ABREPARENTESES = 282,
+    FECHAPARENTESES = 283,
+    ABRECHAVE = 284,
+    FECHACHAVE = 285,
+    VIRGULA = 286,
+    ADICAO = 287,
+    SUBTRACAO = 288,
+    MULTIPLICACAO = 289,
+    DIVISAO = 290,
+    ABRECOLCHETE = 291,
+    FECHACOLCHETE = 292,
+    END_OF_FILE = 293
   };
 #endif
 /* Tokens.  */
@@ -101,38 +100,37 @@ extern int yydebug;
 #define NUMEROINTEIRO 271
 #define NUMEROFLUTUANTE 272
 #define EXPONENCIAL 273
-#define COMENTARIO 274
-#define IGUAL 275
-#define DOISPONTOS 276
-#define ATRIBUICAO 277
-#define MENOR 278
-#define MENORIGUAL 279
-#define MAIOR 280
-#define MAIORIGUAL 281
-#define DIFERENTE 282
-#define ABREPARENTESES 283
-#define FECHAPARENTESES 284
-#define ABRECHAVE 285
-#define FECHACHAVE 286
-#define VIRGULA 287
-#define ADICAO 288
-#define SUBTRACAO 289
-#define MULTIPLICACAO 290
-#define DIVISAO 291
-#define ABRECOLCHETE 292
-#define FECHACOLCHETE 293
-#define END_OF_FILE 294
+#define IGUAL 274
+#define DOISPONTOS 275
+#define ATRIBUICAO 276
+#define MENOR 277
+#define MENORIGUAL 278
+#define MAIOR 279
+#define MAIORIGUAL 280
+#define DIFERENTE 281
+#define ABREPARENTESES 282
+#define FECHAPARENTESES 283
+#define ABRECHAVE 284
+#define FECHACHAVE 285
+#define VIRGULA 286
+#define ADICAO 287
+#define SUBTRACAO 288
+#define MULTIPLICACAO 289
+#define DIVISAO 290
+#define ABRECOLCHETE 291
+#define FECHACOLCHETE 292
+#define END_OF_FILE 293
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 15 "parser.y" /* yacc.c:1909  */
+#line 17 "parser.y" /* yacc.c:1909  */
 
 	char pgm[32768];
 
-#line 136 "parser.tab.h" /* yacc.c:1909  */
+#line 134 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

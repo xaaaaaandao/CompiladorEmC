@@ -4,6 +4,8 @@
 	#include <stdarg.h>
 	#include <string.h>
 	#include "syntax-tree.h"
+	#include "pTree.h"
+	#include "files.h"
 
 	/* Protótipos */
 	int yylex(void);
@@ -17,11 +19,12 @@
 };
 %start programa
 
-%token <pgm> SE ENTAO SENAO FIM REPITA RETORNA ATE LEIA ESCREVA TIPOINTEIRO TIPOFLUTUANTE TIPOVOID IDENTIFICADOR NUMEROINTEIRO NUMEROFLUTUANTE EXPONENCIAL COMENTARIO IGUAL DOISPONTOS ATRIBUICAO MENOR MENORIGUAL MAIOR MAIORIGUAL DIFERENTE ABREPARENTESES FECHAPARENTESES ABRECHAVE FECHACHAVE VIRGULA ADICAO SUBTRACAO MULTIPLICACAO DIVISAO ABRECOLCHETE FECHACOLCHETE END_OF_FILE
+%token <pgm> SE ENTAO SENAO FIM REPITA RETORNA ATE LEIA ESCREVA TIPOINTEIRO TIPOFLUTUANTE TIPOVOID IDENTIFICADOR NUMEROINTEIRO NUMEROFLUTUANTE EXPONENCIAL IGUAL DOISPONTOS ATRIBUICAO MENOR MENORIGUAL MAIOR MAIORIGUAL DIFERENTE ABREPARENTESES FECHAPARENTESES ABRECHAVE FECHACHAVE VIRGULA ADICAO SUBTRACAO MULTIPLICACAO DIVISAO ABRECOLCHETE FECHACOLCHETE END_OF_FILE
 
 %% 
+//start
 programa:
-	lista_declaracoes {printf("programa\n");}
+	lista_declaracoes {printf("lista_declaracoes\n");}
 	;
 
 lista_declaracoes:
@@ -49,7 +52,7 @@ lista_variaveis:
 	;
 
 var:
-	IDENTIFICADOR {printf("IDENTIFICADOR\n");}
+	IDENTIFICADOR {printf("IDENTIFICADOR\n"); printf("%s\n", $1);}
 	| IDENTIFICADOR indice {printf("IDENTIFICADOR indice\n");}
 	;
 
@@ -69,8 +72,8 @@ declaracao_funcao:
 	;
 
 cabecalho:
-	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM {printf("IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM\n"); }
-	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM {printf("IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM\n"); }
+	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM {printf("IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM\n");}
+	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM {printf("IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM\n"); printf("%s\n", $1);}
 	;
 
 lista_parametros:
@@ -86,8 +89,8 @@ parametro:
 corpo:
 	acao {printf("acao\n");}
 	| corpo acao {printf("corpo acao\n");}
-	| atribuicao
-	| corpo atribuicao;
+	| atribuicao {printf("atribuicao\n");}
+	| corpo atribuicao {printf("corpo atribuicao\n");};
 
 acao:
 	declaracao_variaveis {printf("declaracao_variaveis\n");}
@@ -187,6 +190,7 @@ lista_argumentos:
 	lista_argumentos VIRGULA expressao {printf("lista_argumentos VIRGULA expressao\n");}
 	| expressao {printf("expressao\n");}
 	;
+//end
 
 %%
 void yyerror(char *s) {
@@ -194,13 +198,10 @@ void yyerror(char *s) {
 }
 
 int main(int argc, char *argv[]){
-	/*
-		-> precisar ter uma expressão para o comentário?
-		-> como fazer com a expressão vazio & erro?
-	*/
 	yyin = fopen(argv[1], "r");
 	yyparse();	
 	fclose(yyin);
+	printTreeSyntactic();
 	return 0;
 }
 

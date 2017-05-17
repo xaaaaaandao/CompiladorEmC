@@ -128,7 +128,6 @@ COMENTARIO "{"[^\}]*"}"
 
 {COMENTARIO} {
 	strcpy(yylval.pgm, yytext);
-	return COMENTARIO;
 }
 
 "=" {

@@ -1,7 +1,6 @@
 Terminais sem uso na gramática
 
    TIPOVOID
-   COMENTARIO
    ABRECHAVE
    FECHACHAVE
    END_OF_FILE
@@ -136,98 +135,97 @@ IDENTIFICADOR (270) 11 12 19 20 23 39 69
 NUMEROINTEIRO (271) 66
 NUMEROFLUTUANTE (272) 67
 EXPONENCIAL (273) 68
-COMENTARIO (274)
-IGUAL (275) 54
-DOISPONTOS (276) 7 23
-ATRIBUICAO (277) 38
-MENOR (278) 52
-MENORIGUAL (279) 56
-MAIOR (280) 53
-MAIORIGUAL (281) 57
-DIFERENTE (282) 55
-ABREPARENTESES (283) 19 20 39 40 41 62 69
-FECHAPARENTESES (284) 19 20 39 40 41 62 69
-ABRECHAVE (285)
-FECHACHAVE (286)
-VIRGULA (287) 9 21 70
-ADICAO (288) 58
-SUBTRACAO (289) 59
-MULTIPLICACAO (290) 60
-DIVISAO (291) 61
-ABRECOLCHETE (292) 13 14 24
-FECHACOLCHETE (293) 13 14 24
-END_OF_FILE (294)
+IGUAL (274) 54
+DOISPONTOS (275) 7 23
+ATRIBUICAO (276) 38
+MENOR (277) 52
+MENORIGUAL (278) 56
+MAIOR (279) 53
+MAIORIGUAL (280) 57
+DIFERENTE (281) 55
+ABREPARENTESES (282) 19 20 39 40 41 62 69
+FECHAPARENTESES (283) 19 20 39 40 41 62 69
+ABRECHAVE (284)
+FECHACHAVE (285)
+VIRGULA (286) 9 21 70
+ADICAO (287) 58
+SUBTRACAO (288) 59
+MULTIPLICACAO (289) 60
+DIVISAO (290) 61
+ABRECOLCHETE (291) 13 14 24
+FECHACOLCHETE (292) 13 14 24
+END_OF_FILE (293)
 
 
 Não terminais com as regras onde eles aparecem
 
-$accept (40)
+$accept (39)
     à esquerda: 0
-programa (41)
+programa (40)
     à esquerda: 1, à direita: 0
-lista_declaracoes (42)
+lista_declaracoes (41)
     à esquerda: 2 3, à direita: 1 2
-declaracao (43)
+declaracao (42)
     à esquerda: 4 5 6, à direita: 2 3
-declaracao_variaveis (44)
+declaracao_variaveis (43)
     à esquerda: 7, à direita: 4 29
-inicializacao_variaveis (45)
+inicializacao_variaveis (44)
     à esquerda: 8, à direita: 5
-lista_variaveis (46)
+lista_variaveis (45)
     à esquerda: 9 10, à direita: 7 9
-var (47)
+var (46)
     à esquerda: 11 12, à direita: 9 10 38 63
-indice (48)
+indice (47)
     à esquerda: 13 14, à direita: 12 13
-tipo (49)
+tipo (48)
     à esquerda: 15 16, à direita: 7 17 23
-declaracao_funcao (50)
+declaracao_funcao (49)
     à esquerda: 17 18, à direita: 6
-cabecalho (51)
+cabecalho (50)
     à esquerda: 19 20, à direita: 17 18
-lista_parametros (52)
+lista_parametros (51)
     à esquerda: 21 22, à direita: 19 21
-parametro (53)
+parametro (52)
     à esquerda: 23 24, à direita: 21 22 24
-corpo (54)
+corpo (53)
     à esquerda: 25 26 27 28, à direita: 19 20 26 28 35 36 37
-acao (55)
+acao (54)
     à esquerda: 29 30 31 32 33 34, à direita: 25 26
-se (56)
+se (55)
     à esquerda: 35 36, à direita: 30
-repita (57)
+repita (56)
     à esquerda: 37, à direita: 31
-atribuicao (58)
+atribuicao (57)
     à esquerda: 38, à direita: 8 27 28 42
-leia (59)
+leia (58)
     à esquerda: 39, à direita: 32
-escreva (60)
+escreva (59)
     à esquerda: 40, à direita: 33
-retorna (61)
+retorna (60)
     à esquerda: 41, à direita: 34
-expressao (62)
+expressao (61)
     à esquerda: 42 43, à direita: 13 14 35 36 37 38 40 41 62 70 71
-expressao_simples (63)
+expressao_simples (62)
     à esquerda: 44 45, à direita: 43 45
-expressao_aditiva (64)
+expressao_aditiva (63)
     à esquerda: 46 47, à direita: 44 45 47
-expressao_multiplicativa (65)
+expressao_multiplicativa (64)
     à esquerda: 48 49, à direita: 46 47 49
-expressao_unaria (66)
+expressao_unaria (65)
     à esquerda: 50 51, à direita: 48 49
-operador_relacional (67)
+operador_relacional (66)
     à esquerda: 52 53 54 55 56 57, à direita: 45
-operador_soma (68)
+operador_soma (67)
     à esquerda: 58 59, à direita: 47 51
-operador_multiplicacao (69)
+operador_multiplicacao (68)
     à esquerda: 60 61, à direita: 49
-fator (70)
+fator (69)
     à esquerda: 62 63 64 65, à direita: 50 51
-numero (71)
+numero (70)
     à esquerda: 66 67 68, à direita: 65
-chamada_funcao (72)
+chamada_funcao (71)
     à esquerda: 69, à direita: 64
-lista_argumentos (73)
+lista_argumentos (72)
     à esquerda: 70 71, à direita: 69 70
 
 
