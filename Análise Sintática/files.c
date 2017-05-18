@@ -229,19 +229,6 @@ void buildTree(pTree *bnf, pTree *outTree){
 	Node *auxiliar = outTree -> first;
 	pTree *finalTree = (pTree*) malloc (sizeof(pTree));
 	initializeTree(finalTree); 
-	while(auxiliar != NULL){
-		if(auxiliar -> next == NULL){
-			break;
-		}
-		strcpy(step1, auxiliar -> step);
-		strcpy(step2, auxiliar -> next -> step);
-		printf("%s\n", step1);
-		printf("%s\n", step2);
-		printf("===========\n");
-		memset(step1, 0, sizeof(step1));
-		memset(step2, 0, sizeof(step2));
-		auxiliar = auxiliar -> next;
-	}
 	idNode = 1;
 	auxiliar = outTree -> first;
 	while(auxiliar != NULL){
@@ -252,7 +239,8 @@ void buildTree(pTree *bnf, pTree *outTree){
 		strcpy(step2, auxiliar -> next -> step);
 		if(hasRule(bnf, step1, step2)){
 			if(compareString(step1, "programa") == 0){
-				insertTree(finalTree, "NULL", step1);	
+				insertTree(finalTree, "NULL", step1);
+				insertTree(finalTree, step1, step2);	
 			} else {
 				insertTree(finalTree, step1, step2);					
 			}
@@ -275,6 +263,7 @@ void buildTree(pTree *bnf, pTree *outTree){
 		//printf("===========\n");
 		auxiliar = auxiliar -> next;
 	}
+	cleanTree(finalTree);
 	printTree(finalTree);
 }
 

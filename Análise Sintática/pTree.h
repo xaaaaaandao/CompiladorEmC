@@ -26,6 +26,8 @@ void insertFirstTree(pTree*, char*);
 int sizeTree(pTree*);
 void printTree(pTree*);
 void printStepTree(pTree*);
+void cleanTree(pTree*);
 
 int idNode;
+
 #endif /* FILES_H */

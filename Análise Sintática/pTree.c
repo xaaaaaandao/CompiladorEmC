@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "pTree.h"
+#include "files.h"
 
 void initializeTree(pTree *tree){
 	tree -> first = NULL;
@@ -83,4 +84,44 @@ void printStepTree(pTree *tree){
 			printNode = printNode -> next;
 		}
 	}    
+}
+
+void cleanTree(pTree *tree){
+	char father[SIZE], children[SIZE], newChildren[SIZE];
+	Node *auxiliar = tree -> first;
+	int i = 0, j = 0, fim = -1;
+	while(auxiliar != NULL){
+		strcpy(father, auxiliar -> father);
+		strcpy(children, auxiliar -> children);
+		i = 0;
+		j = 0;
+		fim = -1;
+		while(children[i] != '\0'){
+			if(children[i] == ' '){
+				newChildren[j] = '\0';
+				if(compareString(newChildren, father) == 0){
+					fim = i;
+					break;
+				}
+			} else {
+				newChildren[j] = children[i];
+				j++;
+			}
+			i++;
+		}
+		if(fim > -1){
+			fim++;
+			i = 0;
+			memset(newChildren, 0, sizeof(newChildren));
+			while(children[fim] != '\0'){
+				newChildren[i] = children[fim];
+				i++;
+				fim++;
+			}
+			newChildren[i] = '\0';
+			//printf("newChildren: %s\n", newChildren);
+			strcpy(auxiliar -> children, newChildren);
+		}
+		auxiliar = auxiliar -> next;
+	}
 }

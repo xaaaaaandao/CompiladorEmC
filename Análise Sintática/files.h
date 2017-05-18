@@ -8,6 +8,7 @@
 
 #include "pTree.h"
 
+int compareString(char[], char[]);
 void printTreeSyntactic();
 
 #endif /* FILES_H */
