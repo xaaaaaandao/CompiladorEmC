@@ -4,6 +4,7 @@
 #define bnftplusplus "parser.y"
 #define startbnftplusplus "//start"
 #define endbnftplusplus "//end"
+#define outputprogram "output.txt"
 
 #include "pTree.h"
 

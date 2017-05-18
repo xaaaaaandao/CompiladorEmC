@@ -4,7 +4,9 @@
 #define SIZE 32768
 
 typedef struct node{
-	char input[SIZE];
+	char father[SIZE];
+	char children[SIZE];
+	char step[SIZE];
 	struct node *next;
 }Node;
 
@@ -15,8 +17,10 @@ typedef struct{
 
 void initializeTree(pTree*);
 int emptyTree(pTree*);
-void insertTree(pTree*, char*);
+void insertTree(pTree*, char*, char*);
+void insertFirstTree(pTree*, char*);
 int sizeTree(pTree*);
 void printTree(pTree*);
+void printStepTree(pTree*);
 
 #endif /* FILES_H */

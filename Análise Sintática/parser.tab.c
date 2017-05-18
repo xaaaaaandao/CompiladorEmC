@@ -73,12 +73,13 @@
 	#include "files.h"
 
 	/* Protótipos */
+	FILE *output;
 	int yylex(void);
 	void yyerror(char *s);
 	extern FILE *yyin;
 	extern FILE *yyout;
 
-#line 82 "parser.tab.c" /* yacc.c:339  */
+#line 83 "parser.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -194,11 +195,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 17 "parser.y" /* yacc.c:355  */
+#line 18 "parser.y" /* yacc.c:355  */
 
 	char pgm[32768];
 
-#line 202 "parser.tab.c" /* yacc.c:355  */
+#line 203 "parser.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -215,7 +216,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 219 "parser.tab.c" /* yacc.c:358  */
+#line 220 "parser.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -516,14 +517,14 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    27,    27,    31,    32,    36,    37,    38,    42,    46,
-      50,    51,    55,    56,    60,    61,    65,    66,    70,    71,
-      75,    76,    80,    81,    85,    86,    90,    91,    92,    93,
-      96,    97,    98,    99,   100,   101,   104,   105,   109,   113,
-     117,   121,   125,   129,   130,   134,   135,   139,   140,   144,
-     145,   149,   150,   154,   155,   156,   157,   158,   159,   163,
-     164,   168,   169,   173,   174,   175,   176,   180,   181,   182,
-     186,   190,   191
+       0,    28,    28,    32,    33,    37,    38,    39,    43,    47,
+      51,    52,    56,    57,    61,    62,    66,    67,    71,    72,
+      76,    77,    81,    82,    86,    87,    91,    92,    93,    94,
+      97,    98,    99,   100,   101,   102,   105,   106,   110,   114,
+     118,   122,   126,   130,   131,   135,   136,   140,   141,   145,
+     146,   150,   151,   155,   156,   157,   158,   159,   160,   164,
+     165,   169,   170,   174,   175,   176,   177,   181,   182,   183,
+     187,   191,   192
 };
 #endif
 
@@ -1396,433 +1397,433 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 27 "parser.y" /* yacc.c:1646  */
-    {printf("lista_declaracoes\n");}
-#line 1402 "parser.tab.c" /* yacc.c:1646  */
+#line 28 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "lista_declaracoes\n");}
+#line 1403 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 31 "parser.y" /* yacc.c:1646  */
-    {printf("lista_declaracoes declaracao\n");}
-#line 1408 "parser.tab.c" /* yacc.c:1646  */
+#line 32 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "lista_declaracoes declaracao\n");}
+#line 1409 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 32 "parser.y" /* yacc.c:1646  */
-    {printf("declaracao\n");}
-#line 1414 "parser.tab.c" /* yacc.c:1646  */
+#line 33 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "declaracao\n");}
+#line 1415 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 36 "parser.y" /* yacc.c:1646  */
-    {printf("declaracao_variaveis\n");}
-#line 1420 "parser.tab.c" /* yacc.c:1646  */
+#line 37 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "declaracao_variaveis\n");}
+#line 1421 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 37 "parser.y" /* yacc.c:1646  */
-    {printf("inicializacao_variaveis\n");}
-#line 1426 "parser.tab.c" /* yacc.c:1646  */
+#line 38 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "inicializacao_variaveis\n");}
+#line 1427 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 38 "parser.y" /* yacc.c:1646  */
-    {printf("declaracao_funcao\n");}
-#line 1432 "parser.tab.c" /* yacc.c:1646  */
+#line 39 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "declaracao_funcao\n");}
+#line 1433 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 42 "parser.y" /* yacc.c:1646  */
-    {printf("tipo DOISPONTOS lista_variaveis\n");}
-#line 1438 "parser.tab.c" /* yacc.c:1646  */
+#line 43 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "tipo DOISPONTOS lista_variaveis\n");}
+#line 1439 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 46 "parser.y" /* yacc.c:1646  */
-    {printf("atribuicao\n");}
-#line 1444 "parser.tab.c" /* yacc.c:1646  */
+#line 47 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "atribuicao\n");}
+#line 1445 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 50 "parser.y" /* yacc.c:1646  */
-    {printf("lista_variaveis VIRGULA var\n");}
-#line 1450 "parser.tab.c" /* yacc.c:1646  */
+#line 51 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "lista_variaveis VIRGULA var\n");}
+#line 1451 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 51 "parser.y" /* yacc.c:1646  */
-    {printf("var\n");}
-#line 1456 "parser.tab.c" /* yacc.c:1646  */
+#line 52 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "var\n");}
+#line 1457 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 55 "parser.y" /* yacc.c:1646  */
-    {printf("IDENTIFICADOR\n"); printf("%s\n", (yyvsp[0].pgm));}
-#line 1462 "parser.tab.c" /* yacc.c:1646  */
+#line 56 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "IDENTIFICADOR\n");}
+#line 1463 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 56 "parser.y" /* yacc.c:1646  */
-    {printf("IDENTIFICADOR indice\n");}
-#line 1468 "parser.tab.c" /* yacc.c:1646  */
+#line 57 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "IDENTIFICADOR indice\n");}
+#line 1469 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 60 "parser.y" /* yacc.c:1646  */
-    {printf("indice ABRECOLCHETE expressao FECHACOLCHETE\n");}
-#line 1474 "parser.tab.c" /* yacc.c:1646  */
+#line 61 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "indice ABRECOLCHETE expressao FECHACOLCHETE\n");}
+#line 1475 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 61 "parser.y" /* yacc.c:1646  */
-    {printf("ABRECOLCHETE expressao FECHACOLCHETE\n");}
-#line 1480 "parser.tab.c" /* yacc.c:1646  */
+#line 62 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "ABRECOLCHETE expressao FECHACOLCHETE\n");}
+#line 1481 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 65 "parser.y" /* yacc.c:1646  */
-    {printf("TIPOINTEIRO\n");}
-#line 1486 "parser.tab.c" /* yacc.c:1646  */
+#line 66 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "TIPOINTEIRO\n");}
+#line 1487 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 66 "parser.y" /* yacc.c:1646  */
-    {printf("TIPOFLUTUANTE\n");}
-#line 1492 "parser.tab.c" /* yacc.c:1646  */
+#line 67 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "TIPOFLUTUANTE\n");}
+#line 1493 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 70 "parser.y" /* yacc.c:1646  */
-    {printf("tipo cabecalho\n");}
-#line 1498 "parser.tab.c" /* yacc.c:1646  */
+#line 71 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "tipo cabecalho\n");}
+#line 1499 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 71 "parser.y" /* yacc.c:1646  */
-    {printf("cabecalho\n");}
-#line 1504 "parser.tab.c" /* yacc.c:1646  */
+#line 72 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "cabecalho\n");}
+#line 1505 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 75 "parser.y" /* yacc.c:1646  */
-    {printf("IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM\n");}
-#line 1510 "parser.tab.c" /* yacc.c:1646  */
+#line 76 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM\n");}
+#line 1511 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 76 "parser.y" /* yacc.c:1646  */
-    {printf("IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM\n"); printf("%s\n", (yyvsp[-4].pgm));}
-#line 1516 "parser.tab.c" /* yacc.c:1646  */
+#line 77 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM\n"); fprintf(output,"%s\n", (yyvsp[-4].pgm));}
+#line 1517 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 80 "parser.y" /* yacc.c:1646  */
-    {printf("lista_parametros VIRGULA parametro\n");}
-#line 1522 "parser.tab.c" /* yacc.c:1646  */
+#line 81 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "lista_parametros VIRGULA parametro\n");}
+#line 1523 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 81 "parser.y" /* yacc.c:1646  */
-    {printf("parametro\n");}
-#line 1528 "parser.tab.c" /* yacc.c:1646  */
+#line 82 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "parametro\n");}
+#line 1529 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 85 "parser.y" /* yacc.c:1646  */
-    {printf("tipo DOISPONTOS IDENTIFICADOR\n");}
-#line 1534 "parser.tab.c" /* yacc.c:1646  */
+#line 86 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "tipo DOISPONTOS IDENTIFICADOR\n");}
+#line 1535 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 86 "parser.y" /* yacc.c:1646  */
-    {printf("parametro ABRECOLCHETE FECHACOLCHETE\n");}
-#line 1540 "parser.tab.c" /* yacc.c:1646  */
+#line 87 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "parametro ABRECOLCHETE FECHACOLCHETE\n");}
+#line 1541 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 90 "parser.y" /* yacc.c:1646  */
-    {printf("acao\n");}
-#line 1546 "parser.tab.c" /* yacc.c:1646  */
+#line 91 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "acao\n");}
+#line 1547 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 91 "parser.y" /* yacc.c:1646  */
-    {printf("corpo acao\n");}
-#line 1552 "parser.tab.c" /* yacc.c:1646  */
+#line 92 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "corpo acao\n");}
+#line 1553 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 92 "parser.y" /* yacc.c:1646  */
-    {printf("atribuicao\n");}
-#line 1558 "parser.tab.c" /* yacc.c:1646  */
+#line 93 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "atribuicao\n");}
+#line 1559 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 93 "parser.y" /* yacc.c:1646  */
-    {printf("corpo atribuicao\n");}
-#line 1564 "parser.tab.c" /* yacc.c:1646  */
+#line 94 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "corpo atribuicao\n");}
+#line 1565 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 96 "parser.y" /* yacc.c:1646  */
-    {printf("declaracao_variaveis\n");}
-#line 1570 "parser.tab.c" /* yacc.c:1646  */
+#line 97 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "declaracao_variaveis\n");}
+#line 1571 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 97 "parser.y" /* yacc.c:1646  */
-    {printf("se\n");}
-#line 1576 "parser.tab.c" /* yacc.c:1646  */
+#line 98 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "se\n");}
+#line 1577 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 98 "parser.y" /* yacc.c:1646  */
-    {printf("repita\n");}
-#line 1582 "parser.tab.c" /* yacc.c:1646  */
+#line 99 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "repita\n");}
+#line 1583 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 99 "parser.y" /* yacc.c:1646  */
-    {printf("leia\n");}
-#line 1588 "parser.tab.c" /* yacc.c:1646  */
+#line 100 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "leia\n");}
+#line 1589 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 100 "parser.y" /* yacc.c:1646  */
-    {printf("escreva\n");}
-#line 1594 "parser.tab.c" /* yacc.c:1646  */
+#line 101 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "escreva\n");}
+#line 1595 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 101 "parser.y" /* yacc.c:1646  */
-    {printf("retorna\n");}
-#line 1600 "parser.tab.c" /* yacc.c:1646  */
+#line 102 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "retorna\n");}
+#line 1601 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 104 "parser.y" /* yacc.c:1646  */
-    {printf("SE expressao ENTAO corpo FIM\n");}
-#line 1606 "parser.tab.c" /* yacc.c:1646  */
+#line 105 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "SE expressao ENTAO corpo FIM\n");}
+#line 1607 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 105 "parser.y" /* yacc.c:1646  */
-    {printf("SE expressao ENTAO corpo SENAO corpo FIM\n");}
-#line 1612 "parser.tab.c" /* yacc.c:1646  */
+#line 106 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "SE expressao ENTAO corpo SENAO corpo FIM\n");}
+#line 1613 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 109 "parser.y" /* yacc.c:1646  */
-    {printf("REPITA corpo ATE expressao\n");}
-#line 1618 "parser.tab.c" /* yacc.c:1646  */
+#line 110 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "REPITA corpo ATE expressao\n");}
+#line 1619 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 113 "parser.y" /* yacc.c:1646  */
-    {printf("var ATRIBUICAO expressao\n");}
-#line 1624 "parser.tab.c" /* yacc.c:1646  */
+#line 114 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "var ATRIBUICAO expressao\n");}
+#line 1625 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 117 "parser.y" /* yacc.c:1646  */
-    {printf("LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES\n");}
-#line 1630 "parser.tab.c" /* yacc.c:1646  */
+#line 118 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES\n");}
+#line 1631 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 121 "parser.y" /* yacc.c:1646  */
-    {printf("ESCREVA ABREPARENTESES expressao FECHAPARENTESES\n");}
-#line 1636 "parser.tab.c" /* yacc.c:1646  */
+#line 122 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "ESCREVA ABREPARENTESES expressao FECHAPARENTESES\n");}
+#line 1637 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 125 "parser.y" /* yacc.c:1646  */
-    {printf("RETORNA ABREPARENTESES expressao FECHAPARENTESES\n");}
-#line 1642 "parser.tab.c" /* yacc.c:1646  */
+#line 126 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "RETORNA ABREPARENTESES expressao FECHAPARENTESES\n");}
+#line 1643 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 129 "parser.y" /* yacc.c:1646  */
-    {printf("atribuicao\n");}
-#line 1648 "parser.tab.c" /* yacc.c:1646  */
+#line 130 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "atribuicao\n");}
+#line 1649 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 130 "parser.y" /* yacc.c:1646  */
-    {printf("expressao_simples\n");}
-#line 1654 "parser.tab.c" /* yacc.c:1646  */
+#line 131 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "expressao_simples\n");}
+#line 1655 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 134 "parser.y" /* yacc.c:1646  */
-    {printf("expressao_aditiva\n");}
-#line 1660 "parser.tab.c" /* yacc.c:1646  */
+#line 135 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "expressao_aditiva\n");}
+#line 1661 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 135 "parser.y" /* yacc.c:1646  */
-    {printf("expressao_simples operador_relacional expressao_aditiva\n");}
-#line 1666 "parser.tab.c" /* yacc.c:1646  */
+#line 136 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "expressao_simples operador_relacional expressao_aditiva\n");}
+#line 1667 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 139 "parser.y" /* yacc.c:1646  */
-    {printf("expressao_multiplicativa\n");}
-#line 1672 "parser.tab.c" /* yacc.c:1646  */
+#line 140 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "expressao_multiplicativa\n");}
+#line 1673 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 140 "parser.y" /* yacc.c:1646  */
-    {printf("expressao_aditiva operador_soma expressao_multiplicativa\n");}
-#line 1678 "parser.tab.c" /* yacc.c:1646  */
+#line 141 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "expressao_aditiva operador_soma expressao_multiplicativa\n");}
+#line 1679 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 144 "parser.y" /* yacc.c:1646  */
-    {printf("expressao_unaria\n");}
-#line 1684 "parser.tab.c" /* yacc.c:1646  */
+#line 145 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "expressao_unaria\n");}
+#line 1685 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 145 "parser.y" /* yacc.c:1646  */
-    {printf("expressao_multiplicativa operador_multiplicacao expressao_unaria\n");}
-#line 1690 "parser.tab.c" /* yacc.c:1646  */
+#line 146 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "expressao_multiplicativa operador_multiplicacao expressao_unaria\n");}
+#line 1691 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 149 "parser.y" /* yacc.c:1646  */
-    {printf("fator \n");}
-#line 1696 "parser.tab.c" /* yacc.c:1646  */
+#line 150 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "fator \n");}
+#line 1697 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 150 "parser.y" /* yacc.c:1646  */
-    {printf("operador_soma fator\n");}
-#line 1702 "parser.tab.c" /* yacc.c:1646  */
+#line 151 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "operador_soma fator\n");}
+#line 1703 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 154 "parser.y" /* yacc.c:1646  */
-    {printf("MENOR\n");}
-#line 1708 "parser.tab.c" /* yacc.c:1646  */
+#line 155 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "MENOR\n");}
+#line 1709 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 155 "parser.y" /* yacc.c:1646  */
-    {printf("MAIOR\n");}
-#line 1714 "parser.tab.c" /* yacc.c:1646  */
+#line 156 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "MAIOR\n");}
+#line 1715 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 156 "parser.y" /* yacc.c:1646  */
-    {printf("IGUAL\n");}
-#line 1720 "parser.tab.c" /* yacc.c:1646  */
+#line 157 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "IGUAL\n");}
+#line 1721 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 157 "parser.y" /* yacc.c:1646  */
-    {printf("DIFERENTE\n");}
-#line 1726 "parser.tab.c" /* yacc.c:1646  */
+#line 158 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "DIFERENTE\n");}
+#line 1727 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 158 "parser.y" /* yacc.c:1646  */
-    {printf("MENORIGUAL\n");}
-#line 1732 "parser.tab.c" /* yacc.c:1646  */
+#line 159 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "MENORIGUAL\n");}
+#line 1733 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 159 "parser.y" /* yacc.c:1646  */
-    {printf("MAIORIGUAL\n");}
-#line 1738 "parser.tab.c" /* yacc.c:1646  */
+#line 160 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "MAIORIGUAL\n");}
+#line 1739 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 163 "parser.y" /* yacc.c:1646  */
-    {printf("ADICAO\n");}
-#line 1744 "parser.tab.c" /* yacc.c:1646  */
+#line 164 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "ADICAO\n");}
+#line 1745 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 164 "parser.y" /* yacc.c:1646  */
-    {printf("SUBTRACAO\n");}
-#line 1750 "parser.tab.c" /* yacc.c:1646  */
+#line 165 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "SUBTRACAO\n");}
+#line 1751 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 168 "parser.y" /* yacc.c:1646  */
-    {printf("MULTIPLICACAO\n");}
-#line 1756 "parser.tab.c" /* yacc.c:1646  */
+#line 169 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "MULTIPLICACAO\n");}
+#line 1757 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 169 "parser.y" /* yacc.c:1646  */
-    {printf("DIVISAO\n");}
-#line 1762 "parser.tab.c" /* yacc.c:1646  */
+#line 170 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "DIVISAO\n");}
+#line 1763 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 173 "parser.y" /* yacc.c:1646  */
-    {printf("ABREPARENTESES expressao FECHAPARENTESES\n");}
-#line 1768 "parser.tab.c" /* yacc.c:1646  */
+#line 174 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "ABREPARENTESES expressao FECHAPARENTESES\n");}
+#line 1769 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 174 "parser.y" /* yacc.c:1646  */
-    {printf("var\n");}
-#line 1774 "parser.tab.c" /* yacc.c:1646  */
+#line 175 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "var\n");}
+#line 1775 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 175 "parser.y" /* yacc.c:1646  */
-    {printf("chamada_funcao\n");}
-#line 1780 "parser.tab.c" /* yacc.c:1646  */
+#line 176 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "chamada_funcao\n");}
+#line 1781 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 176 "parser.y" /* yacc.c:1646  */
-    {printf("numero\n");}
-#line 1786 "parser.tab.c" /* yacc.c:1646  */
+#line 177 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "numero\n");}
+#line 1787 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 180 "parser.y" /* yacc.c:1646  */
-    {printf("NUMEROINTEIRO\n");}
-#line 1792 "parser.tab.c" /* yacc.c:1646  */
+#line 181 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "NUMEROINTEIRO\n");}
+#line 1793 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 181 "parser.y" /* yacc.c:1646  */
-    {printf("NUMEROFLUTUANTE\n");}
-#line 1798 "parser.tab.c" /* yacc.c:1646  */
+#line 182 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "NUMEROFLUTUANTE\n");}
+#line 1799 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 182 "parser.y" /* yacc.c:1646  */
-    {printf("EXPONENCIAL\n");}
-#line 1804 "parser.tab.c" /* yacc.c:1646  */
+#line 183 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "EXPONENCIAL\n");}
+#line 1805 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 186 "parser.y" /* yacc.c:1646  */
-    {printf("IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES\n");}
-#line 1810 "parser.tab.c" /* yacc.c:1646  */
+#line 187 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES\n");}
+#line 1811 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 71:
-#line 190 "parser.y" /* yacc.c:1646  */
-    {printf("lista_argumentos VIRGULA expressao\n");}
-#line 1816 "parser.tab.c" /* yacc.c:1646  */
+#line 191 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "lista_argumentos VIRGULA expressao\n");}
+#line 1817 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 72:
-#line 191 "parser.y" /* yacc.c:1646  */
-    {printf("expressao\n");}
-#line 1822 "parser.tab.c" /* yacc.c:1646  */
+#line 192 "parser.y" /* yacc.c:1646  */
+    {fprintf(output, "expressao\n");}
+#line 1823 "parser.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1826 "parser.tab.c" /* yacc.c:1646  */
+#line 1827 "parser.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2050,16 +2051,18 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 195 "parser.y" /* yacc.c:1906  */
+#line 196 "parser.y" /* yacc.c:1906  */
 
 void yyerror(char *s) {
 	fprintf(stdout, "%s\n", s);
 }
 
 int main(int argc, char *argv[]){
+	output = fopen(outputprogram, "w");
 	yyin = fopen(argv[1], "r");
 	yyparse();	
 	fclose(yyin);
+	fclose(output);
 	printTreeSyntactic();
 	return 0;
 }

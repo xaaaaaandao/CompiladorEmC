@@ -8,6 +8,7 @@
 	#include "files.h"
 
 	/* Protótipos */
+	FILE *output;
 	int yylex(void);
 	void yyerror(char *s);
 	extern FILE *yyin;
@@ -24,171 +25,171 @@
 %% 
 //start
 programa:
-	lista_declaracoes {printf("lista_declaracoes\n");}
+	lista_declaracoes {fprintf(output, "lista_declaracoes\n");}
 	;
 
 lista_declaracoes:
-	lista_declaracoes declaracao {printf("lista_declaracoes declaracao\n");}
-	| declaracao {printf("declaracao\n");}
+	lista_declaracoes declaracao {fprintf(output, "lista_declaracoes declaracao\n");}
+	| declaracao {fprintf(output, "declaracao\n");}
 	;
 
 declaracao:
-	declaracao_variaveis {printf("declaracao_variaveis\n");}
-	| inicializacao_variaveis {printf("inicializacao_variaveis\n");}
-	| declaracao_funcao {printf("declaracao_funcao\n");}
+	declaracao_variaveis {fprintf(output, "declaracao_variaveis\n");}
+	| inicializacao_variaveis {fprintf(output, "inicializacao_variaveis\n");}
+	| declaracao_funcao {fprintf(output, "declaracao_funcao\n");}
 	;
 
 declaracao_variaveis:
-	tipo DOISPONTOS lista_variaveis {printf("tipo DOISPONTOS lista_variaveis\n");}
+	tipo DOISPONTOS lista_variaveis {fprintf(output, "tipo DOISPONTOS lista_variaveis\n");}
 	;
 
 inicializacao_variaveis:
-	atribuicao {printf("atribuicao\n");}
+	atribuicao {fprintf(output, "atribuicao\n");}
 	;
 
 lista_variaveis:
-	lista_variaveis VIRGULA var {printf("lista_variaveis VIRGULA var\n");}
-	| var {printf("var\n");}
+	lista_variaveis VIRGULA var {fprintf(output, "lista_variaveis VIRGULA var\n");}
+	| var {fprintf(output, "var\n");}
 	;
 
 var:
-	IDENTIFICADOR {printf("IDENTIFICADOR\n"); printf("%s\n", $1);}
-	| IDENTIFICADOR indice {printf("IDENTIFICADOR indice\n");}
+	IDENTIFICADOR {fprintf(output, "IDENTIFICADOR\n");}
+	| IDENTIFICADOR indice {fprintf(output, "IDENTIFICADOR indice\n");}
 	;
 
 indice:
-	indice ABRECOLCHETE expressao FECHACOLCHETE {printf("indice ABRECOLCHETE expressao FECHACOLCHETE\n");}
-	| ABRECOLCHETE expressao FECHACOLCHETE {printf("ABRECOLCHETE expressao FECHACOLCHETE\n");}
+	indice ABRECOLCHETE expressao FECHACOLCHETE {fprintf(output, "indice ABRECOLCHETE expressao FECHACOLCHETE\n");}
+	| ABRECOLCHETE expressao FECHACOLCHETE {fprintf(output, "ABRECOLCHETE expressao FECHACOLCHETE\n");}
 	;
 
 tipo:
-	TIPOINTEIRO {printf("TIPOINTEIRO\n");}
-	| TIPOFLUTUANTE {printf("TIPOFLUTUANTE\n");}
+	TIPOINTEIRO {fprintf(output, "TIPOINTEIRO\n");}
+	| TIPOFLUTUANTE {fprintf(output, "TIPOFLUTUANTE\n");}
 	;
 
 declaracao_funcao:
-	tipo cabecalho {printf("tipo cabecalho\n");}
-	| cabecalho {printf("cabecalho\n");}
+	tipo cabecalho {fprintf(output, "tipo cabecalho\n");}
+	| cabecalho {fprintf(output, "cabecalho\n");}
 	;
 
 cabecalho:
-	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM {printf("IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM\n");}
-	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM {printf("IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM\n"); printf("%s\n", $1);}
+	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM {fprintf(output, "IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM\n");}
+	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM {fprintf(output, "IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM\n"); fprintf(output,"%s\n", $1);}
 	;
 
 lista_parametros:
-	lista_parametros VIRGULA parametro {printf("lista_parametros VIRGULA parametro\n");}
-	| parametro {printf("parametro\n");}
+	lista_parametros VIRGULA parametro {fprintf(output, "lista_parametros VIRGULA parametro\n");}
+	| parametro {fprintf(output, "parametro\n");}
 	;
 
 parametro:
-	tipo DOISPONTOS IDENTIFICADOR {printf("tipo DOISPONTOS IDENTIFICADOR\n");}
-	| parametro ABRECOLCHETE FECHACOLCHETE{printf("parametro ABRECOLCHETE FECHACOLCHETE\n");}
+	tipo DOISPONTOS IDENTIFICADOR {fprintf(output, "tipo DOISPONTOS IDENTIFICADOR\n");}
+	| parametro ABRECOLCHETE FECHACOLCHETE{fprintf(output, "parametro ABRECOLCHETE FECHACOLCHETE\n");}
 	;
 
 corpo:
-	acao {printf("acao\n");}
-	| corpo acao {printf("corpo acao\n");}
-	| atribuicao {printf("atribuicao\n");}
-	| corpo atribuicao {printf("corpo atribuicao\n");};
+	acao {fprintf(output, "acao\n");}
+	| corpo acao {fprintf(output, "corpo acao\n");}
+	| atribuicao {fprintf(output, "atribuicao\n");}
+	| corpo atribuicao {fprintf(output, "corpo atribuicao\n");};
 
 acao:
-	declaracao_variaveis {printf("declaracao_variaveis\n");}
-	| se {printf("se\n");}
-	| repita {printf("repita\n");}
-	| leia {printf("leia\n");}
-	| escreva {printf("escreva\n");}
-	| retorna {printf("retorna\n");};
+	declaracao_variaveis {fprintf(output, "declaracao_variaveis\n");}
+	| se {fprintf(output, "se\n");}
+	| repita {fprintf(output, "repita\n");}
+	| leia {fprintf(output, "leia\n");}
+	| escreva {fprintf(output, "escreva\n");}
+	| retorna {fprintf(output, "retorna\n");};
 
 se:
-	SE expressao ENTAO corpo FIM {printf("SE expressao ENTAO corpo FIM\n");}
-	| SE expressao ENTAO corpo SENAO corpo FIM {printf("SE expressao ENTAO corpo SENAO corpo FIM\n");}
+	SE expressao ENTAO corpo FIM {fprintf(output, "SE expressao ENTAO corpo FIM\n");}
+	| SE expressao ENTAO corpo SENAO corpo FIM {fprintf(output, "SE expressao ENTAO corpo SENAO corpo FIM\n");}
 	;
 
 repita:
-	REPITA corpo ATE expressao {printf("REPITA corpo ATE expressao\n");}
+	REPITA corpo ATE expressao {fprintf(output, "REPITA corpo ATE expressao\n");}
 	;
 
 atribuicao:
-	var ATRIBUICAO expressao{printf("var ATRIBUICAO expressao\n");}
+	var ATRIBUICAO expressao{fprintf(output, "var ATRIBUICAO expressao\n");}
 	;
 
 leia:
-	LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES{printf("LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES\n");}
+	LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES{fprintf(output, "LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES\n");}
 	;
 
 escreva:
-	ESCREVA ABREPARENTESES expressao FECHAPARENTESES{printf("ESCREVA ABREPARENTESES expressao FECHAPARENTESES\n");}
+	ESCREVA ABREPARENTESES expressao FECHAPARENTESES{fprintf(output, "ESCREVA ABREPARENTESES expressao FECHAPARENTESES\n");}
 	;
 
 retorna:
-	RETORNA ABREPARENTESES expressao FECHAPARENTESES{printf("RETORNA ABREPARENTESES expressao FECHAPARENTESES\n");}
+	RETORNA ABREPARENTESES expressao FECHAPARENTESES{fprintf(output, "RETORNA ABREPARENTESES expressao FECHAPARENTESES\n");}
 	;
 
 expressao:
-	atribuicao {printf("atribuicao\n");}
-	| expressao_simples {printf("expressao_simples\n");}
+	atribuicao {fprintf(output, "atribuicao\n");}
+	| expressao_simples {fprintf(output, "expressao_simples\n");}
 	;
 
 expressao_simples:
-	expressao_aditiva {printf("expressao_aditiva\n");}
-	| expressao_simples operador_relacional expressao_aditiva {printf("expressao_simples operador_relacional expressao_aditiva\n");}
+	expressao_aditiva {fprintf(output, "expressao_aditiva\n");}
+	| expressao_simples operador_relacional expressao_aditiva {fprintf(output, "expressao_simples operador_relacional expressao_aditiva\n");}
 	; 
 
 expressao_aditiva:
-	expressao_multiplicativa {printf("expressao_multiplicativa\n");}
-	| expressao_aditiva operador_soma expressao_multiplicativa {printf("expressao_aditiva operador_soma expressao_multiplicativa\n");}
+	expressao_multiplicativa {fprintf(output, "expressao_multiplicativa\n");}
+	| expressao_aditiva operador_soma expressao_multiplicativa {fprintf(output, "expressao_aditiva operador_soma expressao_multiplicativa\n");}
 	;
 
 expressao_multiplicativa:
-	expressao_unaria {printf("expressao_unaria\n");}
-	| expressao_multiplicativa operador_multiplicacao expressao_unaria{printf("expressao_multiplicativa operador_multiplicacao expressao_unaria\n");}
+	expressao_unaria {fprintf(output, "expressao_unaria\n");}
+	| expressao_multiplicativa operador_multiplicacao expressao_unaria{fprintf(output, "expressao_multiplicativa operador_multiplicacao expressao_unaria\n");}
 	;
 
 expressao_unaria:
-	fator {printf("fator \n");}
-	| operador_soma fator {printf("operador_soma fator\n");}
+	fator {fprintf(output, "fator \n");}
+	| operador_soma fator {fprintf(output, "operador_soma fator\n");}
 	;
 
 operador_relacional:
-	MENOR {printf("MENOR\n");}
-	| MAIOR {printf("MAIOR\n");}
-	| IGUAL {printf("IGUAL\n");}
-	| DIFERENTE {printf("DIFERENTE\n");}
-	| MENORIGUAL {printf("MENORIGUAL\n");}
-	| MAIORIGUAL{printf("MAIORIGUAL\n");}
+	MENOR {fprintf(output, "MENOR\n");}
+	| MAIOR {fprintf(output, "MAIOR\n");}
+	| IGUAL {fprintf(output, "IGUAL\n");}
+	| DIFERENTE {fprintf(output, "DIFERENTE\n");}
+	| MENORIGUAL {fprintf(output, "MENORIGUAL\n");}
+	| MAIORIGUAL{fprintf(output, "MAIORIGUAL\n");}
 	; 
 
 operador_soma:
-	ADICAO {printf("ADICAO\n");}
-	| SUBTRACAO {printf("SUBTRACAO\n");}
+	ADICAO {fprintf(output, "ADICAO\n");}
+	| SUBTRACAO {fprintf(output, "SUBTRACAO\n");}
 	;
 
 operador_multiplicacao:
-	MULTIPLICACAO {printf("MULTIPLICACAO\n");}
-	| DIVISAO {printf("DIVISAO\n");}
+	MULTIPLICACAO {fprintf(output, "MULTIPLICACAO\n");}
+	| DIVISAO {fprintf(output, "DIVISAO\n");}
 	;
 
 fator:
-	ABREPARENTESES expressao FECHAPARENTESES {printf("ABREPARENTESES expressao FECHAPARENTESES\n");}
-	| var {printf("var\n");}
-	| chamada_funcao {printf("chamada_funcao\n");}
-	| numero {printf("numero\n");}
+	ABREPARENTESES expressao FECHAPARENTESES {fprintf(output, "ABREPARENTESES expressao FECHAPARENTESES\n");}
+	| var {fprintf(output, "var\n");}
+	| chamada_funcao {fprintf(output, "chamada_funcao\n");}
+	| numero {fprintf(output, "numero\n");}
 	;
 
 numero:
-	NUMEROINTEIRO {printf("NUMEROINTEIRO\n");}
-	| NUMEROFLUTUANTE {printf("NUMEROFLUTUANTE\n");}
-	| EXPONENCIAL {printf("EXPONENCIAL\n");}
+	NUMEROINTEIRO {fprintf(output, "NUMEROINTEIRO\n");}
+	| NUMEROFLUTUANTE {fprintf(output, "NUMEROFLUTUANTE\n");}
+	| EXPONENCIAL {fprintf(output, "EXPONENCIAL\n");}
 	;
 
 chamada_funcao:
-	IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES {printf("IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES\n");}
+	IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES {fprintf(output, "IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES\n");}
 	;
 
 lista_argumentos:
-	lista_argumentos VIRGULA expressao {printf("lista_argumentos VIRGULA expressao\n");}
-	| expressao {printf("expressao\n");}
+	lista_argumentos VIRGULA expressao {fprintf(output, "lista_argumentos VIRGULA expressao\n");}
+	| expressao {fprintf(output, "expressao\n");}
 	;
 //end
 
@@ -198,9 +199,11 @@ void yyerror(char *s) {
 }
 
 int main(int argc, char *argv[]){
+	output = fopen(outputprogram, "w");
 	yyin = fopen(argv[1], "r");
 	yyparse();	
 	fclose(yyin);
+	fclose(output);
 	printTreeSyntactic();
 	return 0;
 }
