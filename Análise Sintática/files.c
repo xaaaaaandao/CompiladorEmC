@@ -267,6 +267,7 @@ void buildTree(pTree *bnf, pTree *outTree){
 	}
 	cleanTree(finalTree);
 	printTree(finalTree);
+	system("rm *.txt");
 }
 
 void printTreeSyntactic(){
