@@ -2054,7 +2054,13 @@ yyreturn:
 #line 196 "parser.y" /* yacc.c:1906  */
 
 void yyerror(char *s) {
-	fprintf(stdout, "%s\n", s);
+	if(compareString(s, "syntax error") == 0){
+		system("reset");
+		printf("\033[1m\033[31mSYNTAX ERROR\n");	
+		exit(1);
+	} else {
+		fprintf(stdout, "%s\n", s);
+	}
 }
 
 int main(int argc, char *argv[]){

@@ -268,7 +268,7 @@ void buildTree(pTree *bnf, pTree *outTree){
 }
 
 void printTreeSyntactic(){
-	//system("clear");
+	system("reset");
 	int start, end;
 	FILE *parser = fopen(bnftplusplus, "r");
 	pTree *bnf = (pTree*) malloc (sizeof(pTree));

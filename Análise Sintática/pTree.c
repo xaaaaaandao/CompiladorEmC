@@ -68,6 +68,7 @@ void printTree(pTree *tree){
 			printf("ID: %d \n", printNode -> id);
 			printf("Pai: %s \n", printNode -> father);
 			printf("Filho: %s \n", printNode -> children);
+			printf("\n");
 			printNode = printNode -> next;
 		}
 	}    
@@ -121,6 +122,26 @@ void cleanTree(pTree *tree){
 			newChildren[i] = '\0';
 			//printf("newChildren: %s\n", newChildren);
 			strcpy(auxiliar -> children, newChildren);
+		}
+		auxiliar = auxiliar -> next;
+	}
+	auxiliar = tree -> first;
+	while(auxiliar != NULL){
+		i = 0;
+		while(auxiliar -> father[i] != '\0'){
+			if(auxiliar -> father[i] == '\n'){
+				auxiliar -> father[i] = '\0';
+				break;
+			}
+			i++;
+		}
+		i = 0;
+		while(auxiliar -> children[i] != '\0'){
+			if(auxiliar -> children[i] == '\n'){
+				auxiliar -> children[i] = '\0';
+				break;
+			}
+			i++;
 		}
 		auxiliar = auxiliar -> next;
 	}
