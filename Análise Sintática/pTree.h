@@ -7,6 +7,7 @@ typedef struct node{
 	char father[SIZE];
 	char children[SIZE];
 	char step[SIZE];
+	struct node *previous;
 	struct node *next;
 }Node;
 

@@ -16,15 +16,18 @@ int emptyTree(pTree *tree){
 void insertTree(pTree *tree, char* father, char* children){
 	Node *newNode = (Node *) malloc(sizeof(Node));
 	strcpy(newNode -> father, father);
-	strcpy(newNode -> children, children);
+	strcpy(newNode -> children, children);	
+	newNode -> previous = NULL;
 	newNode -> next = NULL;
 
 	if (emptyTree(tree)){
 		tree -> first = newNode;
 		tree -> last = newNode;
 	} else {
+		newNode -> previous = tree -> last;
 		tree -> last -> next = newNode;
 		tree -> last = newNode;
+
 	}
 	
 	tree -> size++;
@@ -33,10 +36,19 @@ void insertTree(pTree *tree, char* father, char* children){
 void insertFirstTree(pTree *tree, char* step){
 	Node *newNode = (Node *) malloc(sizeof(Node));
 	Node *auxiliar = tree -> first;
+	newNode -> next = NULL;
+	newNode -> previous = NULL;
 	strcpy(newNode -> step, step);
 	
-	tree -> first = newNode;
-	newNode -> next = auxiliar;
+	if(emptyTree(tree)){
+		tree -> first = newNode;
+		tree -> last = newNode;
+	} else {
+		auxiliar ->  previous = newNode;
+		newNode -> next = auxiliar;
+		tree -> first = newNode;
+	}
+
 	tree -> size++;
 }
 

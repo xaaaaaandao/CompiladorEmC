@@ -140,6 +140,137 @@ void copyOutput(pTree *outTree){
 	fclose(out);
 }
 
+void clearBNF(pTree *bnf){
+	int i;
+	Node *auxiliar = bnf -> first;
+	while(auxiliar != NULL){
+		i = strlen(auxiliar -> children);
+		while(i > 0){
+			if((auxiliar -> children[i] >= 65 && auxiliar -> children[i] <= 90) || (auxiliar -> children[i] >= 97 && auxiliar -> children[i] <= 123)){
+				auxiliar -> children[i + 1] = '\0';
+				break;
+			}
+			i--;
+		}
+		auxiliar = auxiliar -> next;
+	}
+}
+
+bool hasRule(pTree *bnf, char *father, char *children){
+	Node *auxiliar = bnf -> first;
+	while(auxiliar != NULL){
+		if((compareString(father, auxiliar -> father) == 0) && (compareString(children, auxiliar -> children) == 0)){
+			return true;
+		}
+		auxiliar = auxiliar -> next;
+	}
+	return false;
+}
+
+bool hasFather(pTree *bnf, char *father){
+	Node *auxiliar = bnf -> first;
+	while(auxiliar != NULL){
+		if(compareString(auxiliar -> father, father) == 0){
+			return true;
+		}
+		auxiliar = auxiliar -> next;
+	}
+	return false;
+}
+
+bool checkWords(pTree *finalTree, pTree *bnf, char *step1, char *step2){
+	char word[SIZE];
+	int i = 0, j = 0;
+	while(step1[i] != '\0'){
+		if(step1[i] ==  ' '){
+			word[j] = '\0';
+			if(hasFather(bnf, word)){
+				if(hasRule(bnf, word, step2)){
+					insertTree(finalTree, word, step2);
+					return true;
+				}
+			}
+			j = 0;
+			memset(word, 0, sizeof(word));
+		} else {
+			word[j] = step1[i];
+			j++;
+		}
+		i++;
+	}
+	word[j] = '\0';
+	if(hasFather(bnf, word)){
+		if(hasRule(bnf, word, step2)){
+			return true;
+		}
+	}
+	return false;
+}
+
+bool backTree(pTree *bnf, pTree *finalTree, char *step){
+	Node *auxiliar = finalTree -> last;
+	while(auxiliar != NULL){
+		if(checkWords(finalTree, bnf, auxiliar -> children, step)){
+			return true;
+		}
+		auxiliar = auxiliar -> previous;
+	}
+	return false;
+}
+
+void buildTree(pTree *bnf, pTree *outTree){
+	char step1[SIZE], step2[SIZE], father[SIZE];
+	Node *auxiliar = outTree -> first;
+	pTree *finalTree = (pTree*) malloc (sizeof(pTree));
+	initializeTree(finalTree); 
+	while(auxiliar != NULL){
+		if(auxiliar -> next == NULL){
+			break;
+		}
+		strcpy(step1, auxiliar -> step);
+		strcpy(step2, auxiliar -> next -> step);
+		printf("%s\n", step1);
+		printf("%s\n", step2);
+		printf("===========\n");
+		memset(step1, 0, sizeof(step1));
+		memset(step2, 0, sizeof(step2));
+		auxiliar = auxiliar -> next;
+	}
+	auxiliar = outTree -> first;
+	while(auxiliar != NULL){
+		if(auxiliar -> next == NULL){
+			break;
+		}
+		strcpy(step1, auxiliar -> step);
+		strcpy(step2, auxiliar -> next -> step);
+		if(hasRule(bnf, step1, step2)){
+			if(compareString(step1, "programa") == 0){
+				insertTree(finalTree, "NULL", step1);	
+			} else {
+				insertTree(finalTree, step1, step2);					
+			}
+		} else {
+			if(checkWords(finalTree, bnf, step1, step2) == false){
+				if(backTree(bnf, finalTree, step2) == false){
+					printf("err\n");
+				}
+					//printf("dsaadsdsa\n");
+					//printf("%s\n", step1);
+					///printf("%s\n", step2);
+					//printf("===========\n");
+					//break;
+			}
+		}
+		memset(step1, 0, sizeof(step1));
+		memset(step2, 0, sizeof(step2));
+		//printf("%s\n", step1);
+		//printf("%s\n", step2);
+		//printf("===========\n");
+		auxiliar = auxiliar -> next;
+	}
+	printTree(finalTree);
+}
+
 void printTreeSyntactic(){
 	//system("clear");
 	int start, end;
@@ -155,10 +286,13 @@ void printTreeSyntactic(){
 
 	initializeTree(bnf);
 	copyBNF(start, end, bnf);
+	clearBNF(bnf);
 
-	//printTree(bnf);
+//	printTree(bnf);
 	initializeTree(outTree);
-	copyOutput(outTree);	
-	printStepTree(outTree);
+	copyOutput(outTree);
+
+	buildTree(bnf, outTree);
+	//printStepTree(outTree);
 }
 

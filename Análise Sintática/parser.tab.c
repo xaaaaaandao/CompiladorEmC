@@ -1512,7 +1512,7 @@ yyreduce:
 
   case 21:
 #line 77 "parser.y" /* yacc.c:1646  */
-    {fprintf(output, "IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM\n"); fprintf(output,"%s\n", (yyvsp[-4].pgm));}
+    {fprintf(output, "IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM\n");}
 #line 1517 "parser.tab.c" /* yacc.c:1646  */
     break;
 
