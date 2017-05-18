@@ -199,6 +199,7 @@ void yyerror(char *s) {
 }
 
 int main(int argc, char *argv[]){
+	idNode = 0;
 	output = fopen(outputprogram, "w");
 	yyin = fopen(argv[1], "r");
 	yyparse();	

@@ -3,7 +3,10 @@
 
 #define SIZE 32768
 
+#include <stdbool.h>
+
 typedef struct node{
+	int id;
 	char father[SIZE];
 	char children[SIZE];
 	char step[SIZE];
@@ -24,4 +27,5 @@ int sizeTree(pTree*);
 void printTree(pTree*);
 void printStepTree(pTree*);
 
+int idNode;
 #endif /* FILES_H */

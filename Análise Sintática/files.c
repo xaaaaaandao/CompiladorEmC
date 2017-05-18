@@ -186,6 +186,8 @@ bool checkWords(pTree *finalTree, pTree *bnf, char *step1, char *step2){
 			word[j] = '\0';
 			if(hasFather(bnf, word)){
 				if(hasRule(bnf, word, step2)){
+					//printf("w: %s\n", word);
+					//printf("s: %s\n", step2);
 					insertTree(finalTree, word, step2);
 					return true;
 				}
@@ -201,6 +203,9 @@ bool checkWords(pTree *finalTree, pTree *bnf, char *step1, char *step2){
 	word[j] = '\0';
 	if(hasFather(bnf, word)){
 		if(hasRule(bnf, word, step2)){
+		//	printf("w: %s\n", word);
+		//	printf("s: %s\n", step2);
+			insertTree(finalTree, word, step2);
 			return true;
 		}
 	}
@@ -211,6 +216,7 @@ bool backTree(pTree *bnf, pTree *finalTree, char *step){
 	Node *auxiliar = finalTree -> last;
 	while(auxiliar != NULL){
 		if(checkWords(finalTree, bnf, auxiliar -> children, step)){
+			finalTree -> last -> id = auxiliar -> id;					
 			return true;
 		}
 		auxiliar = auxiliar -> previous;
@@ -236,6 +242,7 @@ void buildTree(pTree *bnf, pTree *outTree){
 		memset(step2, 0, sizeof(step2));
 		auxiliar = auxiliar -> next;
 	}
+	idNode = 1;
 	auxiliar = outTree -> first;
 	while(auxiliar != NULL){
 		if(auxiliar -> next == NULL){
