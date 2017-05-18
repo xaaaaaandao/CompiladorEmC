@@ -213,10 +213,12 @@ bool checkWords(pTree *finalTree, pTree *bnf, char *step1, char *step2){
 }
 
 bool backTree(pTree *bnf, pTree *finalTree, char *step){
+	int copyID = idNode;
 	Node *auxiliar = finalTree -> last;
 	while(auxiliar != NULL){
 		if(checkWords(finalTree, bnf, auxiliar -> children, step)){
-			finalTree -> last -> id = auxiliar -> id;					
+			finalTree -> last -> id = auxiliar -> id;
+			idNode = copyID;
 			return true;
 		}
 		auxiliar = auxiliar -> previous;
