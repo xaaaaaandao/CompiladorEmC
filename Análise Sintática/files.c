@@ -226,6 +226,125 @@ bool backTree(pTree *bnf, pTree *finalTree, char *step){
 	return false;
 }
 
+void printRepeatColor(int i, int id, char *father, char *children){
+	if (i == 1){
+		printf(RED_TEXT("ID: %d\n"), id);
+		printf(RED_TEXT("Pai: %s\n"), father);
+		printf(RED_TEXT("Filho: %s\n"), children);
+	} else if (i == 2){
+		printf(GREEN_TEXT("ID: %d\n"), id);
+		printf(GREEN_TEXT("Pai: %s\n"), father);
+		printf(GREEN_TEXT("Filho: %s\n"), children);
+	} else if (i == 3){
+		printf(YELLOW_TEXT("ID: %d\n"), id);
+		printf(YELLOW_TEXT("Pai: %s\n"), father);
+		printf(YELLOW_TEXT("Filho: %s\n"), children);
+	} else if (i == 4){
+		printf(BLUE_TEXT("ID: %d\n"), id);
+		printf(BLUE_TEXT("Pai: %s\n"), father);
+		printf(BLUE_TEXT("Filho: %s\n"), children);
+	} else if (i == 5){
+		printf(MAGENTA_TEXT("ID: %d\n"), id);
+		printf(MAGENTA_TEXT("Pai: %s\n"), father);
+		printf(MAGENTA_TEXT("Filho: %s\n"), children);
+	} else if (i == 6){
+		printf(CYAN_TEXT("ID: %d\n"), id);
+		printf(CYAN_TEXT("Pai: %s\n"), father);
+		printf(CYAN_TEXT("Filho: %s\n"), children);
+	} else if (i == 7){
+		printf(BOLD_RED_TEXT("ID: %d\n"), id);
+		printf(BOLD_RED_TEXT("Pai: %s\n"), father);
+		printf(BOLD_RED_TEXT("Filho: %s\n"), children);
+	} else if (i == 8){
+		printf(BOLD_GREEN_TEXT("ID: %d\n"), id);
+		printf(BOLD_GREEN_TEXT("Pai: %s\n"), father);
+		printf(BOLD_GREEN_TEXT("Filho: %s\n"), children);
+	} else if (i == 9){
+		printf(BOLD_YELLOW_TEXT("ID: %d\n"), id);
+		printf(BOLD_YELLOW_TEXT("Pai: %s\n"), father);
+		printf(BOLD_YELLOW_TEXT("Filho: %s\n"), children);
+	} else if (i == 10){
+		printf(BOLD_BLUE_TEXT("ID: %d\n"), id);
+		printf(BOLD_BLUE_TEXT("Pai: %s\n"), father);
+		printf(BOLD_BLUE_TEXT("Filho: %s\n"), children);
+	} else if (i == 11){
+		printf(BOLD_MAGENTA_TEXT("ID: %d\n"), id);
+		printf(BOLD_MAGENTA_TEXT("Pai: %s\n"), father);
+		printf(BOLD_MAGENTA_TEXT("Filho: %s\n"), children);
+	} else if (i == 12){
+		printf(BOLD_CYAN_TEXT("ID: %d\n"), id);
+		printf(BOLD_CYAN_TEXT("Pai: %s\n"), father);
+		printf(BOLD_CYAN_TEXT("Filho: %s\n"), children);
+	}
+	printf("\n");
+}
+
+void printColor(pTree *finalTree){
+	bool ehBranco;
+	int repeat[SIZE], equal, soma, i = 0, j = 0, k;
+	Node *auxiliar, *auxiliarNode;
+	auxiliar = finalTree -> first;
+	while(auxiliar != NULL){
+		soma = 0;
+		auxiliarNode = finalTree -> first;
+		while(auxiliarNode != NULL){
+			if(auxiliar -> id == auxiliarNode -> id){
+				soma++;
+			}
+			auxiliarNode = auxiliarNode -> next;
+		}
+		if(soma > 1){
+			if(i == 0){
+				repeat[i] = auxiliar -> id;
+				i++;
+			} else {
+				equal = 0;	
+				for(j = 0; j < i; j++){
+					if(repeat[j] == auxiliar -> id){
+						equal = 1;
+						break;
+					}
+				}
+				if(equal == 0){
+					repeat[i] = auxiliar -> id;
+					i++;
+				}
+			}
+		}
+		auxiliar = auxiliar -> next;
+	}
+	if(i < 13){
+		colorOutput x[i];
+		k = 1;
+		for(j = 0; j < i; j++){
+			x[j].id = repeat[j];
+			x[j].color = k;
+			k++;
+		}
+		auxiliar = finalTree -> first;
+		while(auxiliar != NULL){
+			ehBranco = true;
+			for(j = 0; j < i; j++){
+				if(auxiliar -> id == x[j].id){
+					printRepeatColor(x[j].color, auxiliar -> id, auxiliar -> father, auxiliar -> children);
+					ehBranco = false;
+					break;
+				}
+			}
+			if(ehBranco){
+				printf("ID: %d\n", auxiliar -> id);
+				printf("Pai: %s\n", auxiliar -> father);
+				printf("Filho: %s\n", auxiliar -> children);
+				printf("\n");
+			}
+			auxiliar = auxiliar -> next;
+		}
+	} else {
+		printTree(finalTree);	
+	}
+}
+
+
 void buildTree(pTree *bnf, pTree *outTree){
 	char step1[SIZE], step2[SIZE], father[SIZE];
 	Node *auxiliar = outTree -> first;
@@ -266,7 +385,8 @@ void buildTree(pTree *bnf, pTree *outTree){
 		auxiliar = auxiliar -> next;
 	}
 	cleanTree(finalTree);
-	printTree(finalTree);
+	//printTree(finalTree);
+	printColor(finalTree);
 	system("rm *.txt");
 }
 
