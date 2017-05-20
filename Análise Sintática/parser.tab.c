@@ -1458,7 +1458,7 @@ yyreduce:
 
   case 12:
 #line 56 "parser.y" /* yacc.c:1646  */
-    {fprintf(output, "IDENTIFICADOR\n");}
+    {fprintf(output, "IDENTIFICADOR (%s)\n", (yyvsp[0].pgm));}
 #line 1463 "parser.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1788,19 +1788,19 @@ yyreduce:
 
   case 67:
 #line 181 "parser.y" /* yacc.c:1646  */
-    {fprintf(output, "NUMEROINTEIRO\n");}
+    {fprintf(output, "NUMEROINTEIRO (%s)\n", (yyvsp[0].pgm));}
 #line 1793 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 68:
 #line 182 "parser.y" /* yacc.c:1646  */
-    {fprintf(output, "NUMEROFLUTUANTE\n");}
+    {fprintf(output, "NUMEROFLUTUANTE (%s)\n", (yyvsp[0].pgm));}
 #line 1799 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 69:
 #line 183 "parser.y" /* yacc.c:1646  */
-    {fprintf(output, "EXPONENCIAL\n");}
+    {fprintf(output, "EXPONENCIAL (%s)\n", (yyvsp[0].pgm));}
 #line 1805 "parser.tab.c" /* yacc.c:1646  */
     break;
 
@@ -2073,4 +2073,5 @@ int main(int argc, char *argv[]){
 	printTreeSyntactic();
 	return 0;
 }
+
 

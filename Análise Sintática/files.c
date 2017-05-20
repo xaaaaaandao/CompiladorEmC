@@ -116,7 +116,7 @@ void copyBNF(int start, int end, pTree *bnf){
 				strcpy(father, getFather(line));
 			} else if(hasKey(line)){
 				strcpy(children, getChildren(line));
-				insertTree(bnf, father, children);
+				insertTree(bnf, father, children, "NULL");
 				//printf("father: %s\n", father);
 				//printf("children: %s\n", children);
 			}
@@ -129,14 +129,68 @@ void copyBNF(int start, int end, pTree *bnf){
 	fclose(parser);
 }
 
+char* hasParentheses(char *line){
+	char *value = (char*) malloc (SIZE * sizeof(char));
+	bool startParentheses = false;
+	bool endParentheses = false;
+	int i = 0, j = 0, inicio;
+	while(line[i] != '\0'){
+		if(line[i] == '('){
+			startParentheses = true;
+			inicio = i + 1;
+			break;
+		}
+		i++;
+	}
+	i = 0;
+	while(line[i] != '\0'){
+		if(line[i] == ')'){
+			endParentheses = true;
+			break;
+		}
+		i++;
+	}
+	if(startParentheses && endParentheses){
+		i = inicio;
+		while(line[i] != '\0'){
+			if(line[i] == ')'){
+				value[j] = '\0';
+				return value;
+			}
+			value[j] = line[i];
+			i++;
+			j++;
+		}
+	} else {
+		return "NULL";
+	}
+}
+
+void cleanValue(char *line){
+	int i = 0;
+	while(line[i] != '\0'){
+		if(line[i] == ' ' && line[i + 1] == '('){
+			line[i] = '\0';
+			return;
+		}
+		i++;
+	}
+}
+
 void copyOutput(pTree *outTree){
 	FILE *out = fopen(outputprogram, "r");
-	char line[SIZE];
+	char line[SIZE], output[SIZE];
 	while(fgets(line, sizeof(line), out) != NULL){
-		insertFirstTree(outTree, line);
-		//printf("%s\n", line);
+		strcpy(output, hasParentheses(line));
+		if(compareString(output, "NULL") == 0){
+			insertFirstTree(outTree, line, "NULL");
+		} else {
+			cleanValue(line);
+			insertFirstTree(outTree, line, output);			
+		}
+		memset(line, 0, sizeof(line));
 	}
-	insertFirstTree(outTree, "programa");
+	insertFirstTree(outTree, "programa", "NULL");
 	fclose(out);
 }
 
@@ -178,7 +232,7 @@ bool hasFather(pTree *bnf, char *father){
 	return false;
 }
 
-bool checkWords(pTree *finalTree, pTree *bnf, char *step1, char *step2){
+bool checkWords(pTree *finalTree, pTree *bnf, char *step1, char *step2, char *value){
 	char word[SIZE];
 	int i = 0, j = 0;
 	while(step1[i] != '\0'){
@@ -186,9 +240,7 @@ bool checkWords(pTree *finalTree, pTree *bnf, char *step1, char *step2){
 			word[j] = '\0';
 			if(hasFather(bnf, word)){
 				if(hasRule(bnf, word, step2)){
-					//printf("w: %s\n", word);
-					//printf("s: %s\n", step2);
-					insertTree(finalTree, word, step2);
+					insertTree(finalTree, word, step2, value);
 					return true;
 				}
 			}
@@ -203,20 +255,18 @@ bool checkWords(pTree *finalTree, pTree *bnf, char *step1, char *step2){
 	word[j] = '\0';
 	if(hasFather(bnf, word)){
 		if(hasRule(bnf, word, step2)){
-		//	printf("w: %s\n", word);
-		//	printf("s: %s\n", step2);
-			insertTree(finalTree, word, step2);
+			insertTree(finalTree, word, step2, value);
 			return true;
 		}
 	}
 	return false;
 }
 
-bool backTree(pTree *bnf, pTree *finalTree, char *step){
+bool backTree(pTree *bnf, pTree *finalTree, char *step, char *value){
 	int copyID = idNode;
 	Node *auxiliar = finalTree -> last;
 	while(auxiliar != NULL){
-		if(checkWords(finalTree, bnf, auxiliar -> children, step)){
+		if(checkWords(finalTree, bnf, auxiliar -> children, step, value)){
 			finalTree -> last -> id = auxiliar -> id;
 			idNode = copyID;
 			return true;
@@ -226,55 +276,91 @@ bool backTree(pTree *bnf, pTree *finalTree, char *step){
 	return false;
 }
 
-void printRepeatColor(int i, int id, char *father, char *children){
+void printRepeatColor(int i, int id, char *father, char *children, char *value){
 	if (i == 1){
 		printf(RED_TEXT("ID: %d\n"), id);
 		printf(RED_TEXT("Pai: %s\n"), father);
 		printf(RED_TEXT("Filho: %s\n"), children);
+		if(compareString(value, "NULL") != 0){
+			printf(RED_TEXT("Valor: %s\n"), value);		
+		}
 	} else if (i == 2){
 		printf(GREEN_TEXT("ID: %d\n"), id);
 		printf(GREEN_TEXT("Pai: %s\n"), father);
 		printf(GREEN_TEXT("Filho: %s\n"), children);
+		if(compareString(value, "NULL") != 0){
+			printf(GREEN_TEXT("Valor: %s\n"), value);		
+		}
 	} else if (i == 3){
 		printf(YELLOW_TEXT("ID: %d\n"), id);
 		printf(YELLOW_TEXT("Pai: %s\n"), father);
 		printf(YELLOW_TEXT("Filho: %s\n"), children);
+		if(compareString(value, "NULL") != 0){
+			printf(YELLOW_TEXT("Valor: %s\n"), value);		
+		}
 	} else if (i == 4){
 		printf(BLUE_TEXT("ID: %d\n"), id);
 		printf(BLUE_TEXT("Pai: %s\n"), father);
 		printf(BLUE_TEXT("Filho: %s\n"), children);
+		if(compareString(value, "NULL") != 0){
+			printf(BLUE_TEXT("Valor: %s\n"), value);		
+		}
 	} else if (i == 5){
 		printf(MAGENTA_TEXT("ID: %d\n"), id);
 		printf(MAGENTA_TEXT("Pai: %s\n"), father);
 		printf(MAGENTA_TEXT("Filho: %s\n"), children);
+		if(compareString(value, "NULL") != 0){
+			printf(MAGENTA_TEXT("Valor: %s\n"), value);		
+		}
 	} else if (i == 6){
 		printf(CYAN_TEXT("ID: %d\n"), id);
 		printf(CYAN_TEXT("Pai: %s\n"), father);
 		printf(CYAN_TEXT("Filho: %s\n"), children);
+		if(compareString(value, "NULL") != 0){
+			printf(CYAN_TEXT("Valor: %s\n"), value);		
+		}	
 	} else if (i == 7){
 		printf(BOLD_RED_TEXT("ID: %d\n"), id);
 		printf(BOLD_RED_TEXT("Pai: %s\n"), father);
 		printf(BOLD_RED_TEXT("Filho: %s\n"), children);
+		if(compareString(value, "NULL") != 0){
+			printf(BOLD_RED_TEXT("Valor: %s\n"), value);		
+		}	
 	} else if (i == 8){
 		printf(BOLD_GREEN_TEXT("ID: %d\n"), id);
 		printf(BOLD_GREEN_TEXT("Pai: %s\n"), father);
 		printf(BOLD_GREEN_TEXT("Filho: %s\n"), children);
+		if(compareString(value, "NULL") != 0){
+			printf(BOLD_GREEN_TEXT("Valor: %s\n"), value);		
+		}	
 	} else if (i == 9){
 		printf(BOLD_YELLOW_TEXT("ID: %d\n"), id);
 		printf(BOLD_YELLOW_TEXT("Pai: %s\n"), father);
 		printf(BOLD_YELLOW_TEXT("Filho: %s\n"), children);
+		if(compareString(value, "NULL") != 0){
+			printf(BOLD_YELLOW_TEXT("Valor: %s\n"), value);		
+		}		
 	} else if (i == 10){
 		printf(BOLD_BLUE_TEXT("ID: %d\n"), id);
 		printf(BOLD_BLUE_TEXT("Pai: %s\n"), father);
 		printf(BOLD_BLUE_TEXT("Filho: %s\n"), children);
+		if(compareString(value, "NULL") != 0){
+			printf(BOLD_BLUE_TEXT("Valor: %s\n"), value);		
+		}			
 	} else if (i == 11){
 		printf(BOLD_MAGENTA_TEXT("ID: %d\n"), id);
 		printf(BOLD_MAGENTA_TEXT("Pai: %s\n"), father);
 		printf(BOLD_MAGENTA_TEXT("Filho: %s\n"), children);
+		if(compareString(value, "NULL") != 0){
+			printf(BOLD_MAGENTA_TEXT("Valor: %s\n"), value);		
+		}				
 	} else if (i == 12){
 		printf(BOLD_CYAN_TEXT("ID: %d\n"), id);
 		printf(BOLD_CYAN_TEXT("Pai: %s\n"), father);
 		printf(BOLD_CYAN_TEXT("Filho: %s\n"), children);
+		if(compareString(value, "NULL") != 0){
+			printf(BOLD_CYAN_TEXT("Valor: %s\n"), value);		
+		}			
 	}
 	printf("\n");
 }
@@ -326,7 +412,7 @@ void printColor(pTree *finalTree){
 			ehBranco = true;
 			for(j = 0; j < i; j++){
 				if(auxiliar -> id == x[j].id){
-					printRepeatColor(x[j].color, auxiliar -> id, auxiliar -> father, auxiliar -> children);
+					printRepeatColor(x[j].color, auxiliar -> id, auxiliar -> father, auxiliar -> children, auxiliar -> value);
 					ehBranco = false;
 					break;
 				}
@@ -335,6 +421,9 @@ void printColor(pTree *finalTree){
 				printf("ID: %d\n", auxiliar -> id);
 				printf("Pai: %s\n", auxiliar -> father);
 				printf("Filho: %s\n", auxiliar -> children);
+				if(compareString(auxiliar -> value, "NULL") != 0){				
+					printf("Valor: %s\n", auxiliar -> value);	
+				}
 				printf("\n");
 			}
 			auxiliar = auxiliar -> next;
@@ -360,32 +449,23 @@ void buildTree(pTree *bnf, pTree *outTree){
 		strcpy(step2, auxiliar -> next -> step);
 		if(hasRule(bnf, step1, step2)){
 			if(compareString(step1, "programa") == 0){
-				insertTree(finalTree, "NULL", step1);
-				insertTree(finalTree, step1, step2);	
+				insertTree(finalTree, "NULL", step1, auxiliar -> next -> value);
+				insertTree(finalTree, step1, step2, auxiliar -> next -> value);	
 			} else {
-				insertTree(finalTree, step1, step2);					
+				insertTree(finalTree, step1, step2, auxiliar -> next -> value);					
 			}
 		} else {
-			if(checkWords(finalTree, bnf, step1, step2) == false){
-				if(backTree(bnf, finalTree, step2) == false){
+			if(checkWords(finalTree, bnf, step1, step2, auxiliar -> next -> value) == false){
+				if(backTree(bnf, finalTree, step2, auxiliar -> next -> value) == false){
 					printf("err\n");
 				}
-					//printf("dsaadsdsa\n");
-					//printf("%s\n", step1);
-					///printf("%s\n", step2);
-					//printf("===========\n");
-					//break;
 			}
 		}
 		memset(step1, 0, sizeof(step1));
 		memset(step2, 0, sizeof(step2));
-		//printf("%s\n", step1);
-		//printf("%s\n", step2);
-		//printf("===========\n");
 		auxiliar = auxiliar -> next;
 	}
 	cleanTree(finalTree);
-	//printTree(finalTree);
 	printColor(finalTree);
 	system("rm *.txt");
 }
@@ -407,11 +487,10 @@ void printTreeSyntactic(){
 	copyBNF(start, end, bnf);
 	clearBNF(bnf);
 
-//	printTree(bnf);
 	initializeTree(outTree);
 	copyOutput(outTree);
 
 	buildTree(bnf, outTree);
-	//printStepTree(outTree);
 }
+
 

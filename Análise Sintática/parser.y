@@ -53,7 +53,7 @@ lista_variaveis:
 	;
 
 var:
-	IDENTIFICADOR {fprintf(output, "IDENTIFICADOR\n");}
+	IDENTIFICADOR {fprintf(output, "IDENTIFICADOR (%s)\n", $1);}
 	| IDENTIFICADOR indice {fprintf(output, "IDENTIFICADOR indice\n");}
 	;
 
@@ -178,9 +178,9 @@ fator:
 	;
 
 numero:
-	NUMEROINTEIRO {fprintf(output, "NUMEROINTEIRO\n");}
-	| NUMEROFLUTUANTE {fprintf(output, "NUMEROFLUTUANTE\n");}
-	| EXPONENCIAL {fprintf(output, "EXPONENCIAL\n");}
+	NUMEROINTEIRO {fprintf(output, "NUMEROINTEIRO (%s)\n", $1);}
+	| NUMEROFLUTUANTE {fprintf(output, "NUMEROFLUTUANTE (%s)\n", $1);}
+	| EXPONENCIAL {fprintf(output, "EXPONENCIAL (%s)\n", $1);}
 	;
 
 chamada_funcao:
@@ -214,4 +214,5 @@ int main(int argc, char *argv[]){
 	printTreeSyntactic();
 	return 0;
 }
+
 

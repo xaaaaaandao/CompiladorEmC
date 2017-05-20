@@ -14,10 +14,12 @@ int emptyTree(pTree *tree){
 	return (tree -> first == NULL);
 }  
 
-void insertTree(pTree *tree, char* father, char* children){
+void insertTree(pTree *tree, char* father, char* children, char *value){
 	Node *newNode = (Node *) malloc(sizeof(Node));
 	strcpy(newNode -> father, father);
 	strcpy(newNode -> children, children);	
+	strcpy(newNode -> value, value);	
+
 	newNode -> id = idNode;
 	newNode -> previous = NULL;
 	newNode -> next = NULL;
@@ -35,12 +37,13 @@ void insertTree(pTree *tree, char* father, char* children){
 	tree -> size++;
 }
  
-void insertFirstTree(pTree *tree, char* step){
+void insertFirstTree(pTree *tree, char* step, char *value){
 	Node *newNode = (Node *) malloc(sizeof(Node));
 	Node *auxiliar = tree -> first;
 	newNode -> next = NULL;
 	newNode -> previous = NULL;
 	strcpy(newNode -> step, step);
+	strcpy(newNode -> value, value);
 	
 	if(emptyTree(tree)){
 		tree -> first = newNode;
@@ -64,10 +67,13 @@ void printTree(pTree *tree){
 	} else {
 		Node *printNode;
 		printNode = tree -> first;
-		while (printNode != NULL){ 
+		while (printNode != NULL){
 			printf("ID: %d \n", printNode -> id);
 			printf("Pai: %s \n", printNode -> father);
 			printf("Filho: %s \n", printNode -> children);
+			if(compareString(printNode -> value, "NULL") != 0){
+				printf("Valor: %s\n", printNode -> value);
+			} 
 			printf("\n");
 			printNode = printNode -> next;
 		}
