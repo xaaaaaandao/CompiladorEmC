@@ -262,13 +262,106 @@ bool checkWords(pTree *finalTree, pTree *bnf, char *step1, char *step2, char *va
 	return false;
 }
 
+bool checkFather(pTree *tree, int inicio, int fim, char *father, char *children){
+	Node *auxiliar = tree -> first;
+	while(auxiliar != NULL){
+		if(auxiliar -> id >= inicio && auxiliar -> id <= fim){
+			if((compareString(auxiliar -> father, father) == 0) && (compareString(auxiliar -> children, children) == 0)){
+				return true;
+			}
+		}
+		auxiliar = auxiliar -> next;
+	}
+	return false;
+}
+
+bool hasSpace(char *line){
+	int i = 0;
+	while(line[i] != '\0'){
+		if(line[i] == ' '){
+			return true;
+		}
+		i++;
+	}
+	return false;
+}
+
+bool checkFatherChildren(char *father, char *children){
+	char auxiliarFather[SIZE], auxiliarChildren[SIZE];
+	int i = 0, j = 0;
+	if((hasSpace(father) == false) &&  (hasSpace(children) == false)){
+		if(compareString(father, children) == 0){
+			return true;
+		}
+	} else {
+		while(children[i] != '\0'){
+			if(children[i] == ' '){
+				auxiliarChildren[j] = '\0';
+				if(compareString(auxiliarChildren, father) == 0){
+					return true;
+				} else {
+					memset(auxiliarChildren, 0, sizeof(auxiliarChildren));
+					j = 0;	
+				}
+			} else if(children[i + 1] == '\0'){
+				auxiliarChildren[j] = children[i];
+				auxiliarChildren[j + 1] = '\0';
+				if(compareString(auxiliarChildren, father) == 0){
+					return true;
+				}
+				return false;
+			} else {
+				auxiliarChildren[j] = children[i];
+				j++;
+			}
+			i++;
+		}
+	}
+	return false;
+}
+
 bool backTree(pTree *bnf, pTree *finalTree, char *step, char *value){
-	int copyID = idNode;
+	bool found = false;
+	int copyID = idNode, start, end;
 	Node *auxiliar = finalTree -> last;
+	Node *check, *penultimate, *checkPrevious;
 	while(auxiliar != NULL){
 		if(checkWords(finalTree, bnf, auxiliar -> children, step, value)){
-			finalTree -> last -> id = auxiliar -> id;
+			penultimate = finalTree -> last;
+			if(checkFather(finalTree, auxiliar -> id, penultimate -> previous -> id, finalTree -> last -> father, finalTree -> last -> children) == false){
+				finalTree -> last -> id = auxiliar -> id;	
+			} else {
+				end = auxiliar -> id;
+				while(1){
+					check = finalTree -> first;
+					while(check != NULL){
+						if(check -> next -> id == end){
+							checkPrevious = check;
+							break;
+						}
+						check = check -> next;
+					}
+					while(checkPrevious != NULL){
+						if(checkPrevious == finalTree -> first){
+							finalTree -> last -> id = auxiliar -> id;	
+							return true;
+						}
+						if(checkFatherChildren(finalTree -> last -> father, checkPrevious -> children)){
+							start = checkPrevious -> id;
+							break;
+						}
+						checkPrevious = checkPrevious -> previous;
+					}
+					if(checkFather(finalTree, start, end, finalTree -> last -> father, finalTree -> last -> children) == false){
+						finalTree -> last -> id = checkPrevious -> id;
+						return true;
+					} else {
+						end = start;
+					}
+				}
+			}
 			idNode = copyID;
+			//printf("achou\n");
 			return true;
 		}
 		auxiliar = auxiliar -> previous;
@@ -433,6 +526,15 @@ void printColor(pTree *finalTree){
 	}
 }
 
+void eliminateSpace(char *line){
+	int i = 0;
+	while(line[i] != '\0'){
+		if((line[i] == ' ' && line[i + 1] == '\0') || (line[i] == '\n' && line[i + 1] == '\0')){
+			line[i] = '\0';
+		}
+		i++;
+	}
+}
 
 void buildTree(pTree *bnf, pTree *outTree){
 	char step1[SIZE], step2[SIZE], father[SIZE];
@@ -440,6 +542,12 @@ void buildTree(pTree *bnf, pTree *outTree){
 	pTree *finalTree = (pTree*) malloc (sizeof(pTree));
 	initializeTree(finalTree); 
 	idNode = 1;
+	/*auxiliar = outTree -> first;
+	while(auxiliar != NULL){
+		eliminateSpace(auxiliar -> step);
+	//	printf("-> %s\n", auxiliar -> step);
+		auxiliar = auxiliar -> next;
+	}*/
 	auxiliar = outTree -> first;
 	while(auxiliar != NULL){
 		if(auxiliar -> next == NULL){
@@ -449,15 +557,17 @@ void buildTree(pTree *bnf, pTree *outTree){
 		strcpy(step2, auxiliar -> next -> step);
 		if(hasRule(bnf, step1, step2)){
 			if(compareString(step1, "programa") == 0){
+				//printf("a: %d\n", idNode);
 				insertTree(finalTree, "NULL", step1, auxiliar -> next -> value);
 				insertTree(finalTree, step1, step2, auxiliar -> next -> value);	
 			} else {
+				//printf("b: %d\n", idNode);
 				insertTree(finalTree, step1, step2, auxiliar -> next -> value);					
 			}
 		} else {
 			if(checkWords(finalTree, bnf, step1, step2, auxiliar -> next -> value) == false){
 				if(backTree(bnf, finalTree, step2, auxiliar -> next -> value) == false){
-					printf("err\n");
+					printf(BOLD_RED_TEXT("ERROR"));
 				}
 			}
 		}
@@ -467,11 +577,12 @@ void buildTree(pTree *bnf, pTree *outTree){
 	}
 	cleanTree(finalTree);
 	printColor(finalTree);
+	//generateDot(finalTree);
 	system("rm *.txt");
 }
 
 void printTreeSyntactic(){
-	system("reset");
+	//system("reset");
 	int start, end;
 	FILE *parser = fopen(bnftplusplus, "r");
 	pTree *bnf = (pTree*) malloc (sizeof(pTree));
