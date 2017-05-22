@@ -1,10 +1,12 @@
 #ifndef PTREE_H
 #define	PTREE_H
 
+/* Define de valores */
 #define SIZE 32768
 
 #include <stdbool.h>
 
+/* Estrutura da pseudo-árvore */
 typedef struct node{
 	int id;
 	char father[SIZE];
@@ -20,6 +22,7 @@ typedef struct{
 	int size;
 }pTree;
 
+/* Protótipo das funções */
 void initializeTree(pTree*);
 int emptyTree(pTree*);
 void insertTree(pTree*, char*, char*, char*);
@@ -29,6 +32,7 @@ void printTree(pTree*);
 void printStepTree(pTree*);
 void cleanTree(pTree*);
 
+/* Variável global */
 int idNode;
 
 #endif /* FILES_H */

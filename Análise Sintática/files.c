@@ -4,6 +4,13 @@
 #include <string.h>
 #include "files.h"
 
+/**
+* Esta função compara duas strings, se forem iguais ela retorna zero,
+* caso contrário reotrna um valor diferente de zero;
+@param stringA, é uma sequência de char a ser comparada;
+@param stringB, é uma sequência de char a ser comparada;
+@return result, retorna um inteiro em que se for zero é igual e qualquer coisa se for diferente.
+*/
 int compareString(char stringA[], char stringB[]){
 	int i = 0;
 	int result;
@@ -22,6 +29,13 @@ int compareString(char stringA[], char stringB[]){
 	return result;
 }
 
+/**
+* Esta função verifica onde começa as BNF, no arquivo parser.y
+* e retorna a linha que começa a BNF;
+@param parser, é um arquivo onde temos a BNF definidas;
+@return i, retorna i em que seria a posição da linha onde começa a BNF, caso
+* não encontre retorna -1.
+*/
 int getStart(FILE *parser){
 	char line[SIZE];
 	int i = 0;
@@ -34,6 +48,13 @@ int getStart(FILE *parser){
 	return -1;
 }
 
+/**
+* Esta função verifica onde termina as BNF, no arquivo parser.y
+* e retorna a linha que termina a BNF;
+@param parser, é um arquivo onde temos a BNF definidas;
+@return i, retorna i em que seria a posição da linha onde termina a BNF, caso
+* não encontre retorna -1.
+*/
 int getEnd(FILE *parser){
 	char line[SIZE];
 	int i = 0;
@@ -46,6 +67,12 @@ int getEnd(FILE *parser){
 	return -1;
 }
 
+/**
+* Esta função verifica se a linha contém o caracetere ':'
+* se estiver presente retorna verdadeiro caso contrário retorna falso;
+@param line, é um sequência de caractere onde vai ser procurado o caracetere;
+@return true ou false, retorna verdadeiro caso ou falso caso não ache.
+*/
 bool hasTwoPoint(char *line){
 	int i = 0;
 	while(line[i] != '\0'){
@@ -57,6 +84,12 @@ bool hasTwoPoint(char *line){
 	return false;
 }
 
+/**
+* Esta função verifica se a linha contém o caracetere '{'
+* se estiver presente retorna verdadeiro caso contrário retorna falso;
+@param line, é um sequência de caractere onde vai ser procurado o caracetere;
+@return true ou false, retorna verdadeiro caso ou falso caso não ache.
+*/
 bool hasKey(char *line){
 	int i = 0;
 	while(line[i] != '\0'){
@@ -68,6 +101,11 @@ bool hasKey(char *line){
 	return false;
 }
 
+/**
+* Esta função retorna o pai da BNF;
+@param line, é um sequência de caractere onde vai ser pego o nome do pai;
+@return father, retorna o pai.
+*/
 char *getFather(char *line){
 	char *father = (char*) malloc (SIZE * sizeof(char));
 	int i = 0, j = 0;
@@ -83,6 +121,11 @@ char *getFather(char *line){
 	return father;
 }
 
+/**
+* Esta função retorna o filho da BNF;
+@param line, é um sequência de caractere onde vai ser pego o nome do filho;
+@return children, retorna o filho.
+*/
 char *getChildren(char *line){
 	char *children = (char*) malloc (SIZE * sizeof(char));
 	int i = 0, j = 0;
@@ -104,7 +147,14 @@ char *getChildren(char *line){
 	return children;
 }
 
-
+/**
+* Esta função copia a BNF presente no parser.y presente
+* para uma estrutura;
+@param start, é um inteiro que seria a linha onde começa a BNF;
+@param end, é um inteiro que seria a linha onde termina a BNF;
+@param bnf, é a estrutura onde ser armazenada BNF;
+@return void, retorna nada.
+*/
 void copyBNF(int start, int end, pTree *bnf){
 	char line[SIZE], father[SIZE], children[SIZE];
 	FILE *parser = fopen(bnftplusplus, "r");
@@ -129,6 +179,11 @@ void copyBNF(int start, int end, pTree *bnf){
 	fclose(parser);
 }
 
+/**
+* Esta função verifica tem parentêses, se tiver copia o valor que está dentro do parentêses;
+@param line, é uma sequência de caractere onde será procurado o parentêses;
+@return value, retorna uma sequência de caractere com o valor que estava dentro do parentêses.
+*/
 char* hasParentheses(char *line){
 	char *value = (char*) malloc (SIZE * sizeof(char));
 	bool startParentheses = false;
@@ -166,6 +221,11 @@ char* hasParentheses(char *line){
 	}
 }
 
+/**
+* Esta função reduz uma linha que contenha uma espaço em branco em seguida um abre parentêses;
+@param line, é uma sequência de caractere onde será removido os caracteres;
+@return void, retorna nada.
+*/
 void cleanValue(char *line){
 	int i = 0;
 	while(line[i] != '\0'){
@@ -177,6 +237,12 @@ void cleanValue(char *line){
 	}
 }
 
+/**
+* Esta função copia o caminho percorrido pelo código-fonte de entrada para
+* uma estrutura;
+@param line, é uma sequência de caractere onde será removido os caracteres;
+@return void, retorna nada.
+*/
 void copyOutput(pTree *outTree){
 	FILE *out = fopen(outputprogram, "r");
 	char line[SIZE], output[SIZE];
@@ -194,6 +260,12 @@ void copyOutput(pTree *outTree){
 	fclose(out);
 }
 
+/**
+* Esta função simplesmente acha o último caracetere da linha, e na posição seguinte
+* coloca um marcador de fim de linha;
+@param bnf, é a estrutura onde tem a bnf que será limpa;
+@return void, retorna nada.
+*/
 void clearBNF(pTree *bnf){
 	int i;
 	Node *auxiliar = bnf -> first;
@@ -210,6 +282,13 @@ void clearBNF(pTree *bnf){
 	}
 }
 
+/**
+* Esta função verifica se a entrada contém aquela determinada regra;
+@param bnf, é a estrutura onde tem a bnf que será procurada as regras;
+@param father, é uma sequência de caractere que verifica se a notação existe na BNF;
+@param children, é uma sequência de caractere que se existe;
+@return true ou false, retorna verdadeiro caso exista ou falso caso não exista.
+*/
 bool hasRule(pTree *bnf, char *father, char *children){
 	Node *auxiliar = bnf -> first;
 	while(auxiliar != NULL){
@@ -221,6 +300,12 @@ bool hasRule(pTree *bnf, char *father, char *children){
 	return false;
 }
 
+/**
+* Esta função verifica se existe determinada ação existe;
+@param bnf, é a estrutura onde tem a bnf que será procurada as regras;
+@param father, é uma sequência de caractere que verifica se a notação existe na BNF;
+@return true ou false, retorna verdadeiro caso exista ou falso caso não exista.
+*/
 bool hasFather(pTree *bnf, char *father){
 	Node *auxiliar = bnf -> first;
 	while(auxiliar != NULL){
@@ -232,6 +317,15 @@ bool hasFather(pTree *bnf, char *father){
 	return false;
 }
 
+/**
+* Esta função verifica se uma das palavras contém aquela regra;
+@param finalTree, é a estrutura é montada a árvore sintática;
+@param bnf, é a estrutura onde tem a bnf que será procurada as regras;
+@param step1, é uma sequência de caractere que verifica se a notação existe na BNF;
+@param step2, é uma sequência de caractere que verifica se no step1 tem o step2;
+@param value, é uma sequência de caractere caso exista um valor associado;
+@return true ou false, retorna verdadeiro caso exista ou falso caso não exista.
+*/
 bool checkWords(pTree *finalTree, pTree *bnf, char *step1, char *step2, char *value){
 	char word[SIZE];
 	int i = 0, j = 0;
@@ -262,6 +356,15 @@ bool checkWords(pTree *finalTree, pTree *bnf, char *step1, char *step2, char *va
 	return false;
 }
 
+/**
+* Esta função verifica se o pai e o filho combinam com a notação da BNF;
+@param tree, é a estrutura que será procurado;
+@param inicio, é uma inteiro onde será o início dá onde será procurado;
+@param fim, é uma inteiro onde será o fim dá onde será procurado;
+@param father, é uma sequência de caractere onde será comparado com a estrutura de combinado;
+@param children, é uma sequência de caractere onde será comparado com a estrutura de combinado;
+@return true ou false, retorna verdadeiro caso exista ou falso caso não exista.
+*/
 bool checkFather(pTree *tree, int inicio, int fim, char *father, char *children){
 	Node *auxiliar = tree -> first;
 	while(auxiliar != NULL){
@@ -275,6 +378,11 @@ bool checkFather(pTree *tree, int inicio, int fim, char *father, char *children)
 	return false;
 }
 
+/**
+* Esta função verifica se aquela linha contém espaço em branco.
+@param line, é uma sequência de caractere onde vai ser verificada se existe espaço em branco;
+@return true ou false, retorna verdadeiro caso exista ou falso caso não exista.
+*/
 bool hasSpace(char *line){
 	int i = 0;
 	while(line[i] != '\0'){
@@ -286,6 +394,12 @@ bool hasSpace(char *line){
 	return false;
 }
 
+/**
+* Esta função verifica se foi achado o pai de determinado nó.
+@param father, é uma sequência de caractere onde vai ser verificada a existência;
+@param children, é uma sequência de caractere onde vai ser verificada a existência;
+@return true ou false, retorna verdadeiro caso exista ou falso caso não exista.
+*/
 bool checkFatherChildren(char *father, char *children){
 	char auxiliarFather[SIZE], auxiliarChildren[SIZE];
 	int i = 0, j = 0;
@@ -320,6 +434,14 @@ bool checkFatherChildren(char *father, char *children){
 	return false;
 }
 
+/**
+* Esta função retrocede na árvore atrás do seu pai;
+@param bnf, é a estrutura onde está guarada a BNF;
+@param finalTree, é a estrutura onde está guarada a árvore sintática;
+@param step, é uma sequência de caractere onde vai ser procurado o pai;
+@param value, é uma sequência de caractere onde vai ser o valor que pode ou não ter;
+@return true ou false, retorna verdadeiro caso exista ou falso caso não exista.
+*/
 bool backTree(pTree *bnf, pTree *finalTree, char *step, char *value){
 	bool found = false;
 	int copyID = idNode, start, end;
@@ -369,6 +491,15 @@ bool backTree(pTree *bnf, pTree *finalTree, char *step, char *value){
 	return false;
 }
 
+/**
+* Esta função imprime na tela nós que ID iguais, com a mesma cor;
+@param i, é um inteiro que indica a cor que será pintada;
+@param id, é um inteiro que é o identificador daquele nó;
+@param father, é uma sequência de caractere que é o pai daquele nó;
+@param children, é uma sequência de caractere que é o filho daquele nó;
+@param value, é uma sequência de caractere onde vai ser o valor que pode ou não ter;
+@return void, retorna nada.
+*/
 void printRepeatColor(int i, int id, char *father, char *children, char *value){
 	if (i == 1){
 		printf(RED_TEXT("ID: %d\n"), id);
@@ -458,6 +589,11 @@ void printRepeatColor(int i, int id, char *father, char *children, char *value){
 	printf("\n");
 }
 
+/**
+* Esta função verifica se o número de elementos repetidos tem a mesma quantidade de cores;
+@param finalTree, é a estrutura onde está sendo montada a árvore sintática;
+@return void, retorna nada.
+*/
 void printColor(pTree *finalTree){
 	bool ehBranco;
 	int repeat[SIZE], equal, soma, i = 0, j = 0, k;
@@ -526,6 +662,11 @@ void printColor(pTree *finalTree){
 	}
 }
 
+/**
+* Esta função elimina o espaço em branco e a quebra de linha;
+@param line, é a sequência de caractere onde será eliminado;
+@return void, retorna nada.
+*/
 void eliminateSpace(char *line){
 	int i = 0;
 	while(line[i] != '\0'){
@@ -536,6 +677,25 @@ void eliminateSpace(char *line){
 	}
 }
 
+/**
+* Esta função elimina o espaço em branco e a quebra de linha em todos o nós da saída;
+@param out, é a estrutura onde está armazenada a saída;
+@return void, retorna nada.
+*/
+void cleanOut(pTree *out){
+	Node *auxiliar = out -> first;
+	while(auxiliar != NULL){
+		eliminateSpace(auxiliar -> step);
+		auxiliar = auxiliar -> next;
+	}
+}		
+
+/**
+* Esta função constrói a árvore sintática;
+@param bnf, é a estrutura onde está armazenada a BNF;
+@param outTree, é a estrutura onde está armazenada a saída;
+@return void, retorna nada.
+*/
 void buildTree(pTree *bnf, pTree *outTree){
 	char step1[SIZE], step2[SIZE], father[SIZE];
 	Node *auxiliar = outTree -> first;
@@ -576,13 +736,26 @@ void buildTree(pTree *bnf, pTree *outTree){
 		auxiliar = auxiliar -> next;
 	}
 	cleanTree(finalTree);
+	printf(BOLD_GREEN_TEXT("╔══════════════════════════════════╗\n"));
+	printf(BOLD_GREEN_TEXT("║              CAMINHO             ║\n"));
+	printf(BOLD_GREEN_TEXT("╚══════════════════════════════════╝\n"));
+	cleanOut(outTree);
+	printStepTree(outTree);
+	printf(BOLD_GREEN_TEXT("╔══════════════════════════════════╗\n"));
+	printf(BOLD_GREEN_TEXT("║         ÁRVORE SINTÁTICA         ║\n"));
+	printf(BOLD_GREEN_TEXT("╚══════════════════════════════════╝\n"));
 	printColor(finalTree);
-	//generateDot(finalTree);
 	system("rm *.txt");
 }
 
+/**
+* Esta função chamada as demais funções com a de construir a árvore sintática, ler o 
+* arquivo de saída;
+@param nenhum, não recebe nenhum parâmetro;
+@return void, retorna nada.
+*/
 void printTreeSyntactic(){
-	//system("reset");
+	system("reset");
 	int start, end;
 	FILE *parser = fopen(bnftplusplus, "r");
 	pTree *bnf = (pTree*) malloc (sizeof(pTree));

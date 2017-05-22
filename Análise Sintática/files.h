@@ -1,6 +1,7 @@
 #ifndef FILES_H
 #define	FILES_H
 
+/* Define de colors */
 #define BLACK_TEXT(x) "\033[30;1m" x "\033[0m"
 #define RED_TEXT(x) "\033[31;1m" x "\033[0m"
 #define GREEN_TEXT(x) "\033[32;1m" x "\033[0m"
@@ -18,6 +19,7 @@
 #define BOLD_CYAN_TEXT(x) "\033[1m\033[36m" x "\033[0m"
 #define BOLD_WHITE_TEXT(x) "\033[1m\033[37m" x "\033[0m"
 
+/* Define de nome de arquivos */
 #define bnftplusplus "parser.y"
 #define startbnftplusplus "//start"
 #define endbnftplusplus "//end"
@@ -25,9 +27,11 @@
 
 #include "pTree.h"
 
+/* Protótipos de funções */
 int compareString(char[], char[]);
 void printTreeSyntactic();
 
+/* Estrutura de cor */
 typedef struct{
 	int color;
 	int id;

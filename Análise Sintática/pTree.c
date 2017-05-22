@@ -4,16 +4,34 @@
 #include "pTree.h"
 #include "files.h"
 
+/**
+* Esta função inicializa a pseudo-árvore;
+@param tree, a estrutura da pseudo-árvore;
+@return void, retorna nada.
+*/
 void initializeTree(pTree *tree){
 	tree -> first = NULL;
 	tree -> last = NULL;
 	tree -> size = 0;
 }
 
+/**
+* Esta função verifica se a pseudo-árvore está vazia;
+@param tree, a estrutura da pseudo-árvore;
+@return inteiro, retorna verdade ou não caso esteja vazio a pseudo-árvore.
+*/
 int emptyTree(pTree *tree){
 	return (tree -> first == NULL);
 }  
 
+/**
+* Esta função insere no final da pseudo-árvore;
+@param tree, a estrutura da pseudo-árvore;
+@param father, a sequência de caracetere que será inserido;
+@param children, a sequência de caracetere que será inserido;
+@param value, a sequência de caracetere que será inserido;
+@return void, retorna nada.
+*/
 void insertTree(pTree *tree, char* father, char* children, char *value){
 	Node *newNode = (Node *) malloc(sizeof(Node));
 	strcpy(newNode -> father, father);
@@ -37,6 +55,13 @@ void insertTree(pTree *tree, char* father, char* children, char *value){
 	tree -> size++;
 }
  
+/**
+* Esta função insere no começo da pseudo-árvore;
+@param tree, a estrutura da pseudo-árvore;
+@param step, a sequência de caracetere que será inserido;
+@param value, a sequência de caracetere que será inserido;
+@return void, retorna nada.
+*/
 void insertFirstTree(pTree *tree, char* step, char *value){
 	Node *newNode = (Node *) malloc(sizeof(Node));
 	Node *auxiliar = tree -> first;
@@ -57,10 +82,20 @@ void insertFirstTree(pTree *tree, char* step, char *value){
 	tree -> size++;
 }
 
+/**
+* Esta função retorna o tamanho da pseudo-árvore;
+@param tree, a estrutura da pseudo-árvore;
+@return inteiro, retorna o tamanho da pseudo-árvore.
+*/
 int sizeTree(pTree *tree){
 	return (tree -> size);
 }
 
+/**
+* Esta função imprime a pseudo-árvore;
+@param tree, a estrutura da pseudo-árvore;
+@return void, retorna nada.
+*/
 void printTree(pTree *tree){
 	if (emptyTree(tree)){
 		printf("Empty tree!");
@@ -80,19 +115,33 @@ void printTree(pTree *tree){
 	}    
 }
 
+/**
+* Esta função imprime o caminho percorrido da pseudo-árvore;
+@param tree, a estrutura da pseudo-árvore;
+@return void, retorna nada.
+*/
 void printStepTree(pTree *tree){
 	if (emptyTree(tree)){
 		printf("Empty tree!");
 	} else {
 		Node *printNode;
 		printNode = tree -> first;
-		while (printNode != NULL){ 
-			printf("Passo: %s \n", printNode -> step);
+		while (printNode != NULL){
+			if(compareString(printNode -> value, "NULL") == 0){
+				printf("%s\n", printNode -> step);	
+			} else {
+				printf("%s (%s)\n", printNode -> step, printNode -> value);					
+			}
 			printNode = printNode -> next;
 		}
 	}    
 }
 
+/**
+* Esta função retira quebras de linhas de caractere dos nós da pseudo-árvore;
+@param tree, a estrutura da pseudo-árvore;
+@return void, retorna nada.
+*/
 void cleanTree(pTree *tree){
 	char father[SIZE], children[SIZE], newChildren[SIZE];
 	Node *auxiliar = tree -> first;
