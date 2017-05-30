@@ -126,12 +126,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 22 "parser.y" /* yacc.c:1909  */
+#line 18 "parser.y" /* yacc.c:1909  */
 
-	Arvore *a;
 	char pgm[32768];
 
-#line 135 "parser.tab.h" /* yacc.c:1909  */
+#line 134 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -2,201 +2,429 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <stdarg.h>
+	#include <stdbool.h>
 	#include <string.h>
 	#include "syntax-tree.h"
-	#include "pTree.h"
-	#include "files.h"
+	#include "nTree.h"
 
 	/* Protótipos */
-	FILE *output;
 	int yylex(void);
 	void yyerror(char *s);
 	extern FILE *yyin;
 	extern FILE *yyout;
+	
+	/* Global */
+	bool seNao;
+	static Arvore *aFinal;	
+	Arvore *auxiliar;
 %}
 
 %union	{
+	Arvore *a;
 	char pgm[32768];
 };
 %start programa
 
 %token <pgm> SE ENTAO SENAO FIM REPITA RETORNA ATE LEIA ESCREVA TIPOINTEIRO TIPOFLUTUANTE TIPOVOID IDENTIFICADOR NUMEROINTEIRO NUMEROFLUTUANTE EXPONENCIAL IGUAL DOISPONTOS ATRIBUICAO MENOR MENORIGUAL MAIOR MAIORIGUAL DIFERENTE ABREPARENTESES FECHAPARENTESES ABRECHAVE FECHACHAVE VIRGULA ADICAO SUBTRACAO MULTIPLICACAO DIVISAO ABRECOLCHETE FECHACOLCHETE END_OF_FILE
 
+%type <a> programa lista_declaracoes declaracao declaracao_variaveis inicializacao_variaveis lista_variaveis var indice tipo declaracao_funcao cabecalho lista_parametros parametro corpo acao se repita atribuicao leia escreva retorna expressao expressao_simples expressao_aditiva expressao_multiplicativa expressao_unaria operador_relacional operador_soma operador_multiplicacao fator numero chamada_funcao lista_argumentos 
+
+%left ADICAO SUBTRACAO
+%left MULTIPLICACAO DIVISAO
+
 %% 
 //start
 programa:
-	lista_declaracoes {fprintf(output, "lista_declaracoes\n");}
+	lista_declaracoes { aFinal = criaNo("programa", 1, $1); }
 	;
 
 lista_declaracoes:
-	lista_declaracoes declaracao {fprintf(output, "lista_declaracoes declaracao\n");}
-	| declaracao {fprintf(output, "declaracao\n");}
+	lista_declaracoes declaracao
+			{
+				if($1 != NULL){
+					if(pertenceArvore($$, "lista_declaracoes")){
+						adicionaFilho($$, $2);
+					} else {
+						$$ = criaNo("lista_declaracoes", 1, $2);
+					}
+				} else {
+					$$ = criaNo("lista_declaracoes", 1, $2);
+				}
+			}
+	| declaracao { $$ = criaNo("lista_declaracoes", 1, $1); }
 	;
 
 declaracao:
-	declaracao_variaveis {fprintf(output, "declaracao_variaveis\n");}
-	| inicializacao_variaveis {fprintf(output, "inicializacao_variaveis\n");}
-	| declaracao_funcao {fprintf(output, "declaracao_funcao\n");}
+	declaracao_variaveis { $$ = $1; }
+	| inicializacao_variaveis { $$ = $1; }
+	| declaracao_funcao { $$ = $1; }
 	;
 
 declaracao_variaveis:
-	tipo DOISPONTOS lista_variaveis {fprintf(output, "tipo DOISPONTOS lista_variaveis\n");}
+	tipo DOISPONTOS lista_variaveis  { $$ = criaNo("declaracao_variaveis", 2, $1, $3); }
 	;
 
 inicializacao_variaveis:
-	atribuicao {fprintf(output, "atribuicao\n");}
+	atribuicao { $$ = criaNo("inicializacao_variaives", 1, $1); }
 	;
 
 lista_variaveis:
-	lista_variaveis VIRGULA var {fprintf(output, "lista_variaveis VIRGULA var\n");}
-	| var {fprintf(output, "var\n");}
+	lista_variaveis VIRGULA var
+		{ 
+			if($1 != NULL){
+				if(pertenceArvore($$, "lista_variaveis")){
+					adicionaFilho($$, $3);
+				} else {
+					$$ = criaNo("lista_variaveis", 1, $3);
+				}
+			} else {
+				$$ = criaNo("lista_variaveis", 1, $3);
+			}
+		}
+	| var { $$ = criaNo("lista_variaveis", 1, $1); }
 	;
 
 var:
-	IDENTIFICADOR {fprintf(output, "IDENTIFICADOR (%s)\n", $1);}
-	| IDENTIFICADOR indice {fprintf(output, "IDENTIFICADOR indice\n");}
+	IDENTIFICADOR
+		{ 
+			auxiliar = criaNo($1, 0);		
+			$$ = criaNo("var", 1, auxiliar);
+		}
+	| IDENTIFICADOR indice
+		{			
+			$$ = criaNo("var", 2, criaNo($1, 0), $2);
+		}
 	;
 
 indice:
-	indice ABRECOLCHETE expressao FECHACOLCHETE {fprintf(output, "indice ABRECOLCHETE expressao FECHACOLCHETE\n");}
-	| ABRECOLCHETE expressao FECHACOLCHETE {fprintf(output, "ABRECOLCHETE expressao FECHACOLCHETE\n");}
+	indice ABRECOLCHETE expressao FECHACOLCHETE
+		{
+			if($1 != NULL){
+				if(pertenceArvore($$, "indice")){
+					adicionaFilho($$, $3);
+				} else {
+					$$ = criaNo("indice", 1, $3);
+				}
+			} else {
+				$$ = criaNo("indice", 1, $3);
+			}
+		}
+	| ABRECOLCHETE expressao FECHACOLCHETE { $$ = criaNo("indice", 1, $2); }
 	;
 
 tipo:
-	TIPOINTEIRO {fprintf(output, "TIPOINTEIRO\n");}
-	| TIPOFLUTUANTE {fprintf(output, "TIPOFLUTUANTE\n");}
+	TIPOINTEIRO { $$ = criaNo($1, 0); }
+	| TIPOFLUTUANTE { $$ = criaNo($1, 0); }
 	;
 
 declaracao_funcao:
-	tipo cabecalho {fprintf(output, "tipo cabecalho\n");}
-	| cabecalho {fprintf(output, "cabecalho\n");}
+	tipo cabecalho { $$ = criaNo("declaracao_funcao", 2, $1, $2); }
+	| cabecalho { $$ = criaNo("declaracao_funcao", 1, $1); }
 	;
 
 cabecalho:
-	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM {fprintf(output, "IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM\n");}
-	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM {fprintf(output, "IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM\n");}
+	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM
+		{
+			auxiliar = criaNo($1, 0);
+			$$ = criaNo("cabecalho", 3, auxiliar, $3, $5); 
+		}
+	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM { $$ = criaNo("cabecalho", 2, criaNo($1, 0), $4); }
 	;
 
 lista_parametros:
-	lista_parametros VIRGULA parametro {fprintf(output, "lista_parametros VIRGULA parametro\n");}
-	| parametro {fprintf(output, "parametro\n");}
+	lista_parametros VIRGULA parametro
+		{
+			if($1 != NULL){
+				if(pertenceArvore($$, "lista_parametros")){
+					adicionaFilho($$, $3);
+				} else {
+					$$ = criaNo("lista_parametros", 1, $3);
+				}
+			} else {
+				$$ = criaNo("lista_parametros", 1, $3);
+			}	
+
+		}
+	| parametro { $$ = criaNo("lista_parametros", 1, $1); }
 	;
 
 parametro:
-	tipo DOISPONTOS IDENTIFICADOR {fprintf(output, "tipo DOISPONTOS IDENTIFICADOR\n");}
-	| parametro ABRECOLCHETE FECHACOLCHETE{fprintf(output, "parametro ABRECOLCHETE FECHACOLCHETE\n");}
+	tipo DOISPONTOS IDENTIFICADOR
+		{
+			auxiliar = criaNo($3, 0);
+			$$ = criaNo("parametro", 2, $1, auxiliar);
+		}
+	| parametro ABRECOLCHETE FECHACOLCHETE
+		{
+			if($1 != NULL){
+				if(pertenceArvore($$, "parametro")){
+					auxiliar = criaNo("[", 0);
+					adicionaFilho($$, auxiliar);
+					auxiliar = criaNo("]", 0);
+					adicionaFilho($$, auxiliar);					
+				} else {
+					$$ = criaNo("parametro", 2, criaNo("[", 0), criaNo("]", 0));					
+				}
+			} else {
+				$$ = criaNo("parametro", 2, criaNo("[", 0), criaNo("]", 0));					
+			}
+		}
 	;
 
 corpo:
-	acao {fprintf(output, "acao\n");}
-	| corpo acao {fprintf(output, "corpo acao\n");}
-	| atribuicao {fprintf(output, "atribuicao\n");}
-	| corpo atribuicao {fprintf(output, "corpo atribuicao\n");};
+	acao { $$ = criaNo("corpo", 1, $1); }
+	| corpo acao
+		{
+			if($1 != NULL){
+				if(pertenceArvore($$, "corpo")){
+					adicionaFilho($$, $2);
+				} else {
+					$$ = criaNo("corpo", 1, $2);
+				}
+			} else {
+				$$ = criaNo("corpo", 1, $2);
+			}
+		}
+	| atribuicao { $$ = criaNo("corpo", 1, $1); }
+	| corpo atribuicao
+		{
+			if($1 != NULL){
+				if(pertenceArvore($$, "corpo")){
+					adicionaFilho($$, $2);
+				} else {
+					$$ = criaNo("corpo", 1, $2);
+				}
+			} else {
+				$$ = criaNo("corpo", 1, $2);
+			}
+		}
+	| chamada_funcao { $$ = criaNo("corpo", 1, $1); }
+	| corpo chamada_funcao
+		{
+			if($1 != NULL){
+				if(pertenceArvore($$, "corpo")){
+					adicionaFilho($$, $2);
+				} else {
+					$$ = criaNo("corpo", 1, $2);
+				}
+			} else {
+				$$ = criaNo("corpo", 1, $2);
+			}
+		}
+	;
 
 acao:
-	declaracao_variaveis {fprintf(output, "declaracao_variaveis\n");}
-	| se {fprintf(output, "se\n");}
-	| repita {fprintf(output, "repita\n");}
-	| leia {fprintf(output, "leia\n");}
-	| escreva {fprintf(output, "escreva\n");}
-	| retorna {fprintf(output, "retorna\n");};
+	declaracao_variaveis { $$ = $1; }
+	| se { $$ = criaNo("acao", 1, $1); }
+	| repita { $$ = criaNo("acao", 1, $1); }
+	| leia { $$ = criaNo("acao", 1, $1); }
+	| escreva { $$ = criaNo("acao", 1, $1); }
+	| retorna { $$ = criaNo("acao", 1, $1); }
+	;
 
 se:
-	SE expressao ENTAO corpo FIM {fprintf(output, "SE expressao ENTAO corpo FIM\n");}
-	| SE expressao ENTAO corpo SENAO corpo FIM {fprintf(output, "SE expressao ENTAO corpo SENAO corpo FIM\n");}
+	SE expressao ENTAO corpo FIM { $$ = criaNo("se", 2, $2, $4); }
+	| SE expressao ENTAO corpo SENAO corpo FIM { $$ = criaNo("se", 3, $2, $4, $6); }
 	;
 
 repita:
-	REPITA corpo ATE expressao {fprintf(output, "REPITA corpo ATE expressao\n");}
+	REPITA corpo ATE expressao { $$ = criaNo("repita", 2, $2, $4); }
 	;
 
 atribuicao:
-	var ATRIBUICAO expressao{fprintf(output, "var ATRIBUICAO expressao\n");}
+	var ATRIBUICAO expressao { $$ = criaNo("atribuicao", 2, $1, $3); }
 	;
 
 leia:
-	LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES{fprintf(output, "LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES\n");}
+	LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES
+		{	
+			auxiliar = criaNo($3, 0);
+			$$ = criaNo("LEIA", 1, auxiliar);
+		}
 	;
 
 escreva:
-	ESCREVA ABREPARENTESES expressao FECHAPARENTESES{fprintf(output, "ESCREVA ABREPARENTESES expressao FECHAPARENTESES\n");}
+	ESCREVA ABREPARENTESES expressao FECHAPARENTESES { $$ = criaNo("ESCREVA", 1, $3); }
 	;
 
 retorna:
-	RETORNA ABREPARENTESES expressao FECHAPARENTESES{fprintf(output, "RETORNA ABREPARENTESES expressao FECHAPARENTESES\n");}
+	RETORNA ABREPARENTESES expressao FECHAPARENTESES { $$ = criaNo("RETORNA", 1, $3); }
 	;
 
 expressao:
-	atribuicao {fprintf(output, "atribuicao\n");}
-	| expressao_simples {fprintf(output, "expressao_simples\n");}
+	atribuicao { $$ = criaNo("expressao", 1, $1); }
+	| expressao_simples { $$ = criaNo("expressao", 1, $1); }
 	;
 
 expressao_simples:
-	expressao_aditiva {fprintf(output, "expressao_aditiva\n");}
-	| expressao_simples operador_relacional expressao_aditiva {fprintf(output, "expressao_simples operador_relacional expressao_aditiva\n");}
+	expressao_aditiva { $$ = criaNo("expressao_simples", 1, $1); }
+	| expressao_simples operador_relacional expressao_aditiva
+		{
+			if($1 != NULL){
+				if(pertenceArvore($$, "expressao_simples")){
+					if($2 != NULL){
+						adicionaFilho($$, $2);
+					}
+					if($3 != NULL){
+						adicionaFilho($$, $3);
+					}
+				}
+			} else {
+				//ver se em algum teste cai aqui
+				$$ = criaNo("expressao_simples", 0);
+				if($2 != NULL){
+					adicionaFilho($$, $2);
+				}
+				if($3 != NULL){
+					adicionaFilho($$, $3);
+				}
+			}
+		}
 	; 
 
 expressao_aditiva:
-	expressao_multiplicativa {fprintf(output, "expressao_multiplicativa\n");}
-	| expressao_aditiva operador_soma expressao_multiplicativa {fprintf(output, "expressao_aditiva operador_soma expressao_multiplicativa\n");}
+	expressao_multiplicativa { $$ = criaNo("expressao_aditiva", 1, $1); }
+	| expressao_aditiva operador_soma expressao_multiplicativa
+		{
+			if($1 != NULL){
+				if(pertenceArvore($$, "expressao_aditiva")){
+					if($2 != NULL){
+						adicionaFilho($$, $2);
+					}
+					if($3 != NULL){
+						adicionaFilho($$, $3);
+					}
+				}
+			} else {
+				//ver se em algum teste cai aqui
+				$$ = criaNo("expressao_aditiva", 0);
+				if($2 != NULL){
+					adicionaFilho($$, $2);
+				}
+				if($3 != NULL){
+					adicionaFilho($$, $3);
+				}
+			}
+		}
 	;
 
 expressao_multiplicativa:
-	expressao_unaria {fprintf(output, "expressao_unaria\n");}
-	| expressao_multiplicativa operador_multiplicacao expressao_unaria{fprintf(output, "expressao_multiplicativa operador_multiplicacao expressao_unaria\n");}
+	expressao_unaria { $$ = criaNo("expressao_multiplicativa", 1, $1); }
+	| expressao_multiplicativa operador_multiplicacao expressao_unaria
+		{
+			if($1 != NULL){
+				if(pertenceArvore($$, "expressao_multiplicativa")){
+					if($2 != NULL){
+						adicionaFilho($$, $2);
+					}
+					if($3 != NULL){
+						adicionaFilho($$, $3);
+					}
+				}
+			} else {
+				//ver se em algum teste cai aqui
+				$$ = criaNo("expressao_multiplicativa", 0);
+				if($2 != NULL){
+					adicionaFilho($$, $2);
+				}
+				if($3 != NULL){
+					adicionaFilho($$, $3);
+				}
+			}
+		}
 	;
 
 expressao_unaria:
-	fator {fprintf(output, "fator \n");}
-	| operador_soma fator {fprintf(output, "operador_soma fator\n");}
+	fator { $$ = criaNo("expressao_unaria", 1, $1); }
+	| operador_soma fator
+		{
+			printf("\033[1m\033[31m\n");
+			if($2 != NULL){
+				if(pertenceArvore($$, "expressao_unaria")){
+					if($1 != NULL){
+						adicionaFilho($$, $1);
+					}
+				}
+			} else {
+				//ver se em algum teste cai aqui
+				$$ = criaNo("expressao_unaria", 0);
+				if($1 != NULL){
+					adicionaFilho($$, $1);
+				}
+			}
+			
+		}
 	;
 
 operador_relacional:
-	MENOR {fprintf(output, "MENOR\n");}
-	| MAIOR {fprintf(output, "MAIOR\n");}
-	| IGUAL {fprintf(output, "IGUAL\n");}
-	| DIFERENTE {fprintf(output, "DIFERENTE\n");}
-	| MENORIGUAL {fprintf(output, "MENORIGUAL\n");}
-	| MAIORIGUAL{fprintf(output, "MAIORIGUAL\n");}
+	MENOR { $$ = criaNo($1, 0); }
+	| MAIOR { $$ = criaNo($1, 0); }
+	| IGUAL { $$ = criaNo($1, 0); }
+	| DIFERENTE { $$ = criaNo($1, 0); }
+	| MENORIGUAL { $$ = criaNo($1, 0); }
+	| MAIORIGUAL { $$ = criaNo($1, 0); }
 	; 
 
 operador_soma:
-	ADICAO {fprintf(output, "ADICAO\n");}
-	| SUBTRACAO {fprintf(output, "SUBTRACAO\n");}
+	ADICAO { $$ = criaNo($1, 0); }
+	| SUBTRACAO { $$ = criaNo($1, 0); }
 	;
 
 operador_multiplicacao:
-	MULTIPLICACAO {fprintf(output, "MULTIPLICACAO\n");}
-	| DIVISAO {fprintf(output, "DIVISAO\n");}
+	MULTIPLICACAO { $$ = criaNo($1, 0); }
+	| DIVISAO { $$ = criaNo($1, 0); }
 	;
 
 fator:
-	ABREPARENTESES expressao FECHAPARENTESES {fprintf(output, "ABREPARENTESES expressao FECHAPARENTESES\n");}
-	| var {fprintf(output, "var\n");}
-	| chamada_funcao {fprintf(output, "chamada_funcao\n");}
-	| numero {fprintf(output, "numero\n");}
+	ABREPARENTESES expressao FECHAPARENTESES { $$ = criaNo("fator", 1, $2); }
+	| var { $$ = criaNo("fator", 1, $1); }
+	| chamada_funcao { $$ = criaNo("fator", 1, $1); }
+	| numero { $$ = criaNo("fator", 1, $1); }
 	;
 
 numero:
-	NUMEROINTEIRO {fprintf(output, "NUMEROINTEIRO (%s)\n", $1);}
-	| NUMEROFLUTUANTE {fprintf(output, "NUMEROFLUTUANTE (%s)\n", $1);}
-	| EXPONENCIAL {fprintf(output, "EXPONENCIAL (%s)\n", $1);}
+	NUMEROINTEIRO
+		{
+			auxiliar = criaNo($1, 0);
+			$$ = criaNo("numero", 1, auxiliar);
+		}
+	| NUMEROFLUTUANTE
+		{
+			auxiliar = criaNo($1, 0);
+			$$ = criaNo("numero", 1, auxiliar);
+		}
+	| EXPONENCIAL
+		{
+			auxiliar = criaNo($1, 0);
+			$$ = criaNo("numero", 1, auxiliar);
+		}
 	;
 
 chamada_funcao:
-	IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES {fprintf(output, "IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES\n");}
-	;
+	IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES {	$$ = criaNo("chamada_funcao", 2, criaNo($1, 0), $3); }
+	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES { $$ = criaNo("chamada_funcao", 1, criaNo($1, 0)); };
 
 lista_argumentos:
-	lista_argumentos VIRGULA expressao {fprintf(output, "lista_argumentos VIRGULA expressao\n");}
-	| expressao {fprintf(output, "expressao\n");}
+	lista_argumentos VIRGULA expressao
+		{	
+			if($1 != NULL){
+				if(pertenceArvore($$, "lista_argumentos")){
+					adicionaFilho($$, $3);					
+				} else {
+					$$ = criaNo("lista_argumentos", 1, $3);					
+				}
+			} else {
+					$$ = criaNo("lista_argumentos", 1, $3);					
+			}
+		}
+	| expressao { $$ = criaNo("lista_argumentos", 1, $1); }
 	;
 //end
 
 %%
 void yyerror(char *s) {
 	if(compareString(s, "syntax error") == 0){
-		system("reset");
+//		system("reset");
 		printf("\033[1m\033[31mSYNTAX ERROR\n");	
 		exit(1);
 	} else {
@@ -205,13 +433,10 @@ void yyerror(char *s) {
 }
 
 int main(int argc, char *argv[]){
-	idNode = 0;
-	output = fopen(outputprogram, "w");
 	yyin = fopen(argv[1], "r");
 	yyparse();	
 	fclose(yyin);
-	fclose(output);
-	printTreeSyntactic();
+	imprimeArvore(aFinal);
 	return 0;
 }
 

@@ -1109,7 +1109,7 @@ case 16:
 YY_RULE_SETUP
 #line 96 "scanner.l"
 {	
-//	printf("%s\n", yytext);
+	printf("%s\n", yytext);
 	char sinal = '!';	
 	char eValor[3276];			
 	double valor;

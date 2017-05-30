@@ -1,34 +1,9 @@
-/* Node type: Constante numérica, Identificador, Operadores. */
-typedef enum { typeCon, typeId, typeOpr } nodeEnum;
+#define MAX 3276
 
-/* constants */
-typedef struct { int value; } conNodeType;
+struct arvore {
+    char string[MAX];
+    struct arvore *proximo;
+    struct arvore *filho;
+};
 
-/* identifiers */
-typedef struct { int i; } idNodeType;
-
-/* operators */
-typedef struct {
-  int oper;
-  int nops;
-  struct nodeTypeTag *op[1];
-} oprNodeType;
-
-typedef struct nodeTypeTag {
-  nodeEnum type;
-  union {
-    conNodeType con;
-    idNodeType id;
-    oprNodeType opr;
-  };
-} nodeType;
-/* value of constant */
-/* subscript to sym array */
-/* operator */
-/* number of operands */
-/* operands, extended at runtime */
-/* type of node */
-/* constants */
-/* identifiers */
-/* operators */
-extern int sym[26];
+typedef struct arvore Arvore;

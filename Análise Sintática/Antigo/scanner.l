@@ -94,7 +94,7 @@ COMENTARIO "{"[^\}]*"}"
 } 
 
 {EXPONENCIAL} {	
-//	printf("%s\n", yytext);
+	printf("%s\n", yytext);
 	char sinal = '!';	
 	char eValor[3276];			
 	double valor;
