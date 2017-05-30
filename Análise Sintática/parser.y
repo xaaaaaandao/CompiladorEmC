@@ -4,7 +4,7 @@
 	#include <stdarg.h>
 	#include <stdbool.h>
 	#include <string.h>
-	#include "syntax-tree.h"
+//	#include "syntax-tree.h"
 	#include "nTree.h"
 
 	/* Protótipos */
@@ -48,6 +48,7 @@ lista_declaracoes:
 						$$ = criaNo("lista_declaracoes", 1, $2);
 					}
 				} else {
+					fprintf(fileLog, "lista_declaracoes\n");
 					$$ = criaNo("lista_declaracoes", 1, $2);
 				}
 			}
@@ -78,6 +79,7 @@ lista_variaveis:
 					$$ = criaNo("lista_variaveis", 1, $3);
 				}
 			} else {
+				fprintf(fileLog, "lista_variaveis\n");
 				$$ = criaNo("lista_variaveis", 1, $3);
 			}
 		}
@@ -106,6 +108,7 @@ indice:
 					$$ = criaNo("indice", 1, $3);
 				}
 			} else {
+				fprintf(fileLog, "indice\n");
 				$$ = criaNo("indice", 1, $3);
 			}
 		}
@@ -141,6 +144,7 @@ lista_parametros:
 					$$ = criaNo("lista_parametros", 1, $3);
 				}
 			} else {
+				fprintf(fileLog, "lista_parametros\n");
 				$$ = criaNo("lista_parametros", 1, $3);
 			}	
 
@@ -166,6 +170,7 @@ parametro:
 					$$ = criaNo("parametro", 2, criaNo("[", 0), criaNo("]", 0));					
 				}
 			} else {
+				fprintf(fileLog, "parametro\n");
 				$$ = criaNo("parametro", 2, criaNo("[", 0), criaNo("]", 0));					
 			}
 		}
@@ -182,6 +187,7 @@ corpo:
 					$$ = criaNo("corpo", 1, $2);
 				}
 			} else {
+				fprintf(fileLog, "corpo\n");
 				$$ = criaNo("corpo", 1, $2);
 			}
 		}
@@ -195,6 +201,7 @@ corpo:
 					$$ = criaNo("corpo", 1, $2);
 				}
 			} else {
+				fprintf(fileLog, "corpo\n");
 				$$ = criaNo("corpo", 1, $2);
 			}
 		}
@@ -208,6 +215,7 @@ corpo:
 					$$ = criaNo("corpo", 1, $2);
 				}
 			} else {
+				fprintf(fileLog, "corpo\n");
 				$$ = criaNo("corpo", 1, $2);
 			}
 		}
@@ -270,6 +278,7 @@ expressao_simples:
 					}
 				}
 			} else {
+				fprintf(fileLog, "expressao_simples\n");
 				//ver se em algum teste cai aqui
 				$$ = criaNo("expressao_simples", 0);
 				if($2 != NULL){
@@ -296,6 +305,7 @@ expressao_aditiva:
 					}
 				}
 			} else {
+				fprintf(fileLog, "expressao_aditiva\n");
 				//ver se em algum teste cai aqui
 				$$ = criaNo("expressao_aditiva", 0);
 				if($2 != NULL){
@@ -322,6 +332,7 @@ expressao_multiplicativa:
 					}
 				}
 			} else {
+				fprintf(fileLog, "expressao_multiplicativa\n");
 				//ver se em algum teste cai aqui
 				$$ = criaNo("expressao_multiplicativa", 0);
 				if($2 != NULL){
@@ -338,7 +349,6 @@ expressao_unaria:
 	fator { $$ = criaNo("expressao_unaria", 1, $1); }
 	| operador_soma fator
 		{
-			printf("\033[1m\033[31m\n");
 			if($2 != NULL){
 				if(pertenceArvore($$, "expressao_unaria")){
 					if($1 != NULL){
@@ -346,6 +356,7 @@ expressao_unaria:
 					}
 				}
 			} else {
+				fprintf(fileLog, "expressao_unaria\n");
 				//ver se em algum teste cai aqui
 				$$ = criaNo("expressao_unaria", 0);
 				if($1 != NULL){
@@ -414,7 +425,8 @@ lista_argumentos:
 					$$ = criaNo("lista_argumentos", 1, $3);					
 				}
 			} else {
-					$$ = criaNo("lista_argumentos", 1, $3);					
+				fprintf(fileLog, "chamada_funcao\n");
+				$$ = criaNo("lista_argumentos", 1, $3);					
 			}
 		}
 	| expressao { $$ = criaNo("lista_argumentos", 1, $1); }
@@ -424,7 +436,7 @@ lista_argumentos:
 %%
 void yyerror(char *s) {
 	if(compareString(s, "syntax error") == 0){
-//		system("reset");
+		system("reset");
 		printf("\033[1m\033[31mSYNTAX ERROR\n");	
 		exit(1);
 	} else {
@@ -433,11 +445,15 @@ void yyerror(char *s) {
 }
 
 int main(int argc, char *argv[]){
+	fileLog = fopen("log.txt", "w");
 	yyin = fopen(argv[1], "r");
 	yyparse();	
 	fclose(yyin);
+	system("reset");
 	imprimeArvore(aFinal);
+	fclose(fileLog);
+	verificarLog();
+	system("reset");
+	gerandoDot(aFinal);
 	return 0;
 }
-
-

@@ -2,6 +2,23 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
+#include <sys/stat.h>
+
+#define MAX 3276
+
+struct arvore {
+    unsigned long int p;
+    unsigned long int f;
+    char string[MAX];
+    struct arvore *proximo;
+    struct arvore *filho;
+};
+
+typedef struct arvore Arvore;
+
+
+FILE *fileLog;
 
 int compareString(char stringA[], char stringB[]){
     int i = 0;
@@ -45,13 +62,17 @@ Arvore *adicionaFilho(Arvore *no, Arvore *novoIrmao){
 }
 
 void imprimeArvore(Arvore *no){
+    static unsigned long int i = 1;
     if(no -> filho == NULL){
         printf("-> %s \n\n", no -> string);        
         return;
     } else {
+        //printf("%s (p:%lu) (f:%lu)\n", no -> string, no -> p, no -> f);
         printf("%s \n", no -> string);
         Arvore *filho =  no -> filho;
         while(filho != NULL){
+            filho -> p = no -> f;
+            filho -> f = i++;
             printf("%s ", filho -> string);
             filho = filho -> proximo;
         }
@@ -70,6 +91,8 @@ Arvore *criaNo(char *string, int numArg, ...){
         no->proximo = NULL;
         no->filho = NULL;
         strcpy(no->string, string);
+        no -> p = 0;
+        no -> f = 0;
         if(numArg > 0){
             va_list filhos;
 
@@ -115,4 +138,74 @@ bool pertenceArvore(Arvore *no, char *string){
         return true;
     }
     return false;
+}
+
+void verificarLog(){
+    struct stat st;
+    if (stat("log.txt", &st) == 0) {
+        system("rm log.txt");
+    } else {
+        printf("\033[1m\033[31mGEROU LOG!\n");    
+    }
+}
+
+char *nomeRotulo(unsigned long int valor){
+    char *rotulo = (char*) calloc (MAX, sizeof(char));
+    if(valor == 4294967295){
+        printf("\033[1m\033[31mnão foi possível gerar .dot!\n");            
+        exit(1);
+    }
+    sprintf(rotulo, "%lu", valor);
+    return rotulo;
+}
+
+void arvoreDot(FILE *dot, Arvore *no){
+    static bool primeiraVez = true;
+    char rotuloOrigem[MAX], rotuloDestino[MAX], transicao[MAX];
+    if(no -> filho == NULL){
+        return;
+    } else {
+        if(primeiraVez){
+            strcpy(rotuloOrigem, nomeRotulo(no -> f));
+            strcat(rotuloOrigem, "[label=\"");
+            strcat(rotuloOrigem, no -> string);
+            strcat(rotuloOrigem, "\"];");
+            //printf("%s\n", rotuloOrigem);
+            fprintf(dot, "%s\n", rotuloOrigem);
+            primeiraVez = false;       
+        }
+        //printf("%s (p:%lu) (f:%lu)\n", no -> string, no -> p, no -> f);
+        Arvore *filho =  no -> filho;
+        while(filho != NULL){
+            strcpy(rotuloDestino, nomeRotulo(filho -> f));
+            strcat(rotuloDestino, "[label=\"");
+            strcat(rotuloDestino, filho -> string);
+            strcat(rotuloDestino, "\"];");
+            //printf("%s\n", rotuloDestino);
+            fprintf(dot, "%s\n", rotuloDestino);
+            strcpy(transicao, nomeRotulo(filho -> p));
+            strcat(transicao, " -> ");
+            strcat(transicao, nomeRotulo(filho -> f));
+            strcat(transicao, ";");
+            //printf("%s\n", transicao);
+            fprintf(dot, "%s\n", transicao);
+            //printf("%s (p:%lu) (f:%lu)\n", filho -> string, filho -> p, filho -> f);
+            filho = filho -> proximo;
+        }
+        filho =  no -> filho;
+        while(filho != NULL){
+            arvoreDot(dot, filho);
+            filho = filho -> proximo;   
+        }
+    }
+}
+
+
+void gerandoDot(Arvore *a){
+    FILE *dot = fopen("syntax-tree.dot", "w");
+    fprintf(dot, "digraph tree {\n");
+    arvoreDot(dot, a);
+    fprintf(dot, "}");
+    fclose(dot);
+    system("dot -Tpng -O syntax-tree.dot && shotwell syntax-tree.dot.png &");
 }
