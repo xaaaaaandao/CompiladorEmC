@@ -2305,10 +2305,11 @@ int main(int argc, char *argv[]){
 	yyparse();	
 	fclose(yyin);
 	system("reset");
+	printf("\033[1m\033[32mÁRVORE SINTÁTICA\033[0m\n");	
 	imprimeArvore(aFinal);
 	fclose(fileLog);
 	verificarLog();
-	system("reset");
 	gerandoDot(aFinal);
+	printf("\033[1m\033[32mÁRVORE SINTÁTICA GERADA COM DOT!\033[0m\n");	
 	return 0;
 }
