@@ -1,0 +1,33 @@
+digraph tree {
+0[label="programa"];
+1[label="lista_declaracoes"];
+0 -> 1;
+2[label="declaracao_funcao"];
+1 -> 2;
+3[label="inteiro"];
+2 -> 3;
+4[label="cabecalho"];
+2 -> 4;
+5[label="fatorial"];
+4 -> 5;
+6[label="lista_parametros"];
+4 -> 6;
+7[label="corpo"];
+4 -> 7;
+8[label="parametro"];
+6 -> 8;
+9[label="parametro"];
+6 -> 9;
+10[label="inteiro"];
+8 -> 10;
+11[label="i"];
+8 -> 11;
+12[label="inteiro"];
+9 -> 12;
+13[label="j"];
+9 -> 13;
+14[label="chamada_funcao"];
+7 -> 14;
+15[label="fatorial"];
+14 -> 15;
+}

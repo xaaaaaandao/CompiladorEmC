@@ -1,0 +1,35 @@
+digraph simples{
+	1[label="programa"];
+	2[label="lista_declaracao"];
+	1 -> 2;
+	3[label="declaracao_funcao"];
+	2 -> 3;
+	4[label="inteiro"];
+	3 -> 4;
+	5[label="cabecalho"];
+	3 -> 5;
+	6[label="fatorial"];
+	5 -> 6;
+	7[label="lista_parametro"];
+	5 -> 7;
+	8[label="corpo"];
+	5 -> 8;
+	9[label="parametro"];
+	7 -> 9;
+	10[label="parametro"];
+	7 -> 10;
+	11[label="inteiro"];
+	9 -> 11;
+	12[label="i"];
+	9 -> 12;
+	13[label="inteiro"];
+	10 -> 13;
+	14[label="j"];
+	10 -> 14;
+	15[label="chamada_funcao"];
+	8 -> 15;
+	16[label="fatorial"];
+	15 -> 16;
+
+
+}
