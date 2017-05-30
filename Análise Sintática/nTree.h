@@ -5,8 +5,10 @@
 #include <limits.h>
 #include <sys/stat.h>
 
+/* Definindo valor MAX */
 #define MAX 3276
 
+/* Definindo estrutura árvore */
 struct arvore {
     unsigned long int p;
     unsigned long int f;
@@ -17,9 +19,17 @@ struct arvore {
 
 typedef struct arvore Arvore;
 
-
+/* Variável global */
 FILE *fileLog;
 
+/**
+* Esta função compareString compara duas strings, e verifica
+* se as duas strings elas são iguais ou não, caso for retorna zero
+* ou caso contrário um valor de diferente de zero;
+@param stringA, sequência de caracteres a ser comparada;
+@param stringB, sequência de caracteres a ser comparada;
+@return resultado, retorna zero se for igual ou qualquer valor diferente de zero é diferente.
+*/
 int compareString(char stringA[], char stringB[]){
     int i = 0;
     int resultado;
@@ -41,6 +51,14 @@ int compareString(char stringA[], char stringB[]){
     return resultado;
 }
 
+
+/**
+* Esta função adicionaIrmao recebe dois nós, 
+* em que os dois nós irão virar irmãos;
+@param no, nó da Árvore que será adicionado o seu irmão;
+@param novoIrmao, nó da Árvore que será adicionado o seu irmão;
+@return no, retorna nó com o seu irmão adicionado.
+*/
 Arvore* adicionaIrmao(Arvore *no, Arvore *novoIrmao){
     if (no == NULL)
         return NULL;
@@ -51,6 +69,13 @@ Arvore* adicionaIrmao(Arvore *no, Arvore *novoIrmao){
     return (no -> proximo = novoIrmao);
 }
 
+/**
+* Esta função adicionaFilho recebe dois nós, 
+* em que os dois nós irão virar irmãos;
+@param no, nó da Árvore que será adicionado o seu irmão;
+@param novoIrmao, nó da Árvore que será adicionado o seu irmão;
+@return no, retorna nó com o seu irmão adicionado.
+*/
 Arvore *adicionaFilho(Arvore *no, Arvore *novoIrmao){
     if (no == NULL)
         return NULL;
@@ -61,13 +86,18 @@ Arvore *adicionaFilho(Arvore *no, Arvore *novoIrmao){
         return (no -> filho = novoIrmao);
 }
 
+/**
+* Esta função imprime recebe um nó da Árvore, 
+* em que iremos imprimir o pai e os filhos, respectivamente;
+@param no, nó da Árvore que será adicionado impresso;
+@return void, ou seja, retorna nada.
+*/
 void imprimeArvore(Arvore *no){
     static unsigned long int i = 1;
     if(no -> filho == NULL){
-        printf("-> %s \n\n", no -> string);        
+	printf("\033[1m\033[32m%s\033[0m\n\n", no -> string);	
         return;
     } else {
-        //printf("%s (p:%lu) (f:%lu)\n", no -> string, no -> p, no -> f);
         printf("%s \n", no -> string);
         Arvore *filho =  no -> filho;
         while(filho != NULL){
@@ -85,6 +115,14 @@ void imprimeArvore(Arvore *no){
     }
 }
 
+/**
+* Esta função criaNo em que iremos receber o valor,
+* e o número de filhos, em que podemos adicionar quantos filhos quisermos;
+@param string, sequência de caractere que será adicionado o nó;
+@param numArg, seria um inteiro com o número de argumentos;
+@param ..., seria nó da árvore que seria adicionado irmãos;
+@return no, retorna nó com o seu irmão adicionado.
+*/
 Arvore *criaNo(char *string, int numArg, ...){
     Arvore *no = malloc(sizeof(Arvore));
     if (no) {
@@ -108,6 +146,13 @@ Arvore *criaNo(char *string, int numArg, ...){
     return no;
 }
 
+/**
+* Esta função pertenceArvore em que iremos receber o nó da Árvore,
+* para onde iremos começar a buscar e valor que será procurado;
+@param no, seria o nó da Árvore onde começara a busca;
+@param string, sequência de caractere que será procurado a existência do nó;
+@return bool, retorna true caso exista ou false caso não exista.
+*/
 bool pertenceArvore(Arvore *no, char *string){
     static bool existe = false;
     if(no -> filho == NULL){
@@ -140,6 +185,14 @@ bool pertenceArvore(Arvore *no, char *string){
     return false;
 }
 
+/**
+* Esta função verificarLog que não recebe nenhum parâmetro
+* em que verifica o tamanho do arquivo log se for zero 
+* ou seja, não contém nada escrito então apaga o log
+* caso exista alguma coisa se tiver avisa;
+@param nenhum, não recebe nenhum parâmetro;
+@return void, ou seja, retorna nada.
+*/
 void verificarLog(){
     struct stat st;
     if (stat("log.txt", &st) == 0) {
@@ -149,6 +202,12 @@ void verificarLog(){
     }
 }
 
+/**
+* Esta função nomeRotulo que recebe um valor
+* e converte esse valor em forma de sequência de caractere;
+@param valor, é um inteiro longo sem sinal que será convertido;
+@return rotulo, valor do inteiro longo sem sinal convertido para string.
+*/
 char *nomeRotulo(unsigned long int valor){
     char *rotulo = (char*) calloc (MAX, sizeof(char));
     if(valor == 4294967295){
@@ -159,6 +218,13 @@ char *nomeRotulo(unsigned long int valor){
     return rotulo;
 }
 
+/**
+* Esta função arvoreDot que seria o arquivo .dot que é necessário
+* para conseguirmos visualizar de maneira mais clara, a árvore sintática;
+@param dot, é do tipo FILE que irá conter o conteúdo do formato .dot;
+@param no, é do tipo Árvore em que irá percorrer a árvore colocando o conteúdo no .dot;
+@return void, ou seja, retorna nada.
+*/
 void arvoreDot(FILE *dot, Arvore *no){
     static bool primeiraVez = true;
     char rotuloOrigem[MAX], rotuloDestino[MAX], transicao[MAX];
@@ -200,7 +266,12 @@ void arvoreDot(FILE *dot, Arvore *no){
     }
 }
 
-
+/**
+* Esta função gerandoDot que irá gerar o arquivo
+* .dot para gerarmos uma a imagem dá árvore.
+@param a, é do tipo Árvore em que irá percorrer a árvore colocando o conteúdo no .dot;
+@return void, ou seja, retorna nada.
+*/
 void gerandoDot(Arvore *a){
     FILE *dot = fopen("syntax-tree.dot", "w");
     fprintf(dot, "digraph tree {\n");
