@@ -2,7 +2,7 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <math.h>
-	#include "syntax-tree.h"
+	#include "syntaxtree.h"
 	#include "parser.tab.h"
 	void yyerror(char *);
 	int linha = 1;

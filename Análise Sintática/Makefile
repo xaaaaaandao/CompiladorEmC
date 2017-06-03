@@ -1,16 +1,11 @@
-all:
-	bison -y -d -t parser.y -o parser.tab.c 
-	flex -d -T scanner.l
-	gcc -c parser.tab.c lex.yy.c -lfl
-	gcc parser.tab.o lex.yy.o -lm -o arvoreSintatica
+all : parser.tab.c scanner.c build
 
-bison:
-	bison -y -d -t parser.y -o parser.tab.c 	
+parser.tab.c : parser.y
+	bison -y -d -t $^ -o parser.tab.c
 
-lex:
-	flex -d -T scanner.l
-
-clean:
-	rm yytokentype.o
-	rm scanner
-	rm syntax-tree.dot
+scanner.c : scanner.l
+	flex -d -T $^
+	
+build :
+	gcc -c parser.tab.c lex.yy.c
+	gcc parser.tab.o lex.yy.o syntaxtree.c -o arvoreSintatica

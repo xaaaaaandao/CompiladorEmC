@@ -1,26 +1,9 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
 #include <sys/stat.h>
-
-/* Definindo valor MAX */
-#define MAX 3276
-
-/* Definindo estrutura árvore */
-struct arvore {
-    unsigned long int p;
-    unsigned long int f;
-    char string[MAX];
-    struct arvore *proximo;
-    struct arvore *filho;
-};
-
-typedef struct arvore Arvore;
-
-/* Variável global */
-FILE *fileLog;
+#include "syntaxtree.h"
 
 /**
 * Esta função compareString compara duas strings, e verifica

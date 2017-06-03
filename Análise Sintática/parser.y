@@ -4,8 +4,7 @@
 	#include <stdarg.h>
 	#include <stdbool.h>
 	#include <string.h>
-//	#include "syntax-tree.h"
-	#include "nTree.h"
+	#include "syntaxtree.h"
 
 	/* Protótipos */
 	int yylex(void);
@@ -62,7 +61,12 @@ declaracao:
 	;
 
 declaracao_variaveis:
-	tipo DOISPONTOS lista_variaveis  { $$ = criaNo("declaracao_variaveis", 2, $1, $3); }
+	tipo DOISPONTOS lista_variaveis
+		{ $$ = criaNo("declaracao_variaveis", 2, $1, $3);
+			if($2[0] == '\0'){
+				printf("falta dois pontos (:) na declaração de variável\n");
+			}
+		}
 	;
 
 inicializacao_variaveis:
@@ -436,8 +440,9 @@ lista_argumentos:
 %%
 void yyerror(char *s) {
 	if(compareString(s, "syntax error") == 0){
-		system("reset");
-		printf("\033[1m\033[31mERROR na linha %d.\033[0m\n", linhadoArquivo());
+//		system("reset");
+//		printf("\033[1m\033[31mERROR na linha %d.\033[0m\n", linhadoArquivo());
+		printf("dsadsds\n");
 		system("rm linha.txt");
 		exit(1);
 	} else {
