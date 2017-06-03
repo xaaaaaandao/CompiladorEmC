@@ -13,3 +13,4 @@ lex:
 clean:
 	rm yytokentype.o
 	rm scanner
+	rm syntax-tree.dot

@@ -278,7 +278,9 @@ void gerandoDot(Arvore *a){
     arvoreDot(dot, a);
     fprintf(dot, "}");
     fclose(dot);
-    system("dot -Tpng -O syntax-tree.dot && shotwell syntax-tree.dot.png &");
+    system("dot -Tpng -O syntax-tree.dot");
+    system("rm syntax-tree.dot");
+    system("eog syntax-tree.dot.png &");
 }
 
 int linhadoArquivo(){
