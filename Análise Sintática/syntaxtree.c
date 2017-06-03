@@ -265,11 +265,3 @@ void gerandoDot(Arvore *a){
     system("rm syntax-tree.dot");
     system("eog syntax-tree.dot.png &");
 }
-
-int linhadoArquivo(){
-    FILE *entrada = fopen("linha.txt", "r");
-    char linha[MAX];
-    while((fgets(linha, sizeof(linha), entrada)) != NULL)
-    fclose(entrada);
-    return atoi(linha);
-}
