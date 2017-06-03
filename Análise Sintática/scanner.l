@@ -5,6 +5,7 @@
 	#include "syntax-tree.h"
 	#include "parser.tab.h"
 	void yyerror(char *);
+	int linha = 1;
 %}
 
 DIGITO [0-9]
@@ -15,7 +16,8 @@ FLUTUANTE {INTEIRO}("."{NATURAL})
 EXPONENCIAL ({INTEIRO}|{FLUTUANTE})("e"|"E")("+"|"-"){INTEIRO}
 SIMBOLO ("+"|"-"|"*"|"/"|"="|","|":="|"<"|">"|"<="|">="|"<>"|"("|")"|":"|"["|"]"|"{"|"}")
 IDENTIFICADOR {LETRAS}({LETRAS}|{DIGITO})*
-ESPACO [ \n\r\t]+
+ESPACO [ \r\t]+
+NOVALINHA "\n"
 COMENTARIO "{"[^\}]*"}"
 
 %% /* Regras */
@@ -255,6 +257,15 @@ COMENTARIO "{"[^\}]*"}"
 		return once++;
 	else 
 		return '\n';
+}
+
+{NOVALINHA} {
+	FILE *nLinha = fopen("linha.txt", "w");
+	char novoLinha[MAX];
+	linha++;
+	sprintf(novoLinha, "%d", linha);
+	fprintf(nLinha, "%s\n", novoLinha);
+	fclose(nLinha);
 }
 
 %%

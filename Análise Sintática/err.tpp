@@ -1,4 +1,5 @@
 inteiro fat()
+	inteiro : i
 fim
 
 imprime()

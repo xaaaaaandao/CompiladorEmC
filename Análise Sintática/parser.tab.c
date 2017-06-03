@@ -2292,7 +2292,8 @@ yyreturn:
 void yyerror(char *s) {
 	if(compareString(s, "syntax error") == 0){
 		system("reset");
-		printf("\033[1m\033[31mSYNTAX ERROR\n");	
+		printf("\033[1m\033[31mERROR na linha %d.\033[0m\n", linhadoArquivo());
+		system("rm linha.txt");
 		exit(1);
 	} else {
 		fprintf(stdout, "%s\n", s);
@@ -2310,6 +2311,7 @@ int main(int argc, char *argv[]){
 	fclose(fileLog);
 	verificarLog();
 	gerandoDot(aFinal);
-	printf("\033[1m\033[32mÁRVORE SINTÁTICA GERADA COM DOT!\033[0m\n");	
+	printf("\033[1m\033[32mÁRVORE SINTÁTICA GERADA COM DOT!\033[0m\n");
+	system("rm linha.txt");
 	return 0;
 }
