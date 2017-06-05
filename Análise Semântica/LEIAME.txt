@@ -1,0 +1,4 @@
+1 - É necessário ter o GNU Bison, Flex, GCC e Graphviz dot.
+2 - Acesse pelo terminal a pasta.
+3 - Dê um make.
+4 - Para executar ./arvoreSintatica arquivo.tpp

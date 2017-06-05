@@ -1,5 +1,4 @@
-inteiro : j
-j := 0
+inteiro j
 
 inteiro fat()
 	inteiro : i
