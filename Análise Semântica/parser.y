@@ -4,6 +4,7 @@
 	#include <stdarg.h>
 	#include <stdbool.h>
 	#include <string.h>
+	#include "msgerro.h"
 	#include "analisesemantica.h"
 	#include "syntaxtree.h"
 
@@ -62,9 +63,9 @@ declaracao:
 	;
 
 declaracao_variaveis:
-	tipo DOISPONTOS lista_variaveis
-		{ $$ = criaNo("declaracao_variaveis", 2, $1, $3); }
-	| tipo lista_variaveis { printf("erro %d\n", linhaAtual); exit(1); /*tipo de erro*/};
+	tipo DOISPONTOS lista_variaveis { $$ = criaNo("declaracao_variaveis", 2, $1, $3); }
+	| tipo lista_variaveis  { erroDeclaraVariavel(1, linhaAtual, $1 -> string, $2); exit(1);}
+	;
 
 inicializacao_variaveis:
 	atribuicao { $$ = criaNo("inicializacao_variaveis", 1, $1); }
