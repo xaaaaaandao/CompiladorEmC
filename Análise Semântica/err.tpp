@@ -1,5 +1,7 @@
-inteiro : k, l, m
-flutuante : x
+inteiro : j
 
 j := 0
 
+inteiro principal()
+	leia(oi)
+fim

@@ -79,37 +79,49 @@ bool verificaAtribuicoesGlobal(Arvore *arvore){
     return true;
 }
 
+bool verificaFuncaoPrincipal(Arvore *arvore){
+    Arvore *auxiliar = arvore -> filho;
+    //Percorro a lista de declarações
+    while(auxiliar != NULL){
+        //Verifico se existe alguma declaração de função
+        if(compareString(auxiliar -> string, "declaracao_funcao") == 0){
+            //Verifico se tem um filho chamado atribuição
+            Arvore *declaracao_funcao = auxiliar -> filho;
+            while(declaracao_funcao != NULL){
+                if(compareString(declaracao_funcao -> string, "cabecalho") == 0){
+                    if(compareString(declaracao_funcao -> filho -> string, "principal") == 0){
+                        return true;
+                    }
+                }
+                declaracao_funcao = declaracao_funcao -> proximo;
+            }
 
+        }
+        auxiliar = auxiliar -> proximo;
+    }
+    printf("[\033[1m\033[31merro\033[0m] não existe uma função principal\n");
+    return false;
+}
+
+/*
+PERGUNTAR
+1 - COMO RETORNAR A LINHA DO ERRO??
+2 - QUE TIPO DE ERRO QUE AGENTE DETECTA NA ANÁLISE SINTÁTICA?
+3 - A FUNÇÃO PRINCIPAL PODE OU NÃO TER PARAMETROS?
+4 - POSSO CRIAR REGRAS QUE SÃO ERRADA E GERAR ERROS?
+*/
 void percorreArvore(Arvore *arvore){
     Arvore *lista_declaracoes = retornaNo(arvore, "lista_declaracoes");
-    bool okAtribuicoesGlobal;
+    bool okAtribuicoesGlobal, okFuncaoPrincipal;
     //Verificamos se existe lista_declaracoes, caso não tenha existe algum erro
     if(lista_declaracoes != NULL){
        //Verificamos se existem atribuições globais
         okAtribuicoesGlobal = verificaAtribuicoesGlobal(lista_declaracoes);
-        if(okAtribuicoesGlobal){
+        okFuncaoPrincipal = verificaFuncaoPrincipal(lista_declaracoes);
+        if(okAtribuicoesGlobal && okFuncaoPrincipal){
             printf("tudo certo\n");
         }
     } else {
         printf("\033[1m\033[31merro na árvore\033[0m\n");
     }
-    /*if(pai != NULL){
-        //Verifico se existem atribuições
-        if(existeInicializacao(pai)){
-            //Existe a inicialização
-            //Ando por todas as inicializações
-            Arvore *inicializacao = pai -> filho;
-            while(inicializacao != NULL){
-                if(compareString(inicializacao -> string, "inicializacao_variaveis") == 0){
-                    //Achei a inicialização de variável
-                    Arvore *variavel = retornaNo(inicializacao, "atribuicao");
-                    //Pego o nome de variável
-                    printf("nome var: %s\n", variavel -> filho -> filho -> string);
-                    //Passo o nome para todas as declarações de variáveis
-                }
-                inicializacao = inicializacao -> proximo;
-            }
-        }
-
-    }*/
 }

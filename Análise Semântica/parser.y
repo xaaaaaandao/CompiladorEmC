@@ -64,11 +64,14 @@ declaracao:
 declaracao_variaveis:
 	tipo DOISPONTOS lista_variaveis
 		{ $$ = criaNo("declaracao_variaveis", 2, $1, $3);
+			if($$ == NULL){
+				printf("dasdsdas\n");
+			}
 			if($2[0] == '\0'){
 				printf("falta dois pontos (:) na declaração de variável\n");
 			}
 		}
-	;
+	| tipo lista_variaveis { printf("erro %d\n", linhaAtual); exit(1); };
 
 inicializacao_variaveis:
 	atribuicao { $$ = criaNo("inicializacao_variaveis", 1, $1); }
@@ -441,8 +444,11 @@ lista_argumentos:
 %%
 void yyerror(char *s) {
 	if(compareString(s, "syntax error") == 0){
-		system("reset");
+//		system("reset");
+		verificarLog();
 		printf("[\033[1m\033[31merro\033[0m] aproximadamente na linha %d\n", linhaAtual);
+//		printf("yyerrok: %d\n", yyerrok);
+//		printf("yyclearin: %d\n", yyclearin);
 		exit(1);
 	} else {
 		fprintf(stdout, "%s\n", s);

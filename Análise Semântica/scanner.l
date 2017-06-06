@@ -4,6 +4,7 @@
 	#include <math.h>
 	#include "syntaxtree.h"
 	#include "parser.tab.h"
+	int linha = 1;
 	void yyerror(char *);
 %}
 
@@ -259,7 +260,8 @@ COMENTARIO "{"[^\}]*"}"
 }
 
 "\n" {
-	erroLinha(yylineno);
+	erroLinha(linha);
+	++linha;
 }
 
 %%
