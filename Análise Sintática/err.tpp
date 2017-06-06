@@ -1,6 +1,7 @@
 inteiro : j
+
 j := 0
 
-inteiro fat()
-	inteiro : i
+inteiro principal()
+	j := 50.321
 fim

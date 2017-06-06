@@ -3,5 +3,5 @@ inteiro : j
 j := 0
 
 inteiro principal()
-	leia(oi)
+	j := 50.321
 fim

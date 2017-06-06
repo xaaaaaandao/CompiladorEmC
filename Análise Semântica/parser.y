@@ -63,15 +63,8 @@ declaracao:
 
 declaracao_variaveis:
 	tipo DOISPONTOS lista_variaveis
-		{ $$ = criaNo("declaracao_variaveis", 2, $1, $3);
-			if($$ == NULL){
-				printf("dasdsdas\n");
-			}
-			if($2[0] == '\0'){
-				printf("falta dois pontos (:) na declaração de variável\n");
-			}
-		}
-	| tipo lista_variaveis { printf("erro %d\n", linhaAtual); exit(1); };
+		{ $$ = criaNo("declaracao_variaveis", 2, $1, $3); }
+	| tipo lista_variaveis { printf("erro %d\n", linhaAtual); exit(1); /*tipo de erro*/};
 
 inicializacao_variaveis:
 	atribuicao { $$ = criaNo("inicializacao_variaveis", 1, $1); }
@@ -405,17 +398,17 @@ numero:
 	NUMEROINTEIRO
 		{
 			auxiliar = criaNo($1, 0);
-			$$ = criaNo("numero", 1, auxiliar);
+			$$ = criaNo("INTEIRO", 1, auxiliar);
 		}
 	| NUMEROFLUTUANTE
 		{
 			auxiliar = criaNo($1, 0);
-			$$ = criaNo("numero", 1, auxiliar);
+			$$ = criaNo("FLUTUANTE", 1, auxiliar);
 		}
 	| EXPONENCIAL
 		{
 			auxiliar = criaNo($1, 0);
-			$$ = criaNo("numero", 1, auxiliar);
+			$$ = criaNo("EXPONENCIAL", 1, auxiliar);
 		}
 	;
 
@@ -447,8 +440,6 @@ void yyerror(char *s) {
 //		system("reset");
 		verificarLog();
 		printf("[\033[1m\033[31merro\033[0m] aproximadamente na linha %d\n", linhaAtual);
-//		printf("yyerrok: %d\n", yyerrok);
-//		printf("yyclearin: %d\n", yyclearin);
 		exit(1);
 	} else {
 		fprintf(stdout, "%s\n", s);
@@ -460,9 +451,14 @@ int main(int argc, char *argv[]){
 	yyin = fopen(argv[1], "r");
 	yyparse();	
 	fclose(yyin);
+/*	system("reset");
+	printf("\033[1m\033[32mÁRVORE SINTÁTICA\033[0m\n");	
+	imprimeArvore(aFinal);
 	fclose(fileLog);
 	verificarLog();
-	system("reset");
+	gerandoDot(aFinal);
+	printf("\033[1m\033[32mÁRVORE SINTÁTICA GERADA COM DOT!\033[0m\n");
+*/
 	percorreArvore(aFinal);
 	return 0;
 }

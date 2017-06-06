@@ -109,6 +109,7 @@ PERGUNTAR
 2 - QUE TIPO DE ERRO QUE AGENTE DETECTA NA ANÁLISE SINTÁTICA?
 3 - A FUNÇÃO PRINCIPAL PODE OU NÃO TER PARAMETROS?
 4 - POSSO CRIAR REGRAS QUE SÃO ERRADA E GERAR ERROS?
+5 - UMA FUNÇÃO É OBRIGATÓRIO TER CORPO?
 */
 void percorreArvore(Arvore *arvore){
     Arvore *lista_declaracoes = retornaNo(arvore, "lista_declaracoes");

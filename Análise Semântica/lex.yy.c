@@ -1386,15 +1386,14 @@ YY_RULE_SETUP
 {
 	erroLinha(linha);
 	++linha;
-//	erroLinha(yylineno);
 }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 268 "scanner.l"
+#line 267 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1398 "lex.yy.c"
+#line 1397 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2550,7 +2549,7 @@ void yyfree (void * ptr )
 
 /* %ok-for-header */
 
-#line 268 "scanner.l"
+#line 267 "scanner.l"
 
 
 int yywrap(void){
