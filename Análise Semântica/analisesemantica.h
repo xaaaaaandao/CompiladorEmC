@@ -3,6 +3,6 @@
 
 #include "syntaxtree.h"
 
-void percorreArvore(Arvore*);
+bool percorreArvore(Arvore*);
 
 #endif

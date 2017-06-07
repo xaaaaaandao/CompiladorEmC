@@ -64,8 +64,9 @@ declaracao:
 
 declaracao_variaveis:
 	tipo DOISPONTOS lista_variaveis { $$ = criaNo("declaracao_variaveis", 2, $1, $3); }
-	| tipo lista_variaveis  { erroDeclaraVariavel(1, linhaAtual, $1 -> string, $2); detectaErro = true;}
-	| tipo DOISPONTOS  { erroDeclaraVariavel(2, linhaAtual, $1 -> string, NULL); detectaErro = true;}
+	| tipo lista_variaveis  { erroDeclaraVariavel(1, linhaAtual, $1 -> string, $2); detectaErro = true; $$ = NULL;}
+	| tipo DOISPONTOS  { erroDeclaraVariavel(2, linhaAtual, $1 -> string, NULL); detectaErro = true; $$ = NULL;}
+ 	| DOISPONTOS lista_variaveis { erroDeclaraVariavel(3, linhaAtual, "nada", $2); detectaErro = true; $$ = NULL;}
 	;
 
 inicializacao_variaveis:
@@ -441,14 +442,17 @@ void yyerror(char *s) {
 	if(compareString(s, "syntax error") == 0){
 //		system("reset");
 		verificarLog();
-		printf("[\033[1m\033[31merro\033[0m] aproximadamente na linha %d\n", linhaAtual);
-		exit(1);
+		printf("\033[1m\033[31m╔═════════════════╗\033[0m\n");
+		printf("\033[1m\033[31m║      ERROR      ║\033[0m\n");
+		printf("\033[1m\033[31m╚═════════════════╝\033[0m\n");
 	} else {
 		fprintf(stdout, "%s\n", s);
 	}
 }
 
 int main(int argc, char *argv[]){
+	bool arvoreOk;
+	logErro = fopen("logErro.txt", "w");
 	fileLog = fopen("log.txt", "w");
 	yyin = fopen(argv[1], "r");
 	yyparse();	
@@ -456,12 +460,19 @@ int main(int argc, char *argv[]){
 /*	system("reset");
 	printf("\033[1m\033[32mÁRVORE SINTÁTICA\033[0m\n");	
 	imprimeArvore(aFinal);
-	fclose(fileLog);
 	verificarLog();
 	gerandoDot(aFinal);
-	printf("\033[1m\033[32mÁRVORE SINTÁTICA GERADA COM DOT!\033[0m\n");
-*/
-	if(detectaErro == false)
-		percorreArvore(aFinal);
+	printf("\033[1m\033[32mÁRVORE SINTÁTICA GERADA COM DOT!\033[0m\n");*/
+	fclose(fileLog);
+	arvoreOk = percorreArvore(aFinal);
+	if((detectaErro) && (arvoreOk == false)){
+		fclose(logErro);
+		system("reset");
+		printf("\033[1m\033[31m╔═════════════════╗\033[0m\n");
+		printf("\033[1m\033[31m║      ERROR      ║\033[0m\n");
+		printf("\033[1m\033[31m╚═════════════════╝\033[0m\n");
+		imprimeErro();
+		system("rm logErro.txt");
+	}
 	return 0;
 }

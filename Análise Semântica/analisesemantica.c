@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "msgerro.h"
 #include "analisesemantica.h"
 
 Arvore *retornaNo(Arvore *no, char *string){
@@ -68,7 +69,7 @@ bool verificaAtribuicoesGlobal(Arvore *arvore){
                 if(compareString(atribuicao -> filho -> string, "var") == 0){
                     Arvore *variavel = atribuicao -> filho -> filho;
                     if(verificaVariavelGlobal(arvore, variavel -> string) == false){
-                        printf("[\033[1m\033[35maviso\033[0m] variável \033[1m\033[31m%s\033[0m não declarada\n", variavel -> string);
+                        fprintf(logErro, "[\033[1m\033[35maviso\033[0m] variável \033[1m\033[31m%s\033[0m não declarada\n", variavel -> string);
                         return false;
                     }
                 }
@@ -99,7 +100,7 @@ bool verificaFuncaoPrincipal(Arvore *arvore){
         }
         auxiliar = auxiliar -> proximo;
     }
-    printf("[\033[1m\033[31merro\033[0m] não existe uma função principal\n");
+    fprintf(logErro, "[\033[1m\033[31merro\033[0m] não existe uma função principal\n");
     return false;
 }
 
@@ -111,7 +112,7 @@ PERGUNTAR
 4 - POSSO CRIAR REGRAS QUE SÃO ERRADA E GERAR ERROS?
 5 - UMA FUNÇÃO É OBRIGATÓRIO TER CORPO?
 */
-void percorreArvore(Arvore *arvore){
+bool percorreArvore(Arvore *arvore){
     Arvore *lista_declaracoes = retornaNo(arvore, "lista_declaracoes");
     bool okAtribuicoesGlobal, okFuncaoPrincipal;
     //Verificamos se existe lista_declaracoes, caso não tenha existe algum erro
@@ -121,8 +122,11 @@ void percorreArvore(Arvore *arvore){
         okFuncaoPrincipal = verificaFuncaoPrincipal(lista_declaracoes);
         if(okAtribuicoesGlobal && okFuncaoPrincipal){
             printf("tudo certo\n");
+        } else {
+            return false;
         }
     } else {
-        printf("\033[1m\033[31merro na árvore\033[0m\n");
+        fprintf(logErro, "\033[1m\033[31merro na árvore\033[0m\n");
     }
+    return true;
 }

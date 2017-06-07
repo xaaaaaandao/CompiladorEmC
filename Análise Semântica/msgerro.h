@@ -4,5 +4,8 @@
 #include "syntaxtree.h"
 
 void erroDeclaraVariavel();
+void imprimeErro();
+
+FILE *logErro;
 
 #endif
