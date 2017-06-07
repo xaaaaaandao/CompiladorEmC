@@ -1,1 +1,2 @@
-flutuante j
+flutuante :
+inteiro j

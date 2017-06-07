@@ -15,7 +15,7 @@
 	extern FILE *yyout;
 	
 	/* Global */
-	bool seNao;
+	static bool detectaErro = false;
 	static Arvore *aFinal;	
 	Arvore *auxiliar;
 %}
@@ -64,7 +64,8 @@ declaracao:
 
 declaracao_variaveis:
 	tipo DOISPONTOS lista_variaveis { $$ = criaNo("declaracao_variaveis", 2, $1, $3); }
-	| tipo lista_variaveis  { erroDeclaraVariavel(1, linhaAtual, $1 -> string, $2); exit(1);}
+	| tipo lista_variaveis  { erroDeclaraVariavel(1, linhaAtual, $1 -> string, $2); detectaErro = true;}
+	| tipo DOISPONTOS  { erroDeclaraVariavel(2, linhaAtual, $1 -> string, NULL); detectaErro = true;}
 	;
 
 inicializacao_variaveis:
@@ -460,6 +461,7 @@ int main(int argc, char *argv[]){
 	gerandoDot(aFinal);
 	printf("\033[1m\033[32mÁRVORE SINTÁTICA GERADA COM DOT!\033[0m\n");
 */
-	percorreArvore(aFinal);
+	if(detectaErro == false)
+		percorreArvore(aFinal);
 	return 0;
 }
