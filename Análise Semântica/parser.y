@@ -63,10 +63,10 @@ declaracao:
 	;
 
 declaracao_variaveis:
-	tipo DOISPONTOS lista_variaveis { $$ = criaNo("declaracao_variaveis", 2, $1, $3); }
-	| tipo lista_variaveis  { erroDeclaraVariavel(1, linhaAtual, $1 -> string, $2); detectaErro = true; $$ = NULL;}
-	| tipo DOISPONTOS  { erroDeclaraVariavel(2, linhaAtual, $1 -> string, NULL); detectaErro = true; $$ = NULL;}
- 	| DOISPONTOS lista_variaveis { erroDeclaraVariavel(3, linhaAtual, "nada", $2); detectaErro = true; $$ = NULL;}
+	tipo DOISPONTOS lista_variaveis	{ $$ = criaNo("declaracao_variaveis", 2, $1, $3); }
+	| tipo lista_variaveis  { erroDeclaraVariavel(1, linhaAtual, $1 -> string, $2); $$ = NULL; erroSintaxe = true; }
+	| tipo DOISPONTOS  { erroDeclaraVariavel(2, linhaAtual, $1 -> string, NULL); $$ = NULL; erroSintaxe = true; }
+ 	| DOISPONTOS lista_variaveis { erroDeclaraVariavel(3, linhaAtual, "nada", $2); $$ = NULL; erroSintaxe = true; }
 	;
 
 inicializacao_variaveis:
@@ -97,25 +97,19 @@ var:
 			$$ = criaNo("var", 1, auxiliar);
 		}
 	| IDENTIFICADOR indice
-		{			
-			$$ = criaNo("var", 2, criaNo($1, 0), $2);
+		{	
+			if($2 == NULL){
+				erroIndice($1, linhaAtual);
+				erroSintaxe = true;
+			} else {			
+				$$ = criaNo("var", 2, criaNo($1, 0), $2);
+			}
 		}
 	;
 
 indice:
-	indice ABRECOLCHETE expressao FECHACOLCHETE
-		{
-			if($1 != NULL){
-				if(pertenceArvore($$, "indice")){
-					adicionaFilho($$, $3);
-				} else {
-					$$ = criaNo("indice", 1, $3);
-				}
-			} else {
-				fprintf(fileLog, "indice\n");
-				$$ = criaNo("indice", 1, $3);
-			}
-		}
+	indice ABRECOLCHETE expressao FECHACOLCHETE { tipoErroIndice = 1; $$ = NULL; }
+	| ABRECOLCHETE expressao FECHACOLCHETE ABRECOLCHETE expressao FECHACOLCHETE { $$ = criaNo("indice", 2, $2, $5); }
 	| ABRECOLCHETE expressao FECHACOLCHETE { $$ = criaNo("indice", 1, $2); }
 	;
 
@@ -440,39 +434,42 @@ lista_argumentos:
 %%
 void yyerror(char *s) {
 	if(compareString(s, "syntax error") == 0){
-//		system("reset");
 		verificarLog();
-		printf("\033[1m\033[31m╔═════════════════╗\033[0m\n");
-		printf("\033[1m\033[31m║      ERROR      ║\033[0m\n");
-		printf("\033[1m\033[31m╚═════════════════╝\033[0m\n");
+		detectaErro = true;
 	} else {
 		fprintf(stdout, "%s\n", s);
 	}
 }
 
 int main(int argc, char *argv[]){
-	bool arvoreOk;
+	bool okParser = false;
 	logErro = fopen("logErro.txt", "w");
 	fileLog = fopen("log.txt", "w");
 	yyin = fopen(argv[1], "r");
 	yyparse();	
 	fclose(yyin);
-/*	system("reset");
-	printf("\033[1m\033[32mÁRVORE SINTÁTICA\033[0m\n");	
-	imprimeArvore(aFinal);
-	verificarLog();
-	gerandoDot(aFinal);
-	printf("\033[1m\033[32mÁRVORE SINTÁTICA GERADA COM DOT!\033[0m\n");*/
-	fclose(fileLog);
-	arvoreOk = percorreArvore(aFinal);
-	if((detectaErro) && (arvoreOk == false)){
-		fclose(logErro);
+	if(erroSintaxe){
+		//Se tem erro de sintaxe não preciso criar a árvore
 		system("reset");
-		printf("\033[1m\033[31m╔═════════════════╗\033[0m\n");
-		printf("\033[1m\033[31m║      ERROR      ║\033[0m\n");
-		printf("\033[1m\033[31m╚═════════════════╝\033[0m\n");
+		verificarLog();
+		fclose(fileLog);
+		fclose(logErro);
 		imprimeErro();
-		system("rm logErro.txt");
+	} else {
+		//Se for falso, ou seja, não tem erro de sintaxe
+		system("reset");
+		printf("\033[1m\033[32mÁRVORE SINTÁTICA\033[0m\n");	
+		imprimeArvore(aFinal);
+		verificarLog();
+		gerandoDot(aFinal);
+		printf("\033[1m\033[32mÁRVORE SINTÁTICA GERADA COM DOT!\033[0m\n");
+		fclose(fileLog);
+		//Encontrou alguma coisa não permitida
+		if(percorreArvore(aFinal) == false){
+			fclose(logErro);
+			imprimeErro();
+		}
 	}
+	system("rm logErro.txt");
 	return 0;
 }

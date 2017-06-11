@@ -57,5 +57,14 @@ void erroDeclaraVariavel(int tipoErro, int linha, char *tipo, Arvore *variaveis)
         }
         fprintf(logErro, "\n");
         fprintf(logErro, "^\n");
+    } else if(tipoErro == 4){
+        
+    }
+}
+
+void erroIndice(char *variavel, int linha){
+    fprintf(logErro, "[\033[1m\033[31merro\033[0m] aproximadamente na linha %d\n", linha);
+    if(tipoErroIndice ==  1){
+        fprintf(logErro, "[\033[1m\033[31merro\033[0m] a variável \033[1m\033[31m%s\033[0m só pode ter ser um \033[1m\033[32mvetor\033[0m ou uma \033[1m\033[32mmatriz\033[0m\n", variavel);   
     }
 }

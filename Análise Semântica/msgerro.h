@@ -3,9 +3,12 @@
 
 #include "syntaxtree.h"
 
-void erroDeclaraVariavel();
 void imprimeErro();
+void erroDeclaraVariavel(int, int, char*, Arvore*);
+void erroIndice(char*, int);
 
 FILE *logErro;
+static bool erroSintaxe = false;
+int tipoErroIndice;
 
 #endif
