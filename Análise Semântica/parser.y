@@ -34,7 +34,6 @@
 %left MULTIPLICACAO DIVISAO
 
 %% 
-//start
 programa:
 	lista_declaracoes { aFinal = criaNo("programa", 1, $1); }
 	;
@@ -429,7 +428,6 @@ lista_argumentos:
 		}
 	| expressao { $$ = criaNo("lista_argumentos", 1, $1); }
 	;
-//end
 
 %%
 void yyerror(char *s) {
