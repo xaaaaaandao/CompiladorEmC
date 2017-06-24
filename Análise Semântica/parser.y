@@ -4,8 +4,6 @@
 	#include <stdarg.h>
 	#include <stdbool.h>
 	#include <string.h>
-	#include "msgerro.h"
-	#include "analisesemantica.h"
 	#include "syntaxtree.h"
 
 	/* Protótipos */
@@ -15,7 +13,7 @@
 	extern FILE *yyout;
 	
 	/* Global */
-	static bool detectaErro = false;
+	bool seNao;
 	static Arvore *aFinal;	
 	Arvore *auxiliar;
 %}
@@ -34,6 +32,7 @@
 %left MULTIPLICACAO DIVISAO
 
 %% 
+//start
 programa:
 	lista_declaracoes { aFinal = criaNo("programa", 1, $1); }
 	;
@@ -62,14 +61,16 @@ declaracao:
 	;
 
 declaracao_variaveis:
-	tipo DOISPONTOS lista_variaveis	{ $$ = criaNo("declaracao_variaveis", 2, $1, $3); }
-	| tipo lista_variaveis  { erroDeclaraVariavel(1, linhaAtual, $1 -> string, $2); $$ = NULL; erroSintaxe = true; }
-	| tipo DOISPONTOS  { erroDeclaraVariavel(2, linhaAtual, $1 -> string, NULL); $$ = NULL; erroSintaxe = true; }
- 	| DOISPONTOS lista_variaveis { erroDeclaraVariavel(3, linhaAtual, "nada", $2); $$ = NULL; erroSintaxe = true; }
+	tipo DOISPONTOS lista_variaveis
+		{ $$ = criaNo("declaracao_variaveis", 2, $1, $3);
+			if($2[0] == '\0'){
+				printf("falta dois pontos (:) na declaração de variável\n");
+			}
+		}
 	;
 
 inicializacao_variaveis:
-	atribuicao { $$ = criaNo("inicializacao_variaveis", 1, $1); }
+	atribuicao { $$ = criaNo("inicializacao_variaives", 1, $1); }
 	;
 
 lista_variaveis:
@@ -96,19 +97,25 @@ var:
 			$$ = criaNo("var", 1, auxiliar);
 		}
 	| IDENTIFICADOR indice
-		{	
-			if($2 == NULL){
-				erroIndice($1, linhaAtual);
-				erroSintaxe = true;
-			} else {			
-				$$ = criaNo("var", 2, criaNo($1, 0), $2);
-			}
+		{			
+			$$ = criaNo("var", 2, criaNo($1, 0), $2);
 		}
 	;
 
 indice:
-	indice ABRECOLCHETE expressao FECHACOLCHETE { tipoErroIndice = 1; $$ = NULL; }
-	| ABRECOLCHETE expressao FECHACOLCHETE ABRECOLCHETE expressao FECHACOLCHETE { $$ = criaNo("indice", 2, $2, $5); }
+	indice ABRECOLCHETE expressao FECHACOLCHETE
+		{
+			if($1 != NULL){
+				if(pertenceArvore($$, "indice")){
+					adicionaFilho($$, $3);
+				} else {
+					$$ = criaNo("indice", 1, $3);
+				}
+			} else {
+				fprintf(fileLog, "indice\n");
+				$$ = criaNo("indice", 1, $3);
+			}
+		}
 	| ABRECOLCHETE expressao FECHACOLCHETE { $$ = criaNo("indice", 1, $2); }
 	;
 
@@ -394,17 +401,17 @@ numero:
 	NUMEROINTEIRO
 		{
 			auxiliar = criaNo($1, 0);
-			$$ = criaNo("INTEIRO", 1, auxiliar);
+			$$ = criaNo("numero", 1, auxiliar);
 		}
 	| NUMEROFLUTUANTE
 		{
 			auxiliar = criaNo($1, 0);
-			$$ = criaNo("FLUTUANTE", 1, auxiliar);
+			$$ = criaNo("numero", 1, auxiliar);
 		}
 	| EXPONENCIAL
 		{
 			auxiliar = criaNo($1, 0);
-			$$ = criaNo("EXPONENCIAL", 1, auxiliar);
+			$$ = criaNo("numero", 1, auxiliar);
 		}
 	;
 
@@ -428,46 +435,30 @@ lista_argumentos:
 		}
 	| expressao { $$ = criaNo("lista_argumentos", 1, $1); }
 	;
+//end
 
 %%
 void yyerror(char *s) {
 	if(compareString(s, "syntax error") == 0){
-		verificarLog();
-		detectaErro = true;
+		system("reset");
+		printf("\033[1m\033[31mERROR\033[0m\n");
+		exit(1);
 	} else {
 		fprintf(stdout, "%s\n", s);
 	}
 }
 
 int main(int argc, char *argv[]){
-	bool okParser = false;
-	logErro = fopen("logErro.txt", "w");
 	fileLog = fopen("log.txt", "w");
 	yyin = fopen(argv[1], "r");
 	yyparse();	
 	fclose(yyin);
-	if(erroSintaxe){
-		//Se tem erro de sintaxe não preciso criar a árvore
-		system("reset");
-		verificarLog();
-		fclose(fileLog);
-		fclose(logErro);
-		imprimeErro();
-	} else {
-		//Se for falso, ou seja, não tem erro de sintaxe
-		system("reset");
-		printf("\033[1m\033[32mÁRVORE SINTÁTICA\033[0m\n");	
-		imprimeArvore(aFinal);
-		verificarLog();
-		gerandoDot(aFinal);
-		printf("\033[1m\033[32mÁRVORE SINTÁTICA GERADA COM DOT!\033[0m\n");
-		fclose(fileLog);
-		//Encontrou alguma coisa não permitida
-		if(percorreArvore(aFinal) == false){
-			fclose(logErro);
-			imprimeErro();
-		}
-	}
-	system("rm logErro.txt");
+	system("reset");
+	printf("\033[1m\033[32mÁRVORE SINTÁTICA\033[0m\n");	
+	imprimeArvore(aFinal);
+	fclose(fileLog);
+	verificarLog();
+	gerandoDot(aFinal);
+	printf("\033[1m\033[32mÁRVORE SINTÁTICA GERADA COM DOT!\033[0m\n");
 	return 0;
 }

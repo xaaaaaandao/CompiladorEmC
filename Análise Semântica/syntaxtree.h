@@ -18,7 +18,6 @@ typedef struct arvore Arvore;
 
 /* Variável global */
 FILE *fileLog;
-int linhaAtual;
 
 int compareString(char[], char[]);
 Arvore* adicionaIrmao(Arvore*, Arvore*);
@@ -30,6 +29,5 @@ void verificarLog();
 char *nomeRotulo(unsigned long int);
 void arvoreDot(FILE*, Arvore*);
 void gerandoDot(Arvore*);
-void erroLinha(int);
 
 #endif

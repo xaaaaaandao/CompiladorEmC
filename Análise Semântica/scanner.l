@@ -4,11 +4,9 @@
 	#include <math.h>
 	#include "syntaxtree.h"
 	#include "parser.tab.h"
-	int linha = 1;
 	void yyerror(char *);
 %}
 
-%option yylineno
 DIGITO [0-9]
 LETRAS [a-zA-ZãáàÃÁÀõÕóÓéÉíÍúÚ_]
 NATURAL {DIGITO}+
@@ -17,7 +15,7 @@ FLUTUANTE {INTEIRO}("."{NATURAL})
 EXPONENCIAL ({INTEIRO}|{FLUTUANTE})("e"|"E")("+"|"-"){INTEIRO}
 SIMBOLO ("+"|"-"|"*"|"/"|"="|","|":="|"<"|">"|"<="|">="|"<>"|"("|")"|":"|"["|"]"|"{"|"}")
 IDENTIFICADOR {LETRAS}({LETRAS}|{DIGITO})*
-ESPACO [ \r\t]+
+ESPACO [ \n\r\t]+
 COMENTARIO "{"[^\}]*"}"
 
 %% /* Regras */
@@ -257,11 +255,6 @@ COMENTARIO "{"[^\}]*"}"
 		return once++;
 	else 
 		return '\n';
-}
-
-"\n" {
-	erroLinha(linha);
-	++linha;
 }
 
 %%

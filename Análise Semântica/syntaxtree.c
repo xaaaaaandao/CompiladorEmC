@@ -265,12 +265,3 @@ void gerandoDot(Arvore *a){
     system("rm syntax-tree.dot");
     system("eog syntax-tree.dot.png &");
 }
-
-/**
-* Esta função erroLinha que irá atribuir o parâmetro para uma variável global.
-@param l, é do tipo integer em que iramos atribuir ela para uma variável global;
-@return void, ou seja, retorna nada.
-*/
-void erroLinha(int l){
-    linhaAtual = l;
-}
