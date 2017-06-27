@@ -5,6 +5,7 @@
 	#include <stdbool.h>
 	#include <string.h>
 	#include "syntaxtree.h"
+	#include "semantic.h"
 
 	/* Protótipos */
 	int yylex(void);
@@ -47,7 +48,7 @@ lista_declaracoes:
 						$$ = criaNo("lista_declaracoes", 1, $2);
 					}
 				} else {
-					fprintf(fileLog, "lista_declaracoes\n");
+					fprintf(arquivoLog, "lista_declaracoes\n");
 					$$ = criaNo("lista_declaracoes", 1, $2);
 				}
 			}
@@ -67,6 +68,12 @@ declaracao_variaveis:
 				printf("falta dois pontos (:) na declaração de variável\n");
 			}
 		}
+	| tipo DOISPONTOS
+		{ /* Tratar aqui */ $$ = criaNo("declaracao_variaveis", 1, $1); }
+	| tipo lista_variaveis
+		{ /* Tratar aqui */ $$ = criaNo("declaracao_variaveis", 2, $1, $2); }	
+	| DOISPONTOS lista_variaveis
+		{ /* Tratar aqui */ $$ = criaNo("declaracao_variaveis", 1, $2); }	
 	;
 
 inicializacao_variaveis:
@@ -78,50 +85,50 @@ lista_variaveis:
 		{ 
 			if($1 != NULL){
 				if(pertenceArvore($$, "lista_variaveis")){
+					adicionaFilho($$, criaNo(",", 0));
 					adicionaFilho($$, $3);
 				} else {
-					$$ = criaNo("lista_variaveis", 1, $3);
+					$$ = criaNo("lista_variaveis", 2, $3, criaNo(",", 0));
 				}
 			} else {
-				fprintf(fileLog, "lista_variaveis\n");
-				$$ = criaNo("lista_variaveis", 1, $3);
+				fprintf(arquivoLog, "lista_variaveis\n");
+				$$ = criaNo("lista_variaveis", 2, $3, criaNo(",", 0));
+			}
+		}
+	| lista_variaveis var
+		{ 
+			/* Tratar aqui */ 
+			if($1 != NULL){
+				if(pertenceArvore($$, "lista_variaveis")){
+					adicionaFilho($$, $2);
+				} else {
+					$$ = criaNo("lista_variaveis", 1, $2);
+				}
+			} else {
+				fprintf(arquivoLog, "lista_variaveis\n");
+				$$ = criaNo("lista_variaveis", 1, $2);
 			}
 		}
 	| var { $$ = criaNo("lista_variaveis", 1, $1); }
 	;
 
 var:
-	IDENTIFICADOR
-		{ 
-			auxiliar = criaNo($1, 0);		
-			$$ = criaNo("var", 1, auxiliar);
-		}
-	| IDENTIFICADOR indice
-		{			
-			$$ = criaNo("var", 2, criaNo($1, 0), $2);
-		}
+	IDENTIFICADOR { $$ = criaNo("var", 1, criaNo($1, 0)); }
+	| IDENTIFICADOR indice { $$ = criaNo("var", 2, criaNo($1, 0), $2); }
 	;
 
 indice:
-	indice ABRECOLCHETE expressao FECHACOLCHETE
-		{
-			if($1 != NULL){
-				if(pertenceArvore($$, "indice")){
-					adicionaFilho($$, $3);
-				} else {
-					$$ = criaNo("indice", 1, $3);
-				}
-			} else {
-				fprintf(fileLog, "indice\n");
-				$$ = criaNo("indice", 1, $3);
-			}
-		}
-	| ABRECOLCHETE expressao FECHACOLCHETE { $$ = criaNo("indice", 1, $2); }
+	| ABRECOLCHETE expressao FECHACOLCHETE ABRECOLCHETE expressao FECHACOLCHETE { $$ = criaNo("indice", 6, criaNo("[", 0), $2, criaNo("]", 0), criaNo("[", 0), $5, criaNo("]", 0)); }
+	| ABRECOLCHETE expressao FECHACOLCHETE ABRECOLCHETE expressao { /* Tratar aqui */ $$ = criaNo("indice", 5, criaNo("[", 0), $2, criaNo("]", 0), criaNo("[", 0), $5); }
+	| ABRECOLCHETE expressao ABRECOLCHETE expressao { /* Tratar aqui */ $$ = criaNo("indice", 4, criaNo("[", 0), $2, criaNo("[", 0), $4); }
+	| ABRECOLCHETE expressao FECHACOLCHETE { $$ = criaNo("indice", 3, criaNo("[", 0), $2, criaNo("]", 0)); }
+	| ABRECOLCHETE expressao { /* Tratar aqui */ $$ = criaNo("indice", 2, criaNo("[", 0), $2); }
 	;
 
 tipo:
 	TIPOINTEIRO { $$ = criaNo($1, 0); }
 	| TIPOFLUTUANTE { $$ = criaNo($1, 0); }
+	| var { /* Tratar aqui */ $$ = criaNo("nada", 0); }
 	;
 
 declaracao_funcao:
@@ -148,7 +155,7 @@ lista_parametros:
 					$$ = criaNo("lista_parametros", 1, $3);
 				}
 			} else {
-				fprintf(fileLog, "lista_parametros\n");
+				fprintf(arquivoLog, "lista_parametros\n");
 				$$ = criaNo("lista_parametros", 1, $3);
 			}	
 
@@ -174,7 +181,7 @@ parametro:
 					$$ = criaNo("parametro", 2, criaNo("[", 0), criaNo("]", 0));					
 				}
 			} else {
-				fprintf(fileLog, "parametro\n");
+				fprintf(arquivoLog, "parametro\n");
 				$$ = criaNo("parametro", 2, criaNo("[", 0), criaNo("]", 0));					
 			}
 		}
@@ -191,7 +198,7 @@ corpo:
 					$$ = criaNo("corpo", 1, $2);
 				}
 			} else {
-				fprintf(fileLog, "corpo\n");
+				fprintf(arquivoLog, "corpo\n");
 				$$ = criaNo("corpo", 1, $2);
 			}
 		}
@@ -205,7 +212,7 @@ corpo:
 					$$ = criaNo("corpo", 1, $2);
 				}
 			} else {
-				fprintf(fileLog, "corpo\n");
+				fprintf(arquivoLog, "corpo\n");
 				$$ = criaNo("corpo", 1, $2);
 			}
 		}
@@ -219,7 +226,7 @@ corpo:
 					$$ = criaNo("corpo", 1, $2);
 				}
 			} else {
-				fprintf(fileLog, "corpo\n");
+				fprintf(arquivoLog, "corpo\n");
 				$$ = criaNo("corpo", 1, $2);
 			}
 		}
@@ -282,7 +289,7 @@ expressao_simples:
 					}
 				}
 			} else {
-				fprintf(fileLog, "expressao_simples\n");
+				fprintf(arquivoLog, "expressao_simples\n");
 				//ver se em algum teste cai aqui
 				$$ = criaNo("expressao_simples", 0);
 				if($2 != NULL){
@@ -309,7 +316,7 @@ expressao_aditiva:
 					}
 				}
 			} else {
-				fprintf(fileLog, "expressao_aditiva\n");
+				fprintf(arquivoLog, "expressao_aditiva\n");
 				//ver se em algum teste cai aqui
 				$$ = criaNo("expressao_aditiva", 0);
 				if($2 != NULL){
@@ -336,7 +343,7 @@ expressao_multiplicativa:
 					}
 				}
 			} else {
-				fprintf(fileLog, "expressao_multiplicativa\n");
+				fprintf(arquivoLog, "expressao_multiplicativa\n");
 				//ver se em algum teste cai aqui
 				$$ = criaNo("expressao_multiplicativa", 0);
 				if($2 != NULL){
@@ -360,7 +367,7 @@ expressao_unaria:
 					}
 				}
 			} else {
-				fprintf(fileLog, "expressao_unaria\n");
+				fprintf(arquivoLog, "expressao_unaria\n");
 				//ver se em algum teste cai aqui
 				$$ = criaNo("expressao_unaria", 0);
 				if($1 != NULL){
@@ -429,7 +436,7 @@ lista_argumentos:
 					$$ = criaNo("lista_argumentos", 1, $3);					
 				}
 			} else {
-				fprintf(fileLog, "chamada_funcao\n");
+				fprintf(arquivoLog, "chamada_funcao\n");
 				$$ = criaNo("lista_argumentos", 1, $3);					
 			}
 		}
@@ -440,8 +447,7 @@ lista_argumentos:
 %%
 void yyerror(char *s) {
 	if(compareString(s, "syntax error") == 0){
-		system("reset");
-		printf("\033[1m\033[31mERROR\033[0m\n");
+		printf("\033[0m[\033[1m\033[31merro\033[0m] erro inesperado na linha %d\n", linha);
 		exit(1);
 	} else {
 		fprintf(stdout, "%s\n", s);
@@ -449,16 +455,16 @@ void yyerror(char *s) {
 }
 
 int main(int argc, char *argv[]){
-	fileLog = fopen("log.txt", "w");
+	erroSemantico = false;
+	arquivoSemantico = fopen("semantico.txt", "w");
+	arquivoLog = fopen("log.txt", "w");
 	yyin = fopen(argv[1], "r");
 	yyparse();	
 	fclose(yyin);
-	system("reset");
-	printf("\033[1m\033[32mÁRVORE SINTÁTICA\033[0m\n");	
 	imprimeArvore(aFinal);
-	fclose(fileLog);
+	fclose(arquivoSemantico);
+	fclose(arquivoLog);
 	verificarLog();
 	gerandoDot(aFinal);
-	printf("\033[1m\033[32mÁRVORE SINTÁTICA GERADA COM DOT!\033[0m\n");
 	return 0;
 }

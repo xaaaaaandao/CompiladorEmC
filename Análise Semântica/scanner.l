@@ -4,6 +4,7 @@
 	#include <math.h>
 	#include "syntaxtree.h"
 	#include "parser.tab.h"
+	#include "semantic.h"
 	void yyerror(char *);
 %}
 
@@ -15,7 +16,7 @@ FLUTUANTE {INTEIRO}("."{NATURAL})
 EXPONENCIAL ({INTEIRO}|{FLUTUANTE})("e"|"E")("+"|"-"){INTEIRO}
 SIMBOLO ("+"|"-"|"*"|"/"|"="|","|":="|"<"|">"|"<="|">="|"<>"|"("|")"|":"|"["|"]"|"{"|"}")
 IDENTIFICADOR {LETRAS}({LETRAS}|{DIGITO})*
-ESPACO [ \n\r\t]+
+ESPACO [ \r\t]+
 COMENTARIO "{"[^\}]*"}"
 
 %% /* Regras */
@@ -255,6 +256,10 @@ COMENTARIO "{"[^\}]*"}"
 		return once++;
 	else 
 		return '\n';
+}
+
+"\n" {
+	linha++;
 }
 
 %%

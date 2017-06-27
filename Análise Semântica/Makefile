@@ -8,4 +8,4 @@ scanner.c : scanner.l
 	
 build :
 	gcc -c parser.tab.c lex.yy.c
-	gcc parser.tab.o lex.yy.o syntaxtree.c -o analiseSintatica
+	gcc parser.tab.o lex.yy.o syntaxtree.c semantic.c -o analiseSemantica
