@@ -17,8 +17,10 @@ struct arvore {
 typedef struct arvore Arvore;
 
 /* Variável global */
+char folha[MAX];
 FILE *arquivoLog;
 
+void procuraFilho(Arvore*);
 int compareString(char[], char[]);
 Arvore* adicionaIrmao(Arvore*, Arvore*);
 Arvore *adicionaFilho(Arvore*, Arvore*);

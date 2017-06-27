@@ -126,7 +126,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 22 "parser.y" /* yacc.c:1909  */
+#line 21 "parser.y" /* yacc.c:1909  */
 
 	Arvore *a;
 	char pgm[32768];

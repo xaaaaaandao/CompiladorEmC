@@ -14,7 +14,6 @@
 	extern FILE *yyout;
 	
 	/* Global */
-	bool seNao;
 	static Arvore *aFinal;	
 	Arvore *auxiliar;
 %}
@@ -48,7 +47,7 @@ lista_declaracoes:
 						$$ = criaNo("lista_declaracoes", 1, $2);
 					}
 				} else {
-					fprintf(arquivoLog, "lista_declaracoes\n");
+					fprintf(arquivoSemantico, "lista_declaracoes\n");
 					$$ = criaNo("lista_declaracoes", 1, $2);
 				}
 			}
@@ -68,12 +67,8 @@ declaracao_variaveis:
 				printf("falta dois pontos (:) na declaração de variável\n");
 			}
 		}
-	| tipo DOISPONTOS
-		{ /* Tratar aqui */ $$ = criaNo("declaracao_variaveis", 1, $1); }
-	| tipo lista_variaveis
-		{ /* Tratar aqui */ $$ = criaNo("declaracao_variaveis", 2, $1, $2); }	
-	| DOISPONTOS lista_variaveis
-		{ /* Tratar aqui */ $$ = criaNo("declaracao_variaveis", 1, $2); }	
+	| tipo lista_variaveis { erroSemantico = true; $$ = criaNo("declaracao_variaveis", 1, $2); erroDeclaraVariavel($1, $2, 1); }
+	| DOISPONTOS lista_variaveis { erroSemantico = true; $$ = criaNo("declaracao_variaveis", 1, $2); erroDeclaraVariavel(NULL, $2, 2); }
 	;
 
 inicializacao_variaveis:
@@ -91,45 +86,30 @@ lista_variaveis:
 					$$ = criaNo("lista_variaveis", 2, $3, criaNo(",", 0));
 				}
 			} else {
-				fprintf(arquivoLog, "lista_variaveis\n");
+				fprintf(arquivoSemantico, "lista_variaveis\n");
 				$$ = criaNo("lista_variaveis", 2, $3, criaNo(",", 0));
-			}
-		}
-	| lista_variaveis var
-		{ 
-			/* Tratar aqui */ 
-			if($1 != NULL){
-				if(pertenceArvore($$, "lista_variaveis")){
-					adicionaFilho($$, $2);
-				} else {
-					$$ = criaNo("lista_variaveis", 1, $2);
-				}
-			} else {
-				fprintf(arquivoLog, "lista_variaveis\n");
-				$$ = criaNo("lista_variaveis", 1, $2);
 			}
 		}
 	| var { $$ = criaNo("lista_variaveis", 1, $1); }
 	;
 
 var:
-	IDENTIFICADOR { $$ = criaNo("var", 1, criaNo($1, 0)); }
-	| IDENTIFICADOR indice { $$ = criaNo("var", 2, criaNo($1, 0), $2); }
+	IDENTIFICADOR { $$ = criaNo("var", 1, criaNo($1, 0));	}
+	| IDENTIFICADOR indice	{ $$ = criaNo("var", 2, criaNo($1, 0), $2); }
 	;
 
 indice:
-	| ABRECOLCHETE expressao FECHACOLCHETE ABRECOLCHETE expressao FECHACOLCHETE { $$ = criaNo("indice", 6, criaNo("[", 0), $2, criaNo("]", 0), criaNo("[", 0), $5, criaNo("]", 0)); }
-	| ABRECOLCHETE expressao FECHACOLCHETE ABRECOLCHETE expressao { /* Tratar aqui */ $$ = criaNo("indice", 5, criaNo("[", 0), $2, criaNo("]", 0), criaNo("[", 0), $5); }
-	| ABRECOLCHETE expressao ABRECOLCHETE expressao { /* Tratar aqui */ $$ = criaNo("indice", 4, criaNo("[", 0), $2, criaNo("[", 0), $4); }
+	ABRECOLCHETE expressao FECHACOLCHETE ABRECOLCHETE expressao FECHACOLCHETE
+	{ $$ = criaNo("indice", 6, criaNo("[", 0), $2, criaNo("]", 0), criaNo("[", 0), $5, criaNo("]", 0)); }
 	| ABRECOLCHETE expressao FECHACOLCHETE { $$ = criaNo("indice", 3, criaNo("[", 0), $2, criaNo("]", 0)); }
-	| ABRECOLCHETE expressao { /* Tratar aqui */ $$ = criaNo("indice", 2, criaNo("[", 0), $2); }
 	;
 
 tipo:
 	TIPOINTEIRO { $$ = criaNo($1, 0); }
 	| TIPOFLUTUANTE { $$ = criaNo($1, 0); }
-	| var { /* Tratar aqui */ $$ = criaNo("nada", 0); }
 	;
+
+/* até aqui */
 
 declaracao_funcao:
 	tipo cabecalho { $$ = criaNo("declaracao_funcao", 2, $1, $2); }
@@ -155,7 +135,7 @@ lista_parametros:
 					$$ = criaNo("lista_parametros", 1, $3);
 				}
 			} else {
-				fprintf(arquivoLog, "lista_parametros\n");
+				fprintf(arquivoSemantico, "lista_parametros\n");
 				$$ = criaNo("lista_parametros", 1, $3);
 			}	
 
@@ -181,7 +161,7 @@ parametro:
 					$$ = criaNo("parametro", 2, criaNo("[", 0), criaNo("]", 0));					
 				}
 			} else {
-				fprintf(arquivoLog, "parametro\n");
+				fprintf(arquivoSemantico, "parametro\n");
 				$$ = criaNo("parametro", 2, criaNo("[", 0), criaNo("]", 0));					
 			}
 		}
@@ -198,7 +178,7 @@ corpo:
 					$$ = criaNo("corpo", 1, $2);
 				}
 			} else {
-				fprintf(arquivoLog, "corpo\n");
+				fprintf(arquivoSemantico, "corpo\n");
 				$$ = criaNo("corpo", 1, $2);
 			}
 		}
@@ -212,7 +192,7 @@ corpo:
 					$$ = criaNo("corpo", 1, $2);
 				}
 			} else {
-				fprintf(arquivoLog, "corpo\n");
+				fprintf(arquivoSemantico, "corpo\n");
 				$$ = criaNo("corpo", 1, $2);
 			}
 		}
@@ -226,7 +206,7 @@ corpo:
 					$$ = criaNo("corpo", 1, $2);
 				}
 			} else {
-				fprintf(arquivoLog, "corpo\n");
+				fprintf(arquivoSemantico, "corpo\n");
 				$$ = criaNo("corpo", 1, $2);
 			}
 		}
@@ -289,7 +269,7 @@ expressao_simples:
 					}
 				}
 			} else {
-				fprintf(arquivoLog, "expressao_simples\n");
+				fprintf(arquivoSemantico, "expressao_simples\n");
 				//ver se em algum teste cai aqui
 				$$ = criaNo("expressao_simples", 0);
 				if($2 != NULL){
@@ -316,7 +296,7 @@ expressao_aditiva:
 					}
 				}
 			} else {
-				fprintf(arquivoLog, "expressao_aditiva\n");
+				fprintf(arquivoSemantico, "expressao_aditiva\n");
 				//ver se em algum teste cai aqui
 				$$ = criaNo("expressao_aditiva", 0);
 				if($2 != NULL){
@@ -343,7 +323,7 @@ expressao_multiplicativa:
 					}
 				}
 			} else {
-				fprintf(arquivoLog, "expressao_multiplicativa\n");
+				fprintf(arquivoSemantico, "expressao_multiplicativa\n");
 				//ver se em algum teste cai aqui
 				$$ = criaNo("expressao_multiplicativa", 0);
 				if($2 != NULL){
@@ -367,7 +347,7 @@ expressao_unaria:
 					}
 				}
 			} else {
-				fprintf(arquivoLog, "expressao_unaria\n");
+				fprintf(arquivoSemantico, "expressao_unaria\n");
 				//ver se em algum teste cai aqui
 				$$ = criaNo("expressao_unaria", 0);
 				if($1 != NULL){
@@ -436,7 +416,7 @@ lista_argumentos:
 					$$ = criaNo("lista_argumentos", 1, $3);					
 				}
 			} else {
-				fprintf(arquivoLog, "chamada_funcao\n");
+				fprintf(arquivoSemantico, "chamada_funcao\n");
 				$$ = criaNo("lista_argumentos", 1, $3);					
 			}
 		}
@@ -447,7 +427,7 @@ lista_argumentos:
 %%
 void yyerror(char *s) {
 	if(compareString(s, "syntax error") == 0){
-		printf("\033[0m[\033[1m\033[31merro\033[0m] erro inesperado na linha %d\n", linha);
+		fprintf(arquivoSemantico, "\033[0m[\033[1m\033[31merro\033[0m] erro inesperado na linha %d\n", erroLinha);
 		exit(1);
 	} else {
 		fprintf(stdout, "%s\n", s);
@@ -465,6 +445,7 @@ int main(int argc, char *argv[]){
 	fclose(arquivoSemantico);
 	fclose(arquivoLog);
 	verificarLog();
-	gerandoDot(aFinal);
+//	gerandoDot(aFinal);
+	imprimeErro();
 	return 0;
 }

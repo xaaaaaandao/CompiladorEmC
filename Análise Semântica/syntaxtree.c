@@ -5,6 +5,26 @@
 #include <sys/stat.h>
 #include "syntaxtree.h"
 
+void procuraFilho(Arvore *no){
+    static unsigned long int i = 1;
+    if(no -> filho == NULL){
+        strcat(folha, no -> string);
+        return;
+    } else {
+        Arvore *filho =  no -> filho;
+        while(filho != NULL){
+            filho -> p = no -> f;
+            filho -> f = i++;
+            filho = filho -> proximo;
+        }
+        filho =  no -> filho;
+        while(filho != NULL){
+            procuraFilho(filho);
+            filho = filho -> proximo;   
+        }
+    }
+}
+
 /**
 * Esta função compareString compara duas strings, e verifica
 * se as duas strings elas são iguais ou não, caso for retorna zero

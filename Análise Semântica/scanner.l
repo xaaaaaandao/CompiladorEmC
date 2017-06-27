@@ -6,6 +6,7 @@
 	#include "parser.tab.h"
 	#include "semantic.h"
 	void yyerror(char *);
+	int linha = 1;
 %}
 
 DIGITO [0-9]
@@ -242,6 +243,12 @@ COMENTARIO "{"[^\}]*"}"
 	return FECHACOLCHETE;
 }		
 
+
+"\n" {
+	transfereLinha(linha);
+	++linha;
+}
+
 {ESPACO} {
 	//descarta espaço em branco
 }
@@ -258,9 +265,6 @@ COMENTARIO "{"[^\}]*"}"
 		return '\n';
 }
 
-"\n" {
-	linha++;
-}
 
 %%
 int yywrap(void){

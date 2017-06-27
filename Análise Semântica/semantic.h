@@ -2,9 +2,14 @@
 #define	SEMANTIC_H
 
 #include <stdbool.h>
+#include "syntaxtree.h"
 
 FILE *arquivoSemantico;
 bool erroSemantico;
-static int linha = 1;
+int erroLinha;
+
+void transfereLinha(int);
+void erroDeclaraVariavel(Arvore*, Arvore*, int);
+void imprimeErro();
 
 #endif
