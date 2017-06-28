@@ -109,8 +109,6 @@ tipo:
 	| TIPOFLUTUANTE { $$ = criaNo($1, 0); }
 	;
 
-/* até aqui */
-
 declaracao_funcao:
 	tipo cabecalho { $$ = criaNo("declaracao_funcao", 2, $1, $2); }
 	| cabecalho { $$ = criaNo("declaracao_funcao", 1, $1); }
@@ -119,8 +117,19 @@ declaracao_funcao:
 cabecalho:
 	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM
 		{
-			auxiliar = criaNo($1, 0);
-			$$ = criaNo("cabecalho", 3, auxiliar, $3, $5); 
+			$$ = criaNo("cabecalho", 3, criaNo($1, 0), $3, $5);
+			if((erroParametro == 1) || (erroParametro == 2)){
+				erroSemantico = true;
+				fclose(auxiliarSemantico);
+				erroFuncao($1);
+				auxiliarSemantico = fopen("auxiliar.txt", "w");
+				erroListaParametros($3);
+			} else if(erroParametro == 3){
+				erroSemantico = true;
+				erroFuncao($1);
+				erroListaParametros($3);
+			}
+			erroParametro = 0;
 		}
 	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM { $$ = criaNo("cabecalho", 2, criaNo($1, 0), $4); }
 	;
@@ -130,25 +139,38 @@ lista_parametros:
 		{
 			if($1 != NULL){
 				if(pertenceArvore($$, "lista_parametros")){
+					adicionaFilho($$, criaNo(",", 0));
 					adicionaFilho($$, $3);
 				} else {
-					$$ = criaNo("lista_parametros", 1, $3);
+					$$ = criaNo("lista_parametros", 2, $3, criaNo(",", 0));
 				}
 			} else {
 				fprintf(arquivoSemantico, "lista_parametros\n");
-				$$ = criaNo("lista_parametros", 1, $3);
-			}	
-
+				$$ = criaNo("lista_parametros", 2, $3, criaNo(",", 0));
+			}
+		}
+	| lista_parametros parametro
+		{
+			erroParametro = 3;
+			if($1 != NULL){
+				if(pertenceArvore($$, "lista_parametros")){
+					adicionaFilho($$, criaNo("!@#", 0));
+					adicionaFilho($$, $2);
+				} else {
+					$$ = criaNo("lista_parametros", 2, $2, criaNo(",", 0));
+				}
+			} else {
+				fprintf(arquivoSemantico, "lista_parametros\n");
+				$$ = criaNo("lista_parametros", 2, $2, criaNo(",", 0));
+			}
 		}
 	| parametro { $$ = criaNo("lista_parametros", 1, $1); }
 	;
 
 parametro:
-	tipo DOISPONTOS IDENTIFICADOR
-		{
-			auxiliar = criaNo($3, 0);
-			$$ = criaNo("parametro", 2, $1, auxiliar);
-		}
+	tipo DOISPONTOS IDENTIFICADOR {	$$ = criaNo("parametro", 3, $1, criaNo(":", 0), criaNo($3, 0)); }
+	| tipo IDENTIFICADOR { erroParametro = 1; $$ = criaNo("parametro", 2, $1, criaNo($2, 0)); strcpy(erroTipo, $1 -> string); strcpy(erroIdentificador, $2); erroParametroFuncao(); }
+	| DOISPONTOS IDENTIFICADOR { erroParametro = 2; $$ = criaNo("parametro", 2, criaNo(":", 0), criaNo($2, 0)); strcpy(erroIdentificador, $2); erroParametroFuncao(); }
 	| parametro ABRECOLCHETE FECHACOLCHETE
 		{
 			if($1 != NULL){
@@ -166,6 +188,8 @@ parametro:
 			}
 		}
 	;
+
+/* até aqui testar */
 
 corpo:
 	acao { $$ = criaNo("corpo", 1, $1); }
@@ -427,7 +451,10 @@ lista_argumentos:
 %%
 void yyerror(char *s) {
 	if(compareString(s, "syntax error") == 0){
+		erroSemantico = true;
 		fprintf(arquivoSemantico, "\033[0m[\033[1m\033[31merro\033[0m] erro inesperado na linha %d\n", erroLinha);
+		fclose(arquivoSemantico);
+		imprimeErro();
 		exit(1);
 	} else {
 		fprintf(stdout, "%s\n", s);
@@ -437,15 +464,17 @@ void yyerror(char *s) {
 int main(int argc, char *argv[]){
 	erroSemantico = false;
 	arquivoSemantico = fopen("semantico.txt", "w");
+	auxiliarSemantico = fopen("auxiliar.txt", "w");
 	arquivoLog = fopen("log.txt", "w");
 	yyin = fopen(argv[1], "r");
 	yyparse();	
 	fclose(yyin);
 	imprimeArvore(aFinal);
 	fclose(arquivoSemantico);
+	fclose(auxiliarSemantico);
 	fclose(arquivoLog);
 	verificarLog();
-//	gerandoDot(aFinal);
+	gerandoDot(aFinal);
 	imprimeErro();
 	return 0;
 }
