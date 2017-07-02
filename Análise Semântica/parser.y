@@ -118,18 +118,14 @@ cabecalho:
 	IDENTIFICADOR ABREPARENTESES lista_parametros FECHAPARENTESES corpo FIM
 		{
 			$$ = criaNo("cabecalho", 3, criaNo($1, 0), $3, $5);
-			if((erroParametro == 1) || (erroParametro == 2)){
-				erroSemantico = true;
-				fclose(auxiliarSemantico);
-				erroFuncao($1);
-				auxiliarSemantico = fopen("auxiliar.txt", "w");
-				erroListaParametros($3);
-			} else if(erroParametro == 3){
+			if(erroParametro || erroIndiceParametro || erroDoisIndiceParametro || erroTipoIndiceParametro){
 				erroSemantico = true;
 				erroFuncao($1);
 				erroListaParametros($3);
 			}
-			erroParametro = 0;
+			erroParametro = false;
+			erroIndiceParametro = false;
+			erroDoisIndiceParametro = false;
 		}
 	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM { $$ = criaNo("cabecalho", 2, criaNo($1, 0), $4); }
 	;
@@ -151,7 +147,7 @@ lista_parametros:
 		}
 	| lista_parametros parametro
 		{
-			erroParametro = 3;
+			erroParametro = true;
 			if($1 != NULL){
 				if(pertenceArvore($$, "lista_parametros")){
 					adicionaFilho($$, criaNo("!@#", 0));
@@ -169,27 +165,64 @@ lista_parametros:
 
 parametro:
 	tipo DOISPONTOS IDENTIFICADOR {	$$ = criaNo("parametro", 3, $1, criaNo(":", 0), criaNo($3, 0)); }
-	| tipo IDENTIFICADOR { erroParametro = 1; $$ = criaNo("parametro", 2, $1, criaNo($2, 0)); strcpy(erroTipo, $1 -> string); strcpy(erroIdentificador, $2); erroParametroFuncao(); }
-	| DOISPONTOS IDENTIFICADOR { erroParametro = 2; $$ = criaNo("parametro", 2, criaNo(":", 0), criaNo($2, 0)); strcpy(erroIdentificador, $2); erroParametroFuncao(); }
-	| parametro ABRECOLCHETE FECHACOLCHETE
-		{
-			if($1 != NULL){
-				if(pertenceArvore($$, "parametro")){
-					auxiliar = criaNo("[", 0);
-					adicionaFilho($$, auxiliar);
-					auxiliar = criaNo("]", 0);
-					adicionaFilho($$, auxiliar);					
-				} else {
-					$$ = criaNo("parametro", 2, criaNo("[", 0), criaNo("]", 0));					
-				}
-			} else {
-				fprintf(arquivoSemantico, "parametro\n");
-				$$ = criaNo("parametro", 2, criaNo("[", 0), criaNo("]", 0));					
-			}
-		}
-	;
+	//[]
+	| tipo DOISPONTOS IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE { $$ = criaNo("parametro", 5, $1, criaNo(":", 0), criaNo($3, 0), criaNo("[", 0), criaNo("]", 0)); }
+	//]
+	| tipo DOISPONTOS IDENTIFICADOR ABRECOLCHETE { erroIndiceParametro = true; $$ = criaNo("parametro", 4, $1, criaNo(":", 0), criaNo($3, 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0)); }
+	//]
+	| tipo DOISPONTOS IDENTIFICADOR FECHACOLCHETE { erroIndiceParametro = true; $$ = criaNo("parametro", 4, $1, criaNo(":", 0), criaNo($3, 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0)); }
+	//[][]
+	| tipo DOISPONTOS IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE ABRECOLCHETE FECHACOLCHETE { $$ = criaNo("parametro", 7, $1, criaNo(":", 0), criaNo($3, 0), criaNo("[", 0), criaNo("]", 0), criaNo("[", 0), criaNo("]", 0)); }
+	//][]
+	| tipo DOISPONTOS IDENTIFICADOR FECHACOLCHETE ABRECOLCHETE FECHACOLCHETE { erroIndiceParametro = true; $$ = criaNo("parametro", 7, $1, criaNo(":", 0), criaNo($3, 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0), criaNo("[", 0), criaNo("]", 0)); }
+	//]]
+	| tipo DOISPONTOS IDENTIFICADOR FECHACOLCHETE FECHACOLCHETE { erroIndiceParametro = true; $$ = criaNo("parametro", 7, $1, criaNo(":", 0), criaNo($3, 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0)); }
+	//[]]
+	| tipo DOISPONTOS IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE FECHACOLCHETE { erroIndiceParametro = true; $$ = criaNo("parametro", 7, $1, criaNo(":", 0), criaNo($3, 0), criaNo("[", 0), criaNo("]", 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0)); }
+	//[[
+	| tipo DOISPONTOS IDENTIFICADOR ABRECOLCHETE ABRECOLCHETE { erroIndiceParametro = true; $$ = criaNo("parametro", 7, $1, criaNo(":", 0), criaNo($3, 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0)); }
+	//[[]
+	| tipo DOISPONTOS IDENTIFICADOR ABRECOLCHETE ABRECOLCHETE FECHACOLCHETE { erroIndiceParametro = true; $$ = criaNo("parametro", 7, $1, criaNo(":", 0), criaNo($3, 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0), criaNo("[", 0), criaNo("]", 0)); }
+	//[][
+	| tipo DOISPONTOS IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE ABRECOLCHETE { erroIndiceParametro = true; $$ = criaNo("parametro", 7, $1, criaNo(":", 0), criaNo($3, 0), criaNo("[", 0), criaNo("]", 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0)); }
 
-/* até aqui testar */
+
+	| tipo IDENTIFICADOR { erroDoisIndiceParametro = true; $$ = criaNo("parametro", 3, $1, criaNo("\033[1m\033[31m:\033[0m", 0), criaNo($2, 0));}
+	| tipo IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE { erroDoisIndiceParametro = true; $$ = criaNo("parametro", 5, $1, criaNo("\033[1m\033[31m:\033[0m", 0), criaNo($2, 0), criaNo("[", 0), criaNo("]", 0)); }
+	| tipo IDENTIFICADOR ABRECOLCHETE { erroDoisIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 5, $1, criaNo("\033[1m\033[31m:\033[0m", 0), criaNo($2, 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0)); }
+	| tipo IDENTIFICADOR FECHACOLCHETE { erroDoisIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 5, $1, criaNo("\033[1m\033[31m:\033[0m", 0), criaNo($2, 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0)); }
+	| tipo IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE ABRECOLCHETE FECHACOLCHETE { erroDoisIndiceParametro = true; $$ = criaNo("parametro", 7, $1, criaNo("\033[1m\033[31m:\033[0m", 0), criaNo($2, 0), criaNo("[", 0), criaNo("]", 0), criaNo("[", 0), criaNo("]", 0)); }
+	//][]
+	| tipo IDENTIFICADOR FECHACOLCHETE ABRECOLCHETE FECHACOLCHETE { erroDoisIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 7, $1, criaNo("\033[1m\033[31m:\033[0m", 0), criaNo($2, 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0), criaNo("[", 0), criaNo("]", 0)); }
+	//]]
+	| tipo IDENTIFICADOR FECHACOLCHETE FECHACOLCHETE { erroDoisIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 7, $1, criaNo("\033[1m\033[31m:\033[0m", 0), criaNo($2, 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0)); }
+	//[]]
+	| tipo IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE FECHACOLCHETE { erroDoisIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 7, $1, criaNo("\033[1m\033[31m:\033[0m", 0), criaNo($2, 0), criaNo("[", 0), criaNo("]", 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0)); }
+	//[[
+	| tipo IDENTIFICADOR ABRECOLCHETE ABRECOLCHETE { erroDoisIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 7, $1, criaNo("\033[1m\033[31m:\033[0m", 0), criaNo($2, 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0)); }
+	//[[]
+	| tipo IDENTIFICADOR ABRECOLCHETE ABRECOLCHETE FECHACOLCHETE { erroDoisIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 7, $1, criaNo("\033[1m\033[31m:\033[0m", 0), criaNo($2, 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0)); }
+	//[][
+	| tipo IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE ABRECOLCHETE { erroDoisIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 7, $1, criaNo("\033[1m\033[31m:\033[0m", 0), criaNo($2, 0), criaNo("[", 0), criaNo("]", 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0)); }
+
+	| DOISPONTOS IDENTIFICADOR { erroTipoIndiceParametro = true; $$ = criaNo("parametro", 2, criaNo(":", 0), criaNo($2, 0)); }
+	| DOISPONTOS IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE { erroTipoIndiceParametro = true; $$ = criaNo("parametro", 4, criaNo(":", 0), criaNo($2, 0), criaNo("[", 0), criaNo("]", 0)); }
+	| DOISPONTOS IDENTIFICADOR ABRECOLCHETE { erroTipoIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 4, criaNo(":", 0), criaNo($2, 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0)); }
+	| DOISPONTOS IDENTIFICADOR FECHACOLCHETE { erroTipoIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 4, criaNo(":", 0), criaNo($2, 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0)); }
+	| DOISPONTOS IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE ABRECOLCHETE FECHACOLCHETE { erroTipoIndiceParametro = true; $$ = criaNo("parametro", 6, criaNo(":", 0), criaNo($2, 0), criaNo("[", 0), criaNo("]", 0), criaNo("[", 0), criaNo("]", 0)); }
+	//][]
+	| DOISPONTOS IDENTIFICADOR FECHACOLCHETE ABRECOLCHETE FECHACOLCHETE { erroTipoIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 6, criaNo(":", 0), criaNo($2, 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0), criaNo("[", 0), criaNo("]", 0)); }
+	//]]
+	| DOISPONTOS IDENTIFICADOR FECHACOLCHETE FECHACOLCHETE { erroTipoIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 6, criaNo(":", 0), criaNo($2, 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0)); }
+	//[]]
+	| DOISPONTOS IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE FECHACOLCHETE { erroTipoIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 6, criaNo(":", 0), criaNo($2, 0), criaNo("[", 0), criaNo("]", 0), criaNo("\033[1m\033[31m[\033[0m", 0), criaNo("]", 0)); }
+	//[[
+	| DOISPONTOS IDENTIFICADOR ABRECOLCHETE ABRECOLCHETE { erroTipoIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 6, criaNo(":", 0), criaNo($2, 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0)); }
+	//[[]
+	| DOISPONTOS IDENTIFICADOR ABRECOLCHETE ABRECOLCHETE FECHACOLCHETE { erroTipoIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 6, criaNo(":", 0), criaNo($2, 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0), criaNo("[", 0), criaNo("]", 0)); }
+	//[][
+	| DOISPONTOS IDENTIFICADOR ABRECOLCHETE FECHACOLCHETE ABRECOLCHETE { erroTipoIndiceParametro = true; erroIndiceParametro = true; $$ = criaNo("parametro", 6, criaNo(":", 0), criaNo($2, 0), criaNo("[", 0), criaNo("]", 0), criaNo("[", 0), criaNo("\033[1m\033[31m]\033[0m", 0)); }
+;
 
 corpo:
 	acao { $$ = criaNo("corpo", 1, $1); }

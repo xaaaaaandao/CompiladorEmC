@@ -11,9 +11,10 @@ bool erroSemantico;
 int erroLinha;
 
 /* Variáveis globais para erro de paramêtros */
-int erroParametro;
-char erroTipo[MAX];
-char erroIdentificador[MAX];
+bool erroParametro;
+bool erroIndiceParametro;
+bool erroDoisIndiceParametro;
+bool erroTipoIndiceParametro;
 
 void transfereLinha(int);
 void erroDeclaraVariavel(Arvore*, Arvore*, int);
