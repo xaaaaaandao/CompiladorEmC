@@ -59,63 +59,7 @@ void erroFuncao(char *nomeFuncao){
 		fprintf(arquivoSemantico, "%s", linha);
 	fclose(auxiliar);
 }
-/*
-void erroSubParametroFuncao(){
-	if(erroSubParametro == 1)
-		fprintf(auxiliarSemantico, " []\n");	
-	else if(erroSubParametro == 2)
-		fprintf(auxiliarSemantico, " [] []\n");
-	else if(erroSubParametro == 3)
-		fprintf(auxiliarSemantico, " \033[1m\033[31m[\033[0m] \033[1m\033[31m[\033[0m]\n");					
-	else if(erroSubParametro == 4)
-		fprintf(auxiliarSemantico, " \033[1m\033[31m[\033[0m] []\n");					
-	else if(erroSubParametro == 5)
-		fprintf(auxiliarSemantico, " [] \033[1m\033[31m[\033[0m]\n");					
-	else if(erroSubParametro == 6)
-		fprintf(auxiliarSemantico, " [] [\033[1m\033[31m]\033[0m\n");					
-	else if(erroSubParametro == 7)
-		fprintf(auxiliarSemantico, " [\033[1m\033[31m]\033[0m\n");					
-	else if(erroSubParametro == 8)
-		fprintf(auxiliarSemantico, " \033[1m\033[31m[\033[0m]\n");					
-}
 
-
-/*void erroParametroFuncao(){
-	if(erroParametro == 2){
-		fprintf(auxiliarSemantico, "\033[0m[\033[1m\033[31merro\033[0m] falta \033[1m\033[31m:\033[0m\n");
-		if(erroSubParametro > 0)
-			fprintf(auxiliarSemantico, "\033[0m[\033[1m\033[31merro\033[0m] erro nos índices das variáveis\n");	
-		fprintf(auxiliarSemantico, "%s  %s", erroTipo, erroIdentificador);	
-		if(erroSubParametro > 0)
-			erroSubParametroFuncao();
-		if(compareString(erroTipo, "inteiro") == 0)
-			fprintf(auxiliarSemantico, "\n       \033[1m\033[31m↑\033[0m\n");	
-		else if(compareString(erroTipo, "flutuante") == 0)
-			fprintf(auxiliarSemantico, "\n         \033[1m\033[31m↑\033[0m\n");				
-	} else if(erroParametro == 3){
-		fprintf(auxiliarSemantico, "\033[0m[\033[1m\033[31merro\033[0m] falta declarar o tipo da variável\n");
-		if(erroSubParametro > 0)
-			fprintf(auxiliarSemantico, "\033[0m[\033[1m\033[31merro\033[0m] erro nos índices das variáveis\n");	
-		fprintf(auxiliarSemantico, "   : %s", erroIdentificador);
-		if(erroSubParametro > 0)
-			erroSubParametroFuncao();
-		fprintf(auxiliarSemantico, "\n\033[1m\033[31m↑\033[0m\n");	
-	} else if((erroParametro >= 4) && (erroParametro <= 8)){
-		fprintf(auxiliarSemantico, "\033[0m[\033[1m\033[31merro\033[0m] erro nos índices\n");
-		fprintf(auxiliarSemantico, " %s : %s ", erroTipo, erroIdentificador);	
-		if(erroParametro == 4)
-			fprintf(auxiliarSemantico, "\033[1m\033[31m[\033[0m] \033[1m\033[31m[\033[0m]\n");	
-		else if(erroParametro == 5)
-			fprintf(auxiliarSemantico, "\033[1m\033[31m[\033[0m] []\n");	
-		else if(erroParametro == 6)
-			fprintf(auxiliarSemantico, "[] \033[1m\033[31m[\033[0m]\n");
-		else if(erroParametro == 7)
-			fprintf(auxiliarSemantico, "[\033[1m\033[31m]\033[0m\n");				
-		else if(erroParametro == 8)
-			fprintf(auxiliarSemantico, "\033[1m\033[31m[\033[0m]\n");				
-	}
-}
-*/
 void erroListaParametros(Arvore *lista_parametros){
 	bool erroLista = false;
 	Arvore *auxiliar = lista_parametros -> filho;
@@ -173,9 +117,42 @@ void erroListaParametros(Arvore *lista_parametros){
 	}
 }
 
+void erroCorpoFuncao(Arvore *corpo){
+	Arvore *auxiliar = corpo -> filho;
+	while(auxiliar != NULL){
+		if(compareString(auxiliar -> string, "acao") == 0){
+			Arvore *acao = auxiliar -> filho;
+			while(acao != NULL){
+				if(((compareString(acao -> string, "LEIA") == 0)  && (erroLeia))
+					|| ((compareString(acao -> string, "ESCREVA") == 0) && (erroEscreva))
+					|| ((compareString(acao -> string, "RETORNA") == 0) && (erroRetorna))){
+					fprintf(arquivoSemantico, "\033[0m[\033[1m\033[31merro\033[0m] falta \033[1m\033[31m)\033[0m\n");
+					fprintf(arquivoSemantico, "%s", acao -> string);
+					Arvore *acaoFilho = acao -> filho;
+					while(acaoFilho != NULL){
+						if(compareString(acaoFilho -> string, "expressao") == 0){
+							procuraFilho(acaoFilho);
+							fprintf(arquivoSemantico, "%s", folha);
+							memset(folha, 0, sizeof(folha));
+						} else {
+							fprintf(arquivoSemantico, "%s", acaoFilho -> string);
+						}
+						acaoFilho = acaoFilho -> proximo;
+					}
+					fprintf(arquivoSemantico, "\n");
+				}
+				acao = acao -> proximo;
+			}
+		}
+		auxiliar = auxiliar -> proximo;
+	}
+}
+
 void imprimeErro(){
-	if(erroSemantico == true)
+	if(erroSemantico == true){
+		system("clear");
 		system("cat semantico.txt");
+	}
 	system("rm semantico.txt");
 	system("rm auxiliar.txt");
 } 

@@ -126,6 +126,13 @@ cabecalho:
 			erroParametro = false;
 			erroIndiceParametro = false;
 			erroDoisIndiceParametro = false;
+			if(erroCorpo){
+				erroSemantico = true;
+				erroFuncao($1);
+				erroCorpoFuncao($5);
+			}
+			erroCorpo = false;
+			erroLeia = false;
 		}
 	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES corpo FIM { $$ = criaNo("cabecalho", 2, criaNo($1, 0), $4); }
 	;
@@ -292,19 +299,18 @@ atribuicao:
 	;
 
 leia:
-	LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES
-		{	
-			auxiliar = criaNo($3, 0);
-			$$ = criaNo("LEIA", 1, auxiliar);
-		}
+	LEIA ABREPARENTESES IDENTIFICADOR FECHAPARENTESES { $$ = criaNo("LEIA", 1, criaNo($3, 0)); }
+	| LEIA ABREPARENTESES IDENTIFICADOR { erroCorpo = true; erroLeia = true; $$ = criaNo("LEIA", 3, criaNo("(", 0), criaNo($3, 0), criaNo("\033[1m\033[31m)\033[0m", 0)); }
 	;
 
 escreva:
 	ESCREVA ABREPARENTESES expressao FECHAPARENTESES { $$ = criaNo("ESCREVA", 1, $3); }
+	| ESCREVA ABREPARENTESES expressao { erroCorpo = true; erroEscreva = true; $$ = criaNo("ESCREVA", 3, criaNo("(", 0), $3, criaNo("\033[1m\033[31m)\033[0m", 0)); }
 	;
 
 retorna:
 	RETORNA ABREPARENTESES expressao FECHAPARENTESES { $$ = criaNo("RETORNA", 1, $3); }
+	| RETORNA ABREPARENTESES expressao { erroCorpo = true; erroRetorna = true; $$ = criaNo("RETORNA", 3, criaNo("(", 0), $3, criaNo("\033[1m\033[31m)\033[0m", 0)); }
 	;
 
 expressao:
@@ -461,7 +467,8 @@ numero:
 
 chamada_funcao:
 	IDENTIFICADOR ABREPARENTESES lista_argumentos FECHAPARENTESES {	$$ = criaNo("chamada_funcao", 2, criaNo($1, 0), $3); }
-	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES { $$ = criaNo("chamada_funcao", 1, criaNo($1, 0)); };
+	| IDENTIFICADOR ABREPARENTESES FECHAPARENTESES { $$ = criaNo("chamada_funcao", 1, criaNo($1, 0)); }
+	;
 
 lista_argumentos:
 	lista_argumentos VIRGULA expressao
@@ -511,3 +518,4 @@ int main(int argc, char *argv[]){
 	imprimeErro();
 	return 0;
 }
+

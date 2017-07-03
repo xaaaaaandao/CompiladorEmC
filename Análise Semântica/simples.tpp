@@ -1,7 +1,9 @@
 inteiro : j[30], asd
 flutuante : a
 
-fatorial(: i[][,  flutuante : j)
-	fatorial()
+fatorial(inteiro : i[][],  flutuante : j)
+	leia(a)
+	escreva(a+b)
+	retorna(124324)
 fim
 
