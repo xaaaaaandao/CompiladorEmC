@@ -598,9 +598,9 @@ int yy_flex_debug = 1;
 static yyconst flex_int16_t yy_rule_linenum[40] =
     {   0,
        24,   29,   34,   39,   44,   48,   53,   58,   63,   68,
-       73,   78,   83,   88,   93,   98,  131,  135,  141,  147,
-      152,  158,  164,  170,  175,  180,  186,  192,  198,  204,
-      210,  216,  222,  228,  234,  240,  247,  252,  256
+       73,   78,   83,   88,   93,   98,  132,  136,  142,  148,
+      153,  159,  165,  171,  176,  181,  187,  193,  199,  205,
+      211,  217,  223,  229,  235,  241,  248,  253,  257
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -1141,20 +1141,21 @@ YY_RULE_SETUP
 		potencia = potencia * -1;
 	}
 	strcpy(yylval.pgm, yytext);
+	snprintf(yylval.pgm, MAX, "%f", pow(valor, potencia));
 	return EXPONENCIAL;
 }
 	YY_BREAK
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
-#line 131 "scanner.l"
+#line 132 "scanner.l"
 {
 	strcpy(yylval.pgm, yytext);
 }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 135 "scanner.l"
+#line 136 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1163,7 +1164,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 141 "scanner.l"
+#line 142 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1172,7 +1173,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 147 "scanner.l"
+#line 148 "scanner.l"
 {
 	strcpy(yylval.pgm, yytext);
 	return ATRIBUICAO;
@@ -1180,7 +1181,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 152 "scanner.l"
+#line 153 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1189,7 +1190,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 158 "scanner.l"
+#line 159 "scanner.l"
 {
 	strcpy(yylval.pgm, yytext);
 	return MENORIGUAL;
@@ -1198,7 +1199,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 164 "scanner.l"
+#line 165 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1207,7 +1208,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 170 "scanner.l"
+#line 171 "scanner.l"
 {
 	strcpy(yylval.pgm, yytext);
 	return MAIORIGUAL;
@@ -1215,7 +1216,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 175 "scanner.l"
+#line 176 "scanner.l"
 {
 	strcpy(yylval.pgm, yytext);
 	return DIFERENTE;
@@ -1223,7 +1224,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 180 "scanner.l"
+#line 181 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1232,7 +1233,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 186 "scanner.l"
+#line 187 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1241,7 +1242,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 192 "scanner.l"
+#line 193 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1250,7 +1251,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 198 "scanner.l"
+#line 199 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1259,7 +1260,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 204 "scanner.l"
+#line 205 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1268,7 +1269,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 210 "scanner.l"
+#line 211 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1277,7 +1278,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 216 "scanner.l"
+#line 217 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1286,7 +1287,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 222 "scanner.l"
+#line 223 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1295,7 +1296,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 228 "scanner.l"
+#line 229 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1304,7 +1305,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 234 "scanner.l"
+#line 235 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1313,7 +1314,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 240 "scanner.l"
+#line 241 "scanner.l"
 {
 	yylval.pgm[0] = yytext[0];
 	yylval.pgm[1] = '\0';
@@ -1323,7 +1324,7 @@ YY_RULE_SETUP
 case 37:
 /* rule 37 can match eol */
 YY_RULE_SETUP
-#line 247 "scanner.l"
+#line 248 "scanner.l"
 {
 	transfereLinha(linha);
 	++linha;
@@ -1331,20 +1332,20 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 252 "scanner.l"
+#line 253 "scanner.l"
 {
 	//descarta espaço em branco
 }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 256 "scanner.l"
+#line 257 "scanner.l"
 {
 
 }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 260 "scanner.l"
+#line 261 "scanner.l"
 {
 	static int once = 0; 
 	if(once == 0)
@@ -1355,10 +1356,10 @@ case YY_STATE_EOF(INITIAL):
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 269 "scanner.l"
+#line 270 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1362 "lex.yy.c"
+#line 1363 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2503,7 +2504,7 @@ void yyfree (void * ptr )
 
 /* %ok-for-header */
 
-#line 269 "scanner.l"
+#line 270 "scanner.l"
 
 
 int yywrap(void){

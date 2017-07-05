@@ -1,5 +1,7 @@
-inteiro : i [10][30], j, k, l
-inteiro fatorial(inteiro : i, inteiro : j)
-	fatorial()
+inteiro : j[3], asd
+flutuante : a
+
+flutuante fatorial(inteiro : i[][],  flutuante : j)
+  c[5] = 10
 fim
 

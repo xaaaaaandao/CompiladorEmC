@@ -14,6 +14,7 @@
 	extern FILE *yyout;
 	
 	/* Global */
+	char nomeArquivo[MAX];
 	static Arvore *aFinal;	
 	Arvore *auxiliar;
 %}
@@ -72,7 +73,7 @@ declaracao_variaveis:
 	;
 
 inicializacao_variaveis:
-	atribuicao { $$ = criaNo("inicializacao_variaives", 1, $1); }
+	atribuicao { $$ = criaNo("inicializacao_variaveis", 1, $1); }
 	;
 
 lista_variaveis:
@@ -95,13 +96,19 @@ lista_variaveis:
 
 var:
 	IDENTIFICADOR { $$ = criaNo("var", 1, criaNo($1, 0));	}
-	| IDENTIFICADOR indice	{ $$ = criaNo("var", 2, criaNo($1, 0), $2); }
+	| IDENTIFICADOR indice { $$ = criaNo("var", 2, criaNo($1, 0), $2); }
 	;
 
 indice:
 	ABRECOLCHETE expressao FECHACOLCHETE ABRECOLCHETE expressao FECHACOLCHETE
 	{ $$ = criaNo("indice", 6, criaNo("[", 0), $2, criaNo("]", 0), criaNo("[", 0), $5, criaNo("]", 0)); }
-	| ABRECOLCHETE expressao FECHACOLCHETE { $$ = criaNo("indice", 3, criaNo("[", 0), $2, criaNo("]", 0)); }
+	| ABRECOLCHETE expressao FECHACOLCHETE
+		{
+			$$ = criaNo("indice", 3, criaNo("[", 0), $2, criaNo("]", 0)); 
+			if(indiceEhInteiro($2) == false){
+				erroSemantico = true;
+			}
+		}
 	;
 
 tipo:
@@ -492,9 +499,10 @@ lista_argumentos:
 void yyerror(char *s) {
 	if(compareString(s, "syntax error") == 0){
 		erroSemantico = true;
+		erroGrave = true;
 		fprintf(arquivoSemantico, "\033[0m[\033[1m\033[31merro\033[0m] erro inesperado na linha %d\n", erroLinha);
 		fclose(arquivoSemantico);
-		imprimeErro();
+		imprimeErro(nomeArquivo, aFinal);
 		exit(1);
 	} else {
 		fprintf(stdout, "%s\n", s);
@@ -502,6 +510,8 @@ void yyerror(char *s) {
 }
 
 int main(int argc, char *argv[]){
+	strcpy(nomeArquivo, argv[1]);
+	erroGrave = false;
 	erroSemantico = false;
 	arquivoSemantico = fopen("semantico.txt", "w");
 	auxiliarSemantico = fopen("auxiliar.txt", "w");
@@ -509,13 +519,14 @@ int main(int argc, char *argv[]){
 	yyin = fopen(argv[1], "r");
 	yyparse();	
 	fclose(yyin);
-	imprimeArvore(aFinal);
+//	imprimeArvore(aFinal);
 	fclose(arquivoSemantico);
 	fclose(auxiliarSemantico);
 	fclose(arquivoLog);
 	verificarLog();
-	gerandoDot(aFinal);
-	imprimeErro();
+//	gerandoDot(aFinal);
+	system("reset");
+	imprimeErro(argv[1], aFinal);
 	return 0;
 }
 

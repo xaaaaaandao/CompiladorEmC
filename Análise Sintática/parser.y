@@ -440,7 +440,7 @@ lista_argumentos:
 %%
 void yyerror(char *s) {
 	if(compareString(s, "syntax error") == 0){
-		system("reset");
+//		system("reset");
 		printf("\033[1m\033[31mERROR\033[0m\n");
 		exit(1);
 	} else {

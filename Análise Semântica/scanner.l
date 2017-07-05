@@ -125,6 +125,7 @@ COMENTARIO "{"[^\}]*"}"
 		potencia = potencia * -1;
 	}
 	strcpy(yylval.pgm, yytext);
+	snprintf(yylval.pgm, MAX, "%f", pow(valor, potencia));
 	return EXPONENCIAL;
 }
 
