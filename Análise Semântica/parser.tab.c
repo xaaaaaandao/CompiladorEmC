@@ -2565,12 +2565,12 @@ int main(int argc, char *argv[]){
 	yyin = fopen(argv[1], "r");
 	yyparse();	
 	fclose(yyin);
-//	imprimeArvore(aFinal);
+	imprimeArvore(aFinal);
 	fclose(arquivoSemantico);
 	fclose(auxiliarSemantico);
 	fclose(arquivoLog);
 	verificarLog();
-//	gerandoDot(aFinal);
+	gerandoDot(aFinal);
 	system("reset");
 	imprimeErro(argv[1], aFinal);
 	return 0;

@@ -10,7 +10,6 @@
 {flutuante: c}
 {inteiro: c[30]}
 
-
 {quando é flutante - erro}
 {flutuante : a}
 {inteiro : j[30]}
@@ -48,16 +47,29 @@
 {a := c[7][30E-10]}
 {c[3][3] := 0.76+0.5}
 
-flutuante : a[30]
-a[3] := 5.6
+inteiro : a
+a := 10
+inteiro : d[30]
+d[3] := 3
+inteiro : f[30][30]
+f[3][3] := 3
 
-flutuante jabulani(flutuante : j)
-	retorna(0.5)
+flutuante : c
+c := 40.5
+flutuante : e[30]
+e[3] := 3.5
+flutuante : g[30][30]
+g[3][3] := 3.7
+
+flutuante dasdas()
+	flutuante: b
+	b := 10.6
+	retorna(b)
 fim
 
 inteiro principal()
 	inteiro: b
 	b := 10
-	jabulani(b)
+	dasdas()
 	retorna(b)
 fim

@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <llvm-c/Core.h>
+#include <llvm-c/BitWriter.h>
 #include "semantic.h"
-#include "generate.h"
 #include "lista.h"
+#include "generate.h"
 
 void transfereLinha(int l){
 	erroLinha = l;
@@ -228,7 +230,7 @@ void preencheVariaveis(Arvore *arvore, ListaVariaveis *lista, bool ehGlobal){
 }
 
 /* Verifica sem tem redefiniçaõ de variável */
-bool redefinicaoVariavel(char *nome, ListaVariaveis *variaveis, bool ehGlobal){
+void redefinicaoVariavel(char *nome, ListaVariaveis *variaveis, bool ehGlobal){
 	int repetidos = 0;
 	NoVariaveis *auxiliar = variaveis -> primeiro;
 	NoVariaveis *auxiliarRepetido;
@@ -1359,7 +1361,7 @@ bool retornaCompativel(char *tipoFuncao, char *valor, ListaVariaveis *locais, Li
 	int i = 0, j = 0, quantidadeLetras = 0, quantidadeNumeros = 0;
 	memset(auxiliar, 0, sizeof(auxiliar));
 	while(valor[i] != '\0'){
-		if(valor[i] >= 'A' && valor[i] <= 'Z' || valor[i] >= 'a' && valor[i] <= 'z' || valor[i] >= '0' && valor[i] <= '9'|| valor[i] >= '.'){
+		if((valor[i] >= 'A' && valor[i] <= 'Z') || (valor[i] >= 'a' && valor[i] <= 'z') || (valor[i] >= '0' && valor[i] <= '9') || (valor[i] >= '.')){
 			auxiliar[j] = valor[i];
 			j++;
 		} else if(valor[i] == '+' || valor[i] == '*' || valor[i] == '-' || valor[i] == '/'){
@@ -1381,7 +1383,7 @@ bool retornaCompativel(char *tipoFuncao, char *valor, ListaVariaveis *locais, Li
 		}
 		i++;
 	}
-	auxiliar[j] != '\0';
+	auxiliar[j] = '\0';
 	tipo = ehInteiro(auxiliar);
 	if(tipo == 1){
 		if(compareString(tipoFuncao, "inteiro") != 0)
@@ -1539,7 +1541,7 @@ void imprimeUsadaGlobais(ListaVariaveis *variaveis){
 	}
 }
 
-void pecorreTodasFuncao(ListaFuncao *funcoes, ListaVariaveis *globais){
+void pecorreTodasFuncao(LLVMContextRef context, LLVMModuleRef module, LLVMBuilderRef builder, ListaFuncao *funcoes, ListaVariaveis *globais){
 	ListaVariaveis *variaveisLocais, *parametros;
 	ListaInicializacao *inicializacaoLocais;
 	NoFuncao *auxiliar = funcoes -> primeiro;
@@ -1573,6 +1575,8 @@ void pecorreTodasFuncao(ListaFuncao *funcoes, ListaVariaveis *globais){
 
 		usadaGlobais(globais, inicializacaoLocais);
 
+		codigoIRFuncao(context, module, builder, auxiliar, variaveisLocais, parametros, inicializacaoLocais);
+
 		limpaListaVariavel(variaveisLocais);		
 		limpaListaVariavel(parametros);		
 		limpaListaInicializacao(inicializacaoLocais);
@@ -1591,8 +1595,10 @@ void variaveisNaoUtilizadas(ListaVariaveis *v){
 
 /* Verifica as árvore */
 void visitaArvore(char *nomeArquivo, Arvore *arvore){
-	FILE *modulo = fopen("modulo.c", "w");
-	cabecalhoCode(nomeArquivo, modulo);
+	LLVMContextRef context = LLVMGetGlobalContext();;
+    LLVMModuleRef module = LLVMModuleCreateWithNameInContext("meu_modulo.bc", context);
+    LLVMBuilderRef builder = LLVMCreateBuilderInContext(context);
+
 	ListaVariaveis *variaveisGlobais = (ListaVariaveis*) malloc (sizeof(ListaVariaveis*));
 	ListaInicializacao *inicializacaoGlobais = (ListaInicializacao*) malloc (sizeof(ListaInicializacao*));
 	ListaFuncao *listaFuncao = (ListaFuncao*) malloc (sizeof(ListaFuncao*));
@@ -1617,17 +1623,29 @@ void visitaArvore(char *nomeArquivo, Arvore *arvore){
 	/* Redefinição função */
 	redefinicaoFuncao(listaFuncao);
 	if(erroVisita == false){
-		preencheCodeGlobal(modulo, variaveisGlobais, inicializacaoGlobais);
+		codigoIRGlobais(context, module, builder, variaveisGlobais, inicializacaoGlobais);
+		//codigoIRInicializacaoGlobais(context, module, builder, inicializacaoGlobais);
+		/* Erro nas funções */
+		/* Percorre todas as funções */
+		pecorreTodasFuncao(context, module, builder, listaFuncao, variaveisGlobais);
+		imprimeUsada(listaFuncao);
+		imprimeUsadaGlobais(variaveisGlobais);
+		if(erroVisita == false){
+
+			LLVMDumpModule(module);
+		    // Escreve para um arquivo no formato bitcode.
+		    if (LLVMWriteBitcodeToFile(module, "meu_modulo.bc") != 0) {
+		        fprintf(stderr, "error writing bitcode to file, skipping\n");
+		    }
+
+		} else {
+			printf("\033[0m[\033[1m\033[35maviso\033[0m] não conseguiu gerar o código intermediário\n");
+			system("rm meu_modulo.bc");
+		}
+	} else {
+		printf("\033[0m[\033[1m\033[35maviso\033[0m] não conseguiu gerar o código intermediário\n");
+		system("rm meu_modulo.bc");
 	}
-
-	/* Erro nas funções */
-	/* Percorre todas as funções */
-	pecorreTodasFuncao(listaFuncao, variaveisGlobais);
-	imprimeUsada(listaFuncao);
-	imprimeUsadaGlobais(variaveisGlobais);
-
-	caudaCode(nomeArquivo, modulo);
-	fclose(modulo);
 }
 
 
@@ -1645,5 +1663,5 @@ void imprimeErro(char *nome, Arvore *final){
 	system("rm auxiliar.txt");
 	if(erroVisita){
 		exit(1);
-	}
+	} 
 } 

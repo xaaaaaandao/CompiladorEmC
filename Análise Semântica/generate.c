@@ -1,64 +1,180 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "syntaxtree.h"
 #include "generate.h"
 
-char *nomeModulo(char *nomeArquivo){
-	char *novoNome = (char*)calloc(MAX, sizeof(char));
-	int i = strlen(nomeArquivo), j = 0;
-	while(i >= 0){
-		if(nomeArquivo[i] == '.')
-			break;
-		i--;
-	}
-	while(j < i){
-		novoNome[j] = nomeArquivo[i];
-		j++;
-	}
-	nomeArquivo[j] ='\0';
-	return strcat(nomeArquivo, ".bc");
+float existeAtribuicaoFlutuante(char *origem, ListaInicializacao *inicializacao){
+    NoInicializacao *auxiliar = inicializacao -> primeiro;
+    float valor = 0;
+    while(auxiliar != NULL){
+        if(compareString(auxiliar -> origem, origem) == 0){
+            valor = atof(auxiliar -> destino);
+        }
+        auxiliar = auxiliar -> proximo;
+    }
+    return valor;
 }
 
-void cabecalhoCode(char* nomeArquivo, FILE *arquivo){
-	fprintf(arquivo, "#include <stdio.h>\n#include <stdlib.h>\n#include <stdbool.h>\n#include <llvm-c/Core.h>\n#include <llvm-c/BitWriter.h>\n\nint main(int argc, char *argv[]) {\n 	LLVMContextRef context = LLVMGetGlobalContext();\n	LLVMModuleRef module = LLVMModuleCreateWithNameInContext(\"%s\", context);\n	LLVMBuilderRef builder = LLVMCreateBuilderInContext(context);\n\n", nomeModulo(nomeArquivo));
+int existeAtribuicaoInteiro(char *origem, ListaInicializacao *inicializacao){
+    NoInicializacao *auxiliar = inicializacao -> primeiro;
+    int valor = 0;
+    while(auxiliar != NULL){
+        if(compareString(auxiliar -> origem, origem) == 0){
+            valor = atoi(auxiliar -> destino);
+        }
+        auxiliar = auxiliar -> proximo;
+    }
+    return valor;
 }
 
-void caudaCode(char *nomeArquivo, FILE *arquivo){
-	fprintf(arquivo, "\n	LLVMDumpModule(module);\n	if (LLVMWriteBitcodeToFile(module, \"%s\") != 0) {\n 		fprintf(stderr, \"error writing bitcode to file, skipping\");\n 	}\n}", nomeModulo(nomeArquivo));	
+void codigoIRVariaveis(LLVMContextRef context, LLVMModuleRef module, LLVMBuilderRef  builder, ListaVariaveis *globais, ListaInicializacao *inicializacao){
+    char nomeVariavel[MAX];
+    int valor1, valor2;
+    NoVariaveis *auxiliar = globais -> primeiro;
+    while(auxiliar != NULL){
+        memset(nomeVariavel, 0, sizeof(nomeVariavel));
+        if(compareString(auxiliar -> tipo, "inteiro") == 0){
+            strcpy(nomeVariavel, auxiliar -> nome);
+            if(auxiliar -> ehUnidimensional){
+                valor1 = atoi(auxiliar -> valor1);
+                LLVMTypeRef type = LLVMArrayType(LLVMInt64Type(), valor1);
+                LLVMValueRef array =  LLVMBuildArrayAlloca (builder, type, LLVMConstInt(LLVMInt64Type(), 0, false), nomeVariavel);
+                LLVMSetAlignment(array, 16);
+            } else if(auxiliar -> ehBidimensional){
+                valor1 = atoi(auxiliar -> valor1);
+                valor2 = atoi(auxiliar -> valor2);
+                LLVMTypeRef type_0 = LLVMArrayType(LLVMInt64Type(), valor1);
+                LLVMTypeRef type = LLVMArrayType(type_0, valor2);
+                LLVMValueRef array =  LLVMBuildArrayAlloca (builder, type, LLVMConstInt(LLVMInt64Type(), 0, false), nomeVariavel);
+                LLVMSetAlignment(array, 16);
+            } else if((auxiliar -> ehUnidimensional == false) && (auxiliar -> ehBidimensional == false)){
+                LLVMValueRef array = LLVMBuildAlloca (builder, LLVMInt64Type(), nomeVariavel);
+                LLVMBuildStore(builder, LLVMConstInt(LLVMInt64Type(), existeAtribuicaoInteiro(auxiliar -> nome, inicializacao), false), array);
+                LLVMValueRef args[1] = { LLVMBuildLoad(builder, array, "") };
+            }
+        } else if(compareString(auxiliar -> tipo, "flutuante") == 0){
+            strcpy(nomeVariavel, auxiliar -> nome);
+            if(auxiliar -> ehUnidimensional){
+                valor1 = atoi(auxiliar -> valor1);
+                LLVMTypeRef type = LLVMArrayType(LLVMFloatType(), valor1);
+                LLVMValueRef array =  LLVMBuildArrayAlloca (builder, type, LLVMConstInt(LLVMFloatType(), 0, false), nomeVariavel);
+                LLVMSetAlignment(array, 16);
+            } else if(auxiliar -> ehBidimensional){
+                valor1 = atoi(auxiliar -> valor1);
+                valor2 = atoi(auxiliar -> valor2);
+                LLVMTypeRef type_0 = LLVMArrayType(LLVMFloatType(), valor1);
+                LLVMTypeRef type = LLVMArrayType(type_0, valor2);
+                LLVMValueRef array =  LLVMBuildArrayAlloca (builder, type, LLVMConstInt(LLVMFloatType(), 0, false), nomeVariavel);
+                LLVMSetAlignment(array, 16);
+            } else if((auxiliar -> ehUnidimensional == false) && (auxiliar -> ehBidimensional == false)){
+                LLVMValueRef array = LLVMBuildAlloca (builder, LLVMFloatType(), nomeVariavel);
+                LLVMBuildStore(builder, LLVMConstInt(LLVMFloatType(), existeAtribuicaoInteiro(auxiliar -> nome, inicializacao), false), array);
+                LLVMValueRef args[1] = { LLVMBuildLoad(builder, array, "") };                
+            }
+        } 
+        auxiliar = auxiliar -> proximo;
+    }
 }
 
 
-void preencheCodeGlobal(FILE *arquivo, ListaVariaveis *v, ListaInicializacao *i){
-	char type[MAX], type0[MAX], array[MAX];
-	int valor1, valor2;
-	NoVariaveis *variaveis = v -> primeiro;
-	while(variaveis != NULL){
-		if(variaveis -> ehUnidimensional){
-			strcpy(type, "type");
-			strcpy(array, "array");
-			strcat(type, variaveis -> nome);
-			strcat(array, variaveis -> nome);
-			valor1 = atoi(variaveis -> valor1);
-			if(compareString(variaveis -> tipo, "inteiro") == 0){
-				fprintf(arquivo, "	LLVMTypeRef %s = LLVMArrayType(LLVMInt64Type(), %d);\n	LLVMValueRef %s = LLVMAddGlobal (module, %s, \"%s\");\n	LLVMSetInitializer(%s, LLVMConstInt(LLVMInt64Type(), 0, false));\n	LLVMSetLinkage(%s, LLVMCommonLinkage);\n	LLVMSetAlignment(%s, 16);\n", type, valor1, array, type, variaveis -> nome, array, array, array);
-									//LLVMTypeRef typeA = LLVMArrayType(LLVMInt64Type(), 1024); LLVMValueRef arrayA = LLVMAddGlobal (module, typeA, "A"); LLVMSetInitializer(arrayA, LLVMConstInt(LLVMInt64Type(), 0, false));  LLVMSetLinkage(arrayA, LLVMCommonLinkage); LLVMSetAlignment(arrayA, 16);
-			} else if(compareString(variaveis -> tipo, "flutuante") == 0){
-				fprintf(arquivo, "	LLVMTypeRef %s = LLVMArrayType(LLVMFloatType(), %d);\n	LLVMValueRef %s = LLVMAddGlobal (module, %s, \"%s\");\n	LLVMSetInitializer(%s, LLVMConstInt(LLVMInt64Type(), 0, false));\n	LLVMSetLinkage(%s, LLVMCommonLinkage);\n	LLVMSetAlignment(%s, 16);\n", type, valor1, array, type, variaveis -> nome, array, array, array);
-			}
-		} else if(variaveis -> ehBidimensional){
-			if(compareString(variaveis -> tipo, "inteiro") == 0){
+void codigoIRFuncao(LLVMContextRef context, LLVMModuleRef module, LLVMBuilderRef builder, NoFuncao *nofuncao, ListaVariaveis* variaveisLocais, ListaVariaveis *parametros, ListaInicializacao* inicializacaoLocais){
+    if(compareString(nofuncao -> tipo, "inteiro") == 0){
+        LLVMValueRef Zero64 = LLVMConstInt(LLVMInt64Type(), 0, false);
+        LLVMTypeRef functionReturnType = LLVMInt64TypeInContext(context);
+        LLVMValueRef function = LLVMAddFunction(module, nofuncao -> nome, LLVMFunctionType(functionReturnType, NULL, 0, 0));
+        
+        LLVMBasicBlockRef entryBlock = LLVMAppendBasicBlockInContext(context, function, "entry");
+        LLVMBasicBlockRef endBasicBlock = LLVMAppendBasicBlock(function, "end");
+        LLVMPositionBuilderAtEnd(builder, entryBlock);
 
-			} else if(compareString(variaveis -> tipo, "flutuante") == 0){
+        codigoIRVariaveis(context, module, builder, variaveisLocais, inicializacaoLocais);
+        LLVMValueRef returnVal = LLVMBuildAlloca(builder, LLVMInt64Type(), "retorno");
+        LLVMBuildStore(builder, Zero64, returnVal);
 
-			}
-		} else {
-			if(compareString(variaveis -> tipo, "inteiro") == 0){
-				fprintf(arquivo, "	LLVMValueRef %s = LLVMBuildAlloca(builder, LLVMInt64Type(), \"%s\");\n	LLVMSetInitializer(%s, LLVMConstInt(LLVMInt64Type(), 0, false));\n	LLVMSetLinkage(%s, LLVMCommonLinkage);\n	LLVMSetAlignment(%s, 16);\n", variaveis -> nome, variaveis -> nome, variaveis -> nome, variaveis -> nome, variaveis -> nome);		
-			} else if(compareString(variaveis -> tipo, "flutuante") == 0){
-				fprintf(arquivo, "	LLVMValueRef %s = LLVMBuildAlloca(builder, LLVMFloatType(), \"%s\");\n	LLVMSetInitializer(%s, LLVMConstInt(LLVMFloatType(), 0, false));\n	LLVMSetLinkage(%s, LLVMCommonLinkage);\n	LLVMSetAlignment(%s, 16);\n", variaveis -> nome, variaveis -> nome, variaveis -> nome, variaveis -> nome, variaveis -> nome);		
-			}
-		}
-		variaveis = variaveis -> proximo;
-	}
+        LLVMBuildBr(builder, endBasicBlock);
+        LLVMPositionBuilderAtEnd(builder, endBasicBlock);
+        LLVMBuildRet(builder, LLVMBuildLoad(builder, returnVal, ""));
+
+
+
+
+    } else if(compareString(nofuncao -> tipo, "flutuante") == 0){
+        //LLVMTypeRef mainFnReturnType = LLVMFloatTypeInContext(context);
+        
+        LLVMValueRef Zero64 = LLVMConstInt(LLVMFloatType(), 0, false);
+        LLVMTypeRef functionReturnType = LLVMFloatTypeInContext(context);
+        LLVMValueRef function = LLVMAddFunction(module, nofuncao -> nome, LLVMFunctionType(functionReturnType, NULL, 0, 0));
+        
+        LLVMBasicBlockRef entryBlock = LLVMAppendBasicBlockInContext(context, function, "entry");
+        LLVMBasicBlockRef endBasicBlock = LLVMAppendBasicBlock(function, "end");
+        LLVMPositionBuilderAtEnd(builder, entryBlock);
+
+        codigoIRVariaveis(context, module, builder, variaveisLocais, inicializacaoLocais);
+        LLVMValueRef returnVal = LLVMBuildAlloca(builder, LLVMFloatType(), "retorno");
+        LLVMBuildStore(builder, Zero64, returnVal);
+
+        LLVMBuildBr(builder, endBasicBlock);
+        LLVMPositionBuilderAtEnd(builder, endBasicBlock);
+        LLVMBuildRet(builder, LLVMBuildLoad(builder, returnVal, ""));
+
+    } 
+}
+
+
+void codigoIRGlobais(LLVMContextRef context, LLVMModuleRef module, LLVMBuilderRef  builder, ListaVariaveis *globais, ListaInicializacao *inicializacao){
+    char nomeVariavel[MAX];
+    int valor1, valor2;
+    NoVariaveis *auxiliar = globais -> primeiro;
+    while(auxiliar != NULL){
+        memset(nomeVariavel, 0, sizeof(nomeVariavel));
+        if(compareString(auxiliar -> tipo, "inteiro") == 0){
+            strcpy(nomeVariavel, auxiliar -> nome);
+            if(auxiliar -> ehUnidimensional){
+                valor1 = atoi(auxiliar -> valor1);
+                LLVMTypeRef type = LLVMArrayType(LLVMInt64Type(), valor1);
+                LLVMValueRef array = LLVMAddGlobal(module, type, nomeVariavel);
+                LLVMSetInitializer(array, LLVMConstInt(LLVMInt64Type(), 0, false));
+                LLVMSetLinkage(array, LLVMCommonLinkage);
+                LLVMSetAlignment(array, 16);
+            } else if(auxiliar -> ehBidimensional){
+                valor1 = atoi(auxiliar -> valor1);
+                valor2 = atoi(auxiliar -> valor2);
+                LLVMTypeRef type_0 = LLVMArrayType(LLVMInt64Type(), valor1);
+                LLVMTypeRef type = LLVMArrayType(type_0, valor2);
+                LLVMValueRef array = LLVMAddGlobal(module, type, nomeVariavel);
+                LLVMSetInitializer(array, LLVMConstInt(LLVMInt64Type(), 0, false));
+                LLVMSetLinkage(array, LLVMCommonLinkage);
+                LLVMSetAlignment(array, 16);
+            } else if((auxiliar -> ehUnidimensional == false) && (auxiliar -> ehBidimensional == false)){
+                LLVMValueRef array = LLVMAddGlobal (module, LLVMInt64Type(), nomeVariavel);
+                LLVMSetInitializer(array, LLVMConstInt(LLVMInt64Type(), existeAtribuicaoInteiro(auxiliar -> nome, inicializacao), false));
+                LLVMSetLinkage(array, LLVMCommonLinkage);
+                LLVMSetAlignment(array, 16);            }
+        } else if(compareString(auxiliar -> tipo, "flutuante") == 0){
+            strcpy(nomeVariavel, auxiliar -> nome);
+            if(auxiliar -> ehUnidimensional){
+                valor1 = atoi(auxiliar -> valor1);
+                LLVMTypeRef type = LLVMArrayType(LLVMFloatType(), valor1);
+                LLVMValueRef array = LLVMAddGlobal(module, type, nomeVariavel);
+                LLVMSetInitializer(array, LLVMConstInt(LLVMFloatType(), 0, false));
+                LLVMSetLinkage(array, LLVMCommonLinkage);
+                LLVMSetAlignment(array, 16);
+            } else if(auxiliar -> ehBidimensional){
+                valor1 = atoi(auxiliar -> valor1);
+                valor2 = atoi(auxiliar -> valor2);
+                LLVMTypeRef type_0 = LLVMArrayType(LLVMFloatType(), valor1);
+                LLVMTypeRef type = LLVMArrayType(type_0, valor2);
+                LLVMValueRef array = LLVMAddGlobal(module, type, nomeVariavel);
+                LLVMSetInitializer(array, LLVMConstInt(LLVMFloatType(), 0, false));
+                LLVMSetLinkage(array, LLVMCommonLinkage);
+                LLVMSetAlignment(array, 16);
+            } else if((auxiliar -> ehUnidimensional == false) && (auxiliar -> ehBidimensional == false)){
+                LLVMValueRef array = LLVMAddGlobal (module, LLVMFloatType(), nomeVariavel);
+                LLVMSetInitializer(array, LLVMConstInt(LLVMFloatType(), existeAtribuicaoFlutuante(auxiliar -> nome, inicializacao), false));
+                LLVMSetLinkage(array, LLVMCommonLinkage);
+                LLVMSetAlignment(array, 16);
+            }
+        } 
+        auxiliar = auxiliar -> proximo;
+    }
 }
