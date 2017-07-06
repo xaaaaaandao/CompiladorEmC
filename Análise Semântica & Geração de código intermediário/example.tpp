@@ -47,29 +47,9 @@
 {a := c[7][30E-10]}
 {c[3][3] := 0.76+0.5}
 
-inteiro : a
-a := 10
-inteiro : d[30]
-d[3] := 3
-inteiro : f[30][30]
-f[3][3] := 3
-
-flutuante : c
-c := 40.5
-flutuante : e[30]
-e[3] := 3.5
-flutuante : g[30][30]
-g[3][3] := 3.7
-
-flutuante dasdas()
-	flutuante: b
-	b := 10.6
-	retorna(b)
-fim
 
 inteiro principal()
 	inteiro: b
 	b := 10
-	dasdas()
 	retorna(b)
 fim
